@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Brumbly Breakout:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Brumbly_Breakout_jar</output-path>
+    <root id="archive" name="Brumbly Breakout.jar">
+      <element id="module-output" name="Brumbly Breakout" />
+    </root>
+  </artifact>
+</component>
