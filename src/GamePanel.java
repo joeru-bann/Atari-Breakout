@@ -20,9 +20,9 @@ public class GamePanel extends JPanel implements Runnable {
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     static final int BALL_DIAMETER = 8;
 
-    static JPanel optionsPanel = new JPanel();
+    JPanel optionsPanel = new JPanel();
 
-    int lives = 3;
+    int lives;
     int score = 0;
     int hits = 0;
     int choice = 0;
@@ -457,7 +457,7 @@ public class GamePanel extends JPanel implements Runnable {
             if (e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
                 attractModeActive = false;
                 beginGame();
-                //modeButtons();
+               // modeButtons();
             }
 
         }
@@ -481,7 +481,6 @@ public class GamePanel extends JPanel implements Runnable {
         int remainingLives = lives;
 
         if (remainingLives < 1) {
-            welcomeMessage = "YOU LOST GG";
             beginAttractMode();
         }
     }
@@ -504,13 +503,13 @@ public class GamePanel extends JPanel implements Runnable {
         newBricks();
         destroyWelcome();
 
-        lives = 3; //resetting lives to default
+        lives = 10;
         score = 0;
 
         ballColour = Color.white;
     }
 
-    public static JPanel modeButtons() {
+    public JPanel modeButtonsPanel() {
         JPanel panel = new JPanel();
         optionsPanel.setLayout(new FlowLayout());
 
@@ -526,4 +525,5 @@ public class GamePanel extends JPanel implements Runnable {
         return optionsPanel;
     }
 }
+
 
