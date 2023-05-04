@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Welcome extends Rectangle {
-
     Welcome(int x, int y, int welcomeWidth, int welcomeHeight) {
         super(x, y, welcomeWidth, welcomeHeight);
     }

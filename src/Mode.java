@@ -6,10 +6,6 @@ public class Mode {
 
     public void modeChoose(int modeChoice) {
 
-        switch(modeChoice){
-            case 1:
-                Paddle.setPaddleSpeed(10);
 
-        }
     }
 }

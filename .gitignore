@@ -2,10 +2,13 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+!**/src/META-INF/MANIFEST.MF
 
 # Default ignored files
 /shelf/
 /workspace.xml
+/Brumbly Breakout.iml
+!**/src/META-INF/MANIFEST.MF
 
 ### Eclipse ###
 .apt_generated
