@@ -9,17 +9,24 @@ public class GameFrame extends JFrame {
 
         panel = new GamePanel();
 
+        JPanel modeButtonsPanel = new JPanel();
+        // add mode buttons to modeButtonsPanel here
 
-        this.getContentPane().add(panel);
+        // set layout manager to stack components vertically
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        this.setTitle("Brumble Breakout : Breaking Brumble");
-        this.setResizable(false);
-        this.setBackground(Color.black);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.pack();
-        this.setVisible(true);
-        this.setLocationRelativeTo(null);
+        // add modeButtonsPanel above the panel
+        add(modeButtonsPanel);
+        add(panel);
 
+        setTitle("Brumble Breakout : Breaking Brumble");
+        setResizable(false);
+        setBackground(Color.black);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setVisible(true);
+        setLocationRelativeTo(null);
     }
-
 }
+
+

@@ -16,7 +16,7 @@ public class Lives extends Rectangle {
         FontMetrics fm = g.getFontMetrics();
 
         g.setFont(atari);
-        g.setColor(Color.white);
+        g.setColor(Color.red);
         g.drawString("LIVES " + messageToDisplay, (GAME_WIDTH) - 15 - fm.stringWidth("LIVES " + messageToDisplay), GAME_HEIGHT - 15);
     }
 
