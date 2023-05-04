@@ -456,8 +456,8 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
                 attractModeActive = false;
-                //beginGame();
-                modeButtons();
+                beginGame();
+                //modeButtons();
             }
 
         }
@@ -504,7 +504,7 @@ public class GamePanel extends JPanel implements Runnable {
         newBricks();
         destroyWelcome();
 
-        lives = 3;
+        lives = 3; //resetting lives to default
         score = 0;
 
         ballColour = Color.white;
