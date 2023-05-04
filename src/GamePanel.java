@@ -20,9 +20,9 @@ public class GamePanel extends JPanel implements Runnable {
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     static final int BALL_DIAMETER = 8;
 
-    JPanel optionsPanel = new JPanel();
+    static JPanel optionsPanel = new JPanel();
 
-    int lives;
+    int lives = 3;
     int score = 0;
     int hits = 0;
     int choice = 0;
@@ -456,7 +456,8 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
                 attractModeActive = false;
-               // modeButtons();
+                //beginGame();
+                modeButtons();
             }
 
         }
@@ -480,6 +481,7 @@ public class GamePanel extends JPanel implements Runnable {
         int remainingLives = lives;
 
         if (remainingLives < 1) {
+            welcomeMessage = "YOU LOST GG";
             beginAttractMode();
         }
     }
@@ -506,22 +508,22 @@ public class GamePanel extends JPanel implements Runnable {
         score = 0;
 
         ballColour = Color.white;
-    }}
+    }
 
-//    public static JPanel modeButtons() {
-//        JPanel panel = new JPanel();
-//        optionsPanel.setLayout(new FlowLayout());
-//
-//        JButton mode1 = new JButton("Atari");
-//        modeButtonsOptionsPanel.add(mode1);
-//
-//        JButton mode2 = new JButton("Frenzy");
-//        optionsPanel.add(mode2);
-//
-//        JButton mode3 = new JButton("#*#^!&#!?");
-//        optionsPanel.add(mode3);
-//
-//        return optionsPanel;
-//    }
-//}
+    public static JPanel modeButtons() {
+        JPanel panel = new JPanel();
+        optionsPanel.setLayout(new FlowLayout());
+
+        JButton mode1 = new JButton("Atari");
+        optionsPanel.add(mode1);
+
+        JButton mode2 = new JButton("Frenzy");
+        optionsPanel.add(mode2);
+
+        JButton mode3 = new JButton("#*#^!&#!?");
+        optionsPanel.add(mode3);
+
+        return optionsPanel;
+    }
+}
 
