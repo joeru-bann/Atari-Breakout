@@ -7,12 +7,11 @@ import java.awt.image.*;
 import javax.sound.sampled.*;
 
 import javax.swing.*;
-import javax.swing.plaf.TreeUI;
 
 public class GamePanel extends JPanel implements Runnable {
 
     static final int GAME_WIDTH = 461;
-    static final int GAME_HEIGHT = (int)(GAME_WIDTH * (1.15));
+    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.15));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 
     static final int PADDLE_WIDTH = 55;
@@ -21,13 +20,22 @@ public class GamePanel extends JPanel implements Runnable {
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     static final int BALL_DIAMETER = 8;
 
-    int lives = 3;
+    JPanel optionsPanel = new JPanel();
+
+    int lives;
     int score = 0;
     int hits = 0;
     int choice = 0;
+    int modeChoice = 1;
+
     int inclinationSelection = 0;
 
-    String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n" + "PRESS SPACE";
+    String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
+
+    String modeMessage = "PRESS SPACE TO SELECT MODE";
+
+    String mMessage;
+
 
     boolean attractModeActive = true;
     boolean soundPlaying;
@@ -39,7 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
     static final int brickWidth = 32;
     static final int brickHeight = 10;
 
-    static final int BORDER_OFFSET = 20 ; //preventing paddle from touching upper & lower edges
+    static final int BORDER_OFFSET = 20; //preventing paddle from touching upper & lower edges
 
     static final int DISTANCE = 20;  // 0 == edge
 
@@ -51,6 +59,8 @@ public class GamePanel extends JPanel implements Runnable {
     Ball ball;
     Brick[][] brick;
     Welcome welcome;
+
+    Mode mode;
     Lives livesUI;
     Score scoreUI;
     Font atari;
@@ -58,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
     Random random;
     Clip sound;
 
-    GamePanel(){
+    GamePanel() {
         random = new Random();
 
         brick = new Brick[rows][columns];
@@ -91,7 +101,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         gameThread = new Thread(this);
         gameThread.start();
+
     }
+
 
     public void newPaddles() {
         //new paddle instance from class
@@ -120,12 +132,13 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void destroyWelcome() {
-        welcomeMessage = " ";
+        welcomeMessage = " ";  //clear message
+        modeMessage = " ";
     }
 
     public void playSound(String fileName) {
 
-        if (soundPlaying == false) {
+        if (!soundPlaying) {
             try {
                 sound = AudioSystem.getClip();
                 sound.open(AudioSystem.getAudioInputStream(getClass().getResource("audio/" + fileName)));
@@ -147,7 +160,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         super.paintComponent(g);
 
-        buffer = new BufferedImage(getWidth(),getHeight(), BufferedImage.TYPE_INT_RGB);
+        buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         graphics = buffer.getGraphics();
 
         draw(graphics);
@@ -190,7 +203,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         paddle1.draw(g);
         ball.draw(g, ballColour);
-        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage);
+        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage);
+        // mode.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, modeMessage);
 
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -210,7 +224,6 @@ public class GamePanel extends JPanel implements Runnable {
         scoreUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, score);
 
 
-
         Toolkit.getDefaultToolkit().sync();
         // Making sure display refreshes real-time for paint method
 
@@ -228,16 +241,16 @@ public class GamePanel extends JPanel implements Runnable {
         if (paddle1.x <= 0)
             paddle1.x = 0;
 
-        if (paddle1.x >= GAME_WIDTH-PADDLE_WIDTH)
+        if (paddle1.x >= GAME_WIDTH - PADDLE_WIDTH)
             paddle1.x = GAME_WIDTH - PADDLE_WIDTH;
 
         if (ball.y <= 0) {
-            ball.dy= -ball.dy;
+            ball.dy = -ball.dy;
             playSound("boundary_hit.wav");
         }
 
         if (ball.y >= GAME_HEIGHT - BALL_DIAMETER) {
-            ball.dy= -ball.dy;
+            ball.dy = -ball.dy;
 
             if (lives > 0) {
                 lives = lives - 1;
@@ -249,7 +262,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
         //bouncing ball when hitting edges (left/right) of window boundaries
         if (ball.x <= 0) {
-            ball.dx= -ball.dx;
+            ball.dx = -ball.dx;
             playSound("boundary_hit.wav");
 
             if (attractModeActive == true) {
@@ -257,8 +270,8 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        if (ball.x >= GAME_WIDTH-BALL_DIAMETER) {
-            ball.dx= -ball.dx;
+        if (ball.x >= GAME_WIDTH - BALL_DIAMETER) {
+            ball.dx = -ball.dx;
             playSound("boundary_hit.wav");
 
             if (attractModeActive == true) {
@@ -274,7 +287,7 @@ public class GamePanel extends JPanel implements Runnable {
 
                 hits = hits + 1; //used for increasing score + ball speed
 
-               //making the ball go on an angle/inclination when colliding with paddle (slightly random for intent of fun)
+                //making the ball go on an angle/inclination when colliding with paddle (slightly random for intent of fun)
                 if (ball.x + (BALL_DIAMETER / 2) <= paddle1.x + PADDLE_WIDTH / 8) {
                     inclination = -1.6;
                 } else {
@@ -417,7 +430,7 @@ public class GamePanel extends JPanel implements Runnable {
             delta += (now - lastTime) / duration;
             lastTime = now;
 
-            if(delta >=1) {
+            if (delta >= 1) {
                 move();
                 checkCollision();
 
@@ -428,38 +441,46 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-    public class AL extends KeyAdapter{
+    public class AL extends KeyAdapter {
         //moving paddle horizontally when key pressed
         public void keyPressed(KeyEvent e) {
 
             //paddle1.keyPressed(e);
-            if((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && attractModeActive == false) {
+            if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && attractModeActive == false) {
                 paddle1.setDeltaX(-1);
             }
 
-            if((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && attractModeActive == false) {
+            if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && attractModeActive == false) {
                 paddle1.setDeltaX(+1);
             }
 
-            if(e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
+            if (e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
+                attractModeActive = false;
+               // modeButtons();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_1 && attractModeActive == true) {
                 attractModeActive = false;
 
-                beginGame();
+                mode = new Mode(10, 5, "DEFAULT");
             }
+            if (e.getKeyCode() == KeyEvent.VK_2 && attractModeActive == true) {
+                attractModeActive = false;
 
+                mode = new Mode(5, 3, "FRENZY");
+            }
         }
+
 
         //stopping paddle after releasing key - resetting deltaX
         public void keyReleased(KeyEvent e) {
 
-            if((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) & attractModeActive == false) {
+            if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) & attractModeActive == false) {
                 paddle1.setDeltaX(0);
             }
 
-            if((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && attractModeActive == false) {
+            if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && attractModeActive == false) {
                 paddle1.setDeltaX(0);
             }
-
         }
 
     }
@@ -477,7 +498,6 @@ public class GamePanel extends JPanel implements Runnable {
         newWelcome();
 
         attractModeActive = true;
-        welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \r\n" + "PRESS SPACE TO START ";
     }
 
     public void attractModePaddles() {
@@ -489,11 +509,30 @@ public class GamePanel extends JPanel implements Runnable {
         newBall();
         newBricks();
         destroyWelcome();
-
-        lives = 3;
         score = 0;
 
         ballColour = Color.white;
-    }
+    }}
 
-}
+//    public static JPanel modeButtons() {
+//        JPanel panel = new JPanel();
+//        optionsPanel.setLayout(new FlowLayout());
+//
+//        JButton mode1 = new JButton("Atari");
+//        modeButtonsOptionsPanel.add(mode1);
+//
+//        JButton mode2 = new JButton("Frenzy");
+//        optionsPanel.add(mode2);
+//
+//        JButton mode3 = new JButton("#*#^!&#!?");
+//        optionsPanel.add(mode3);
+//
+//        return optionsPanel;
+//    }
+//}
+
+
+
+
+
+

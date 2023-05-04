@@ -6,7 +6,7 @@ public class Paddle extends Rectangle {
     int id;
     int dy;
     int dx;
-    int paddleSpeed = 6;
+    static int paddleSpeed = 6;
 
     Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT) {
 
@@ -32,4 +32,8 @@ public class Paddle extends Rectangle {
         g.fillRect(x, y, width, height);
     }
 
+    public static void setPaddleSpeed(int newPaddleSpeed){
+        paddleSpeed = newPaddleSpeed;
+
+    }
 }
