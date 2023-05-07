@@ -10,8 +10,8 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    static final int GAME_WIDTH = 461;
-    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.15));
+     static final int GAME_WIDTH = 950;
+    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 
     static final int PADDLE_WIDTH = 55;
@@ -20,6 +20,16 @@ public class GamePanel extends JPanel implements Runnable {
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     static final int BALL_DIAMETER = 8;
 
+     final int rows = Math.round(GAME_WIDTH / brickWidth);
+    static final int columns = 8;
+
+    static final int brickWidth = 32;
+    static final int brickHeight = 10;
+
+    static final int BORDER_OFFSET = 20; //preventing paddle from touching upper & lower edges
+
+    static final int DISTANCE = 20;  // 0 == edge
+
     JPanel optionsPanel = new JPanel();
 
     int lives;
@@ -27,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     int hits = 0;
     int choice = 0;
     int modeChoice = 1;
+
 
     int inclinationSelection = 0;
 
@@ -41,15 +52,6 @@ public class GamePanel extends JPanel implements Runnable {
     boolean soundPlaying;
     boolean allCleared;
 
-    static final int rows = 14;
-    static final int columns = 8;
-
-    static final int brickWidth = 32;
-    static final int brickHeight = 10;
-
-    static final int BORDER_OFFSET = 20; //preventing paddle from touching upper & lower edges
-
-    static final int DISTANCE = 20;  // 0 == edge
 
     Thread gameThread;
     BufferedImage buffer;
@@ -457,7 +459,7 @@ public class GamePanel extends JPanel implements Runnable {
             if (e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
                 attractModeActive = false;
                 beginGame();
-               // modeButtons();
+                // modeButtons();
             }
 
         }
@@ -524,6 +526,62 @@ public class GamePanel extends JPanel implements Runnable {
 
         return optionsPanel;
     }
+
+    //this method is not fully my own, I have referenecd the source below, I give full credit for the base method to the OP
+    //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
+
+    public void writeHighScore() {
+        try {
+            // Specify the file path and name for the high scores file
+            String filePath = "highscores.txt";
+
+            // Create a new File object
+            File highScoresFile = new File(filePath);
+
+            // Check if the file already exists
+            if (highScoresFile.exists()) {
+                System.out.println("High scores file already exists.");
+            } else {
+                // Create the new file
+                if (highScoresFile.createNewFile()) {
+                    System.out.println("High scores file created successfully.");
+                } else {
+                    System.out.println("Unable to create high scores file.");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred while creating the high scores file: " + e.getMessage());
+        }
+
+    }
+
+    public void highScoreRead() {
+        int highScore = 0;
+        String line = "";
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("highScores.txt"));
+            while ((line = reader.readLine()) != null)                 // read the score file by each line
+            {
+                try {
+                    int score = Integer.parseInt(line); // parse each line as an int
+                    if (score > highScore)                       // and keep track of the largest
+                    {
+                        highScore = score;
+                    }
+                } catch (NumberFormatException e1) {
+                    // ignore invalid scores
+                    //System.err.println("ignoring invalid score: " + line);
+                }
+            }
+            reader.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(highScore);
+    }
+
+
 }
 
 

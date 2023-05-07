@@ -7,7 +7,7 @@ public class Ball extends Rectangle {
 
     int dx;
     int dy;
-    int ballSpeed = 2;
+    int ballSpeed = 3;
     int vectorX;
     int vectorY;
 
