@@ -1,8 +1,11 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="Brumbly Breakout:jar">
+  <artifact type="jar" build-on-make="true" name="Brumbly Breakout:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/Brumbly_Breakout_jar</output-path>
     <root id="archive" name="Brumbly Breakout.jar">
       <element id="module-output" name="Brumbly Breakout" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      </element>
     </root>
   </artifact>
 </component>

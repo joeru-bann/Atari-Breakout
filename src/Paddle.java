@@ -6,8 +6,17 @@ public class Paddle extends Rectangle {
     int id;
     int dy;
     int dx;
-    static int paddleSpeed = 6;
+    static int paddleSpeed = 9;
 
+    private int paddleWidth;
+    public int getPaddleWidth() {
+        return paddleWidth;
+    }
+
+
+    public void setPaddleWidth(int aWidth) {
+        paddleWidth = aWidth;
+    }
     Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT) {
 
         super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT); //make the rectangle
@@ -36,4 +45,6 @@ public class Paddle extends Rectangle {
         paddleSpeed = newPaddleSpeed;
 
     }
+
+
 }
