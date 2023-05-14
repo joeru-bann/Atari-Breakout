@@ -20,5 +20,7 @@ public class Lives extends Rectangle {
         g.drawString("LIVES " + messageToDisplay, (GAME_WIDTH) - 15 - fm.stringWidth("LIVES " + messageToDisplay), GAME_HEIGHT - 15);
     }
 
+
+
 }
 

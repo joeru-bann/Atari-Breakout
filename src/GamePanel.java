@@ -42,6 +42,9 @@ public class GamePanel extends JPanel implements Runnable {
     int inclinationSelection = 0;
 
     String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
+    int highScore = 0;
+
+    String hScoreDisplay = "hscore"+ highScore;
 
     String modeMessage = "PRESS SPACE TO SELECT MODE";
 
@@ -65,6 +68,8 @@ public class GamePanel extends JPanel implements Runnable {
     Mode mode;
     Lives livesUI;
     Score scoreUI;
+
+    highScore hScore;
     Font atari;
     Color ballColour;
     Random random;
@@ -76,6 +81,8 @@ public class GamePanel extends JPanel implements Runnable {
         brick = new Brick[rows][columns];
         livesUI = new Lives(GAME_WIDTH - 20, GAME_HEIGHT - 20, 20, 20);
         scoreUI = new Score(GAME_WIDTH - 20, GAME_HEIGHT - 20, 20, 20);
+        hScore = new highScore(GAME_WIDTH + 20, GAME_HEIGHT + 20, 40, 40, highScore);
+
         ballColour = Color.white;
 
         try {
@@ -147,7 +154,7 @@ public class GamePanel extends JPanel implements Runnable {
                 soundPlaying = true;
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error occured whilist attempting to play audio");
+                System.out.println("Error occurred whilst attempting to play audio");
             }
         }
 
@@ -220,10 +227,12 @@ public class GamePanel extends JPanel implements Runnable {
         if (allCleared == true) {
             beginAttractMode();
             welcomeMessage = "YOU WON! YIPEEE";
+            hScoreDisplay = ("High score: " + highScore);
         }
 
         livesUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, lives);
         scoreUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, score);
+        hScore.draw(g,atari, GAME_WIDTH,GAME_HEIGHT, highScore);
 
 
         Toolkit.getDefaultToolkit().sync();
@@ -482,8 +491,9 @@ public class GamePanel extends JPanel implements Runnable {
     public void checkIfLost(int lives) {
         int remainingLives = lives;
 
-        if (remainingLives < 1) {
+        if (remainingLives < 1) { //lost
             beginAttractMode();
+            writeHighScore();
         }
     }
 
@@ -507,7 +517,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         lives = 10;
         score = 0;
-
+        highScoreRead();
         ballColour = Color.white;
     }
 
@@ -527,13 +537,13 @@ public class GamePanel extends JPanel implements Runnable {
         return optionsPanel;
     }
 
-    //this method is not fully my own, I have referenecd the source below, I give full credit for the base method to the OP
+    //this method is not fully my own, I have referenced the source below, I give full credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
     public void writeHighScore() {
         try {
             // Specify the file path and name for the high scores file
-            String filePath = "highscores.txt";
+            String filePath = ".src/../highscores.txt";
 
             // Create a new File object
             File highScoresFile = new File(filePath);
