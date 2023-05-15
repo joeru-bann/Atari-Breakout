@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     int inclinationSelection = 0;
 
     String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
-    int highScore = 0;
+    int highScore;
 
     String hScoreDisplay = "hscore"+ highScore;
 
@@ -84,12 +84,13 @@ public class GamePanel extends JPanel implements Runnable {
     Clip sound;
 
     GamePanel() {
+        readHighScore();
         random = new Random();
 
         brick = new Brick[rows][columns];
         livesUI = new Lives(GAME_WIDTH - 20, GAME_HEIGHT - 20, 20, 20);
         scoreUI = new Score(GAME_WIDTH - 20, GAME_HEIGHT - 20, 20, 20);
-        hScore = new highScore(GAME_WIDTH + 30, GAME_HEIGHT + 20, 40, 40, highScore);
+        hScore = new highScore(GAME_WIDTH + 50, GAME_HEIGHT + 20, 40, 40, highScore);
 
         ballColour = Color.white;
 
@@ -410,6 +411,7 @@ public class GamePanel extends JPanel implements Runnable {
                             switch (t) {
                                 case 0:
                                     score += 7;
+
                                     break;
                                 case 1:
                                     score += 7;
@@ -506,16 +508,20 @@ public class GamePanel extends JPanel implements Runnable {
         
         if (remainingLives < 1) { //if lost
             int ran = 0;
-            ran = random.nextInt(3);
+
+            ran = random.nextInt(2);
 
             switch (ran){
                 case 1 : playSound("deep_you_lose.wav");
                 break;
                 case 2: playSound("you_losew.wav");
             }
+            if(score > highScore){
+                highScore = score;
+                writeHighScore(highScore);
 
+            }
             beginAttractMode();
-            writeHighScore(highScore);
         }
     }
 
@@ -570,12 +576,13 @@ public class GamePanel extends JPanel implements Runnable {
             e.printStackTrace();
         }
     }
-    public static int readHighScore() {
-        int highScore = 0;
+    public int readHighScore() {
+        //int highScore = 0;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line = reader.readLine();
             if (line != null) {
+                highScore = 3;
                 highScore = Integer.parseInt(line);
             }
         } catch (IOException e) {
