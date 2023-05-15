@@ -1,3 +1,5 @@
+package Breakout;
+
 import java.awt.*;
 
 public class Paddle extends Rectangle {
@@ -8,7 +10,7 @@ public class Paddle extends Rectangle {
     int dx;
     static int paddleSpeed = 9;
 
-    private int paddleWidth;
+    int paddleWidth;
     public int getPaddleWidth() {
         return paddleWidth;
     }

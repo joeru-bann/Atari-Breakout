@@ -1,10 +1,11 @@
-
+package Breakout;
 import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;  //user input controls
 import java.awt.image.*;
 import javax.sound.sampled.*;
+
 
 import javax.swing.*;
 
@@ -14,8 +15,11 @@ public class GamePanel extends JPanel implements Runnable {
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 
-    static final int PADDLE_WIDTH = 55;
-    static final int PADDLE_HEIGHT = 10;
+    //static final int PADDLE_WIDTH = 55;
+    int PADDLE_WIDTH = 100;
+    //static final int PADDLE_HEIGHT = 10;
+    int PADDLE_HEIGHT = 10;
+
 
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     static final int BALL_DIAMETER = 8;
@@ -46,7 +50,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     String hScoreDisplay = "hscore"+ highScore;
 
+    String highScoreData;
+
     String modeMessage = "PRESS SPACE TO SELECT MODE";
+
+    private static final String FILE_PATH = "data/highscores.txt";
 
     String mMessage;
 
@@ -81,7 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
         brick = new Brick[rows][columns];
         livesUI = new Lives(GAME_WIDTH - 20, GAME_HEIGHT - 20, 20, 20);
         scoreUI = new Score(GAME_WIDTH - 20, GAME_HEIGHT - 20, 20, 20);
-        hScore = new highScore(GAME_WIDTH + 20, GAME_HEIGHT + 20, 40, 40, highScore);
+        hScore = new highScore(GAME_WIDTH + 30, GAME_HEIGHT + 20, 40, 40, highScore);
 
         ballColour = Color.white;
 
@@ -154,7 +162,7 @@ public class GamePanel extends JPanel implements Runnable {
                 soundPlaying = true;
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error occurred whilst attempting to play audio");
+                System.out.println("Error occurred whilst attempting to play Breakout.audio");
             }
         }
 
@@ -230,9 +238,9 @@ public class GamePanel extends JPanel implements Runnable {
             hScoreDisplay = ("High score: " + highScore);
         }
 
-        livesUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, lives);
-        scoreUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, score);
-        hScore.draw(g,atari, GAME_WIDTH,GAME_HEIGHT, highScore);
+            livesUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, lives);
+            scoreUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, score);
+            hScore.draw(g,atari, GAME_WIDTH,GAME_HEIGHT, highScore);
 
 
         Toolkit.getDefaultToolkit().sync();
@@ -244,9 +252,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         paddle1.move();
         ball.move();
-
     }
-
+        public void changePaddle(int change){
+        }
     public void checkCollision() {
 
         if (paddle1.x <= 0)
@@ -264,7 +272,12 @@ public class GamePanel extends JPanel implements Runnable {
             ball.dy = -ball.dy;
 
             if (lives > 0) {
-                lives = lives - 1;
+                lives = lives - 1;  //subtracting lost life and changing ball colour;
+                playSound("lose_life.wav");
+                if(attractModeActive ==false ) {
+                    choice = random.nextInt(6);
+                }
+                paddle1.setPaddleWidth(PADDLE_WIDTH-7); //making paddle smaller as punishment
             }
 
             checkIfLost(lives);
@@ -490,16 +503,26 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void checkIfLost(int lives) {
         int remainingLives = lives;
+        
+        if (remainingLives < 1) { //if lost
+            int ran = 0;
+            ran = random.nextInt(3);
 
-        if (remainingLives < 1) { //lost
+            switch (ran){
+                case 1 : playSound("deep_you_lose.wav");
+                break;
+                case 2: playSound("you_losew.wav");
+            }
+
             beginAttractMode();
-            writeHighScore();
+            writeHighScore(highScore);
         }
     }
 
     public void beginAttractMode() {
         attractModePaddles();
         newWelcome();
+        readHighScore(); //reading the most recent h score
 
         attractModeActive = true;
         welcomeMessage = "PRESS SPACE TO TRY AGAIN";
@@ -515,9 +538,8 @@ public class GamePanel extends JPanel implements Runnable {
         newBricks();
         destroyWelcome();
 
-        lives = 10;
+        lives = 3;
         score = 0;
-        highScoreRead();
         ballColour = Color.white;
     }
 
@@ -540,56 +562,29 @@ public class GamePanel extends JPanel implements Runnable {
     //this method is not fully my own, I have referenced the source below, I give full credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
-    public void writeHighScore() {
-        try {
-            // Specify the file path and name for the high scores file
-            String filePath = ".src/../highscores.txt";
-
-            // Create a new File object
-            File highScoresFile = new File(filePath);
-
-            // Check if the file already exists
-            if (highScoresFile.exists()) {
-                System.out.println("High scores file already exists.");
-            } else {
-                // Create the new file
-                if (highScoresFile.createNewFile()) {
-                    System.out.println("High scores file created successfully.");
-                } else {
-                    System.out.println("Unable to create high scores file.");
-                }
-            }
+    public static void writeHighScore(int highScore) {
+        try (FileWriter writer = new FileWriter(FILE_PATH)) {
+            writer.write(String.valueOf(highScore));
+            System.out.println("wrote score");
         } catch (IOException e) {
-            System.out.println("An error occurred while creating the high scores file: " + e.getMessage());
-        }
-
-    }
-
-    public void highScoreRead() {
-        int highScore = 0;
-        String line = "";
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("highScores.txt"));
-            while ((line = reader.readLine()) != null)                 // read the score file by each line
-            {
-                try {
-                    int score = Integer.parseInt(line); // parse each line as an int
-                    if (score > highScore)                       // and keep track of the largest
-                    {
-                        highScore = score;
-                    }
-                } catch (NumberFormatException e1) {
-                    // ignore invalid scores
-                    //System.err.println("ignoring invalid score: " + line);
-                }
-            }
-            reader.close();
-
-        } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(highScore);
     }
+    public static int readHighScore() {
+        int highScore = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+            String line = reader.readLine();
+            if (line != null) {
+                highScore = Integer.parseInt(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return highScore;
+    }
+
 
 
 }

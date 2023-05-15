@@ -1,3 +1,5 @@
+package Breakout;
+
 import java.awt.*;
 
 public class highScore extends Rectangle {

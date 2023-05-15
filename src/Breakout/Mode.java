@@ -1,3 +1,5 @@
+package Breakout;
+
 public class Mode {
 
     Mode(int lives, int speed, String modeName) {
