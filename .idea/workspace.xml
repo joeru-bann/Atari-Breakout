@@ -10,29 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="new special sounds :) (losing life + game), working on changing paddle">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Breakout/audio/deep_you_lose.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Breakout/audio/lose_life.wav" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Breakout/audio/you_losew.wav" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Breakout.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Brick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GameFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Instructions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Instructions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Lives.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Lives.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Mode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Mode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Paddle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Paddle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Score.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Score.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Welcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Welcome.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/atariFonts/Atari.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/atariFonts/Atari.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/audio/boundary_hit.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/audio/boundary_hit.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/audio/brick_hit.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/audio/brick_hit.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/audio/paddle_hit.wav" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/audio/paddle_hit.wav" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/highScore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/highScore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/highscores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/highscores.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,18 +55,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/coolb/Desktop/coding/IdeaProjects/Brumbly Breakout/out/artifacts/Brumbly_Breakout_jar/Brumbly Breakout.jar",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/coolb/Desktop/coding/IdeaProjects/Brumbly Breakout/out/artifacts/Brumbly_Breakout_jar/Brumbly Breakout.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\coolb\Desktop\coding\IdeaProjects\Brumbly Breakout\src\Breakout" />
@@ -136,7 +115,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684108076627</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="new special sounds :) (losing life + game), working on changing paddle">
+      <created>1684152007347</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1684152007347</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -154,6 +140,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="beginning base classes with intro" />
     <MESSAGE value="added &quot;high scores display text&quot; (high score read/write not working yet)" />
-    <option name="LAST_COMMIT_MESSAGE" value="added &quot;high scores display text&quot; (high score read/write not working yet)" />
+    <MESSAGE value="new special sounds :) (losing life + game), working on changing paddle" />
+    <option name="LAST_COMMIT_MESSAGE" value="new special sounds :) (losing life + game), working on changing paddle" />
   </component>
 </project>
