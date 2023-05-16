@@ -9,9 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="new special sounds :) (losing life + game), working on changing paddle">
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="high score now fully working, readScore method at beginning">
+      <change afterPath="$PROJECT_DIR$/src/Breakout/UI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Instructions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Instructions.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +125,35 @@
       <option name="project" value="LOCAL" />
       <updated>1684152007347</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="new special sounds :) (losing life + game), working on changing paddle">
+      <created>1684195185830</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1684195185830</updated>
+    </task>
+    <task id="LOCAL-00005" summary="high score now fully working, readScore method at beginning">
+      <created>1684197791501</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1684197791501</updated>
+    </task>
+    <task id="LOCAL-00006" summary="high score now fully working, readScore method at beginning">
+      <created>1684197831158</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1684197831158</updated>
+    </task>
+    <task id="LOCAL-00007" summary="high score now fully working, readScore method at beginning">
+      <created>1684197852933</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1684197852933</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -141,6 +172,7 @@
     <MESSAGE value="beginning base classes with intro" />
     <MESSAGE value="added &quot;high scores display text&quot; (high score read/write not working yet)" />
     <MESSAGE value="new special sounds :) (losing life + game), working on changing paddle" />
-    <option name="LAST_COMMIT_MESSAGE" value="new special sounds :) (losing life + game), working on changing paddle" />
+    <MESSAGE value="high score now fully working, readScore method at beginning" />
+    <option name="LAST_COMMIT_MESSAGE" value="high score now fully working, readScore method at beginning" />
   </component>
 </project>

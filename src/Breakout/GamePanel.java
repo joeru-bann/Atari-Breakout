@@ -42,6 +42,9 @@ public class GamePanel extends JPanel implements Runnable {
     int choice = 0;
     int modeChoice = 1;
 
+    private UI livesUI;
+    private UI scoreUI;
+    private UI hScoreUI;
 
     int inclinationSelection = 0;
 
@@ -74,10 +77,6 @@ public class GamePanel extends JPanel implements Runnable {
     Welcome welcome;
 
     Mode mode;
-    Lives livesUI;
-    Score scoreUI;
-
-    highScore hScore;
     Font atari;
     Color ballColour;
     Random random;
@@ -87,10 +86,12 @@ public class GamePanel extends JPanel implements Runnable {
         readHighScore();
         random = new Random();
 
-        brick = new Brick[rows][columns];
-        livesUI = new Lives(GAME_WIDTH - 20, GAME_HEIGHT - 20, 20, 20);
-        scoreUI = new Score(GAME_WIDTH - 20, GAME_HEIGHT - 20, 20, 20);
-        hScore = new highScore(GAME_WIDTH + 50, GAME_HEIGHT + 20, 40, 40, highScore);
+         brick = new Brick[rows][columns];
+         livesUI = new UI(GAME_WIDTH - 500, GAME_HEIGHT -20, Color.RED, "Lives ", atari);
+         scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score ", atari);
+         hScoreUI = new UI(GAME_WIDTH - 100, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore ", atari);
+
+
 
         ballColour = Color.white;
 
@@ -174,6 +175,7 @@ public class GamePanel extends JPanel implements Runnable {
         soundPlaying = false;
     }
 
+    @Override
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);
@@ -185,7 +187,12 @@ public class GamePanel extends JPanel implements Runnable {
 
         g.drawImage(buffer, 0, 0, this);
 
+        livesUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, lives);
+        scoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, score);
+        hScoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, highScore);
     }
+
+
 
 
     public void draw(Graphics g) {
@@ -239,9 +246,10 @@ public class GamePanel extends JPanel implements Runnable {
             hScoreDisplay = ("High score: " + highScore);
         }
 
-            livesUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, lives);
-            scoreUI.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, score);
-            hScore.draw(g,atari, GAME_WIDTH,GAME_HEIGHT, highScore);
+        livesUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, lives);
+        scoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, score);
+        hScoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, highScore);
+
 
 
         Toolkit.getDefaultToolkit().sync();

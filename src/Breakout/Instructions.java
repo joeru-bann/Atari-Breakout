@@ -17,10 +17,8 @@ public class Instructions extends Rectangle {
 
         g.setFont(atari);
         g.setColor(Color.white);
-        //welcome to brumbly
         g.drawString(messageToDisplay, (GAME_WIDTH / 2 + 30) - fm.stringWidth(messageToDisplay) - 20, (GAME_HEIGHT / 2) - fm.getHeight());
-       //mode message
-        g.drawString(modeMessageToDisplay, (GAME_WIDTH / 2 + 15) - fm.stringWidth(modeMessageToDisplay) - 20, (GAME_HEIGHT / 2 + 50) - fm.getHeight());
+
 
     }
 
