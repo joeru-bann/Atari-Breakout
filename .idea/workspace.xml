@@ -9,12 +9,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="high score now fully working, readScore method at beginning">
-      <change afterPath="$PROJECT_DIR$/src/Breakout/UI.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" afterDir="false" />
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="refactrored the UI to utilize one class only, string is automatic size (will change looks bad), way more efficient now.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/Instructions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Instructions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Lives.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Score.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Welcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Welcome.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/highScore.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +154,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684197852933</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="refactrored the UI to utilize one class only, string is automatic size (will change looks bad), way more efficient now.">
+      <created>1684207347446</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1684207347446</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -173,6 +181,7 @@
     <MESSAGE value="added &quot;high scores display text&quot; (high score read/write not working yet)" />
     <MESSAGE value="new special sounds :) (losing life + game), working on changing paddle" />
     <MESSAGE value="high score now fully working, readScore method at beginning" />
-    <option name="LAST_COMMIT_MESSAGE" value="high score now fully working, readScore method at beginning" />
+    <MESSAGE value="refactrored the UI to utilize one class only, string is automatic size (will change looks bad), way more efficient now." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactrored the UI to utilize one class only, string is automatic size (will change looks bad), way more efficient now." />
   </component>
 </project>

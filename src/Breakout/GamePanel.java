@@ -75,7 +75,6 @@ public class GamePanel extends JPanel implements Runnable {
     Ball ball;
     Brick[][] brick;
     Welcome welcome;
-
     Mode mode;
     Font atari;
     Color ballColour;
@@ -87,9 +86,9 @@ public class GamePanel extends JPanel implements Runnable {
         random = new Random();
 
          brick = new Brick[rows][columns];
-         livesUI = new UI(GAME_WIDTH - 500, GAME_HEIGHT -20, Color.RED, "Lives ", atari);
-         scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score ", atari);
-         hScoreUI = new UI(GAME_WIDTH - 100, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore ", atari);
+         livesUI = new UI(GAME_WIDTH - 500, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
+         scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
+         hScoreUI = new UI(GAME_WIDTH - 100, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
 
 
 
@@ -186,11 +185,11 @@ public class GamePanel extends JPanel implements Runnable {
         draw(graphics);
 
         g.drawImage(buffer, 0, 0, this);
-
-        livesUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, lives);
-        scoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, score);
-        hScoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, highScore);
     }
+
+
+
+
 
 
 
@@ -223,7 +222,6 @@ public class GamePanel extends JPanel implements Runnable {
                     ballColour = Color.white;
                     break;
             }
-
         }
 
         paddle1.draw(g);
@@ -244,13 +242,12 @@ public class GamePanel extends JPanel implements Runnable {
             beginAttractMode();
             welcomeMessage = "YOU WON! YIPEEE";
             hScoreDisplay = ("High score: " + highScore);
+
         }
 
         livesUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, lives);
         scoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, score);
         hScoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, highScore);
-
-
 
         Toolkit.getDefaultToolkit().sync();
         // Making sure display refreshes real-time for paint method
