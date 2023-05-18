@@ -11,7 +11,7 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
-     static final int GAME_WIDTH = 950;
+    static final int GAME_WIDTH = 950;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 
@@ -45,22 +45,19 @@ public class GamePanel extends JPanel implements Runnable {
     private UI livesUI;
     private UI scoreUI;
     private UI hScoreUI;
+    private Welcome modeText;
 
     int inclinationSelection = 0;
 
-    String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
     int highScore;
 
+    String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
+    String modeMessage = "PRESS 'M' TO SELECT MODE";
+
     String hScoreDisplay = "hscore"+ highScore;
-
-    String highScoreData;
-
-    String modeMessage = "PRESS SPACE TO SELECT MODE";
+    String empty = "";
 
     private static final String FILE_PATH = "data/highscores.txt";
-
-    String mMessage;
-
 
     boolean attractModeActive = true;
     boolean soundPlaying;
@@ -88,8 +85,7 @@ public class GamePanel extends JPanel implements Runnable {
          brick = new Brick[rows][columns];
          livesUI = new UI(GAME_WIDTH - 500, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
          scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
-         hScoreUI = new UI(GAME_WIDTH - 100, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
-
+         hScoreUI = new UI(GAME_WIDTH - 130, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
 
 
         ballColour = Color.white;
@@ -146,7 +142,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void newWelcome() {
-        welcome = new Welcome(GAME_WIDTH / 2, GAME_HEIGHT / 2, GAME_WIDTH / 15, GAME_HEIGHT / 15);
+        welcome = new Welcome((GAME_WIDTH - (GAME_WIDTH / 15)) / 2, (GAME_HEIGHT - (GAME_HEIGHT / 15)) / 2, GAME_WIDTH / 15, GAME_HEIGHT / 15);
+        //modeText = new Welcome(GAME_WIDTH / 2, (GAME_HEIGHT / 2) - 50, GAME_WIDTH / 15, GAME_HEIGHT / 15);
     }
 
     public void destroyWelcome() {
@@ -179,6 +176,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         super.paintComponent(g);
 
+
         buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         graphics = buffer.getGraphics();
 
@@ -187,19 +185,12 @@ public class GamePanel extends JPanel implements Runnable {
         g.drawImage(buffer, 0, 0, this);
     }
 
-
-
-
-
-
-
-
     public void draw(Graphics g) {
         allCleared = true;
 
         if (attractModeActive == true) {
 
-            switch (choice) {
+            switch (choice) {  //altering choice anywhere in gamePanel allows the ball the change
                 case 0:
                     ballColour = Color.cyan;
                     break;
@@ -227,7 +218,7 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1.draw(g);
         ball.draw(g, ballColour);
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage);
-        // mode.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, modeMessage);
+
 
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -244,14 +235,13 @@ public class GamePanel extends JPanel implements Runnable {
             hScoreDisplay = ("High score: " + highScore);
 
         }
-
-        livesUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, lives);
-        scoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, score);
-        hScoreUI.draw((Graphics2D) g, GAME_WIDTH, GAME_HEIGHT, highScore);
-
+        //Keep draw statements here for atari font to work
+       // modeText.draw((Graphics2D) g, empty);
+        livesUI.draw((Graphics2D) g,  lives);
+        scoreUI.draw((Graphics2D) g, score);
+        hScoreUI.draw((Graphics2D) g, highScore);
         Toolkit.getDefaultToolkit().sync();
         // Making sure display refreshes real-time for paint method
-
     }
 
     public void move() {
@@ -570,7 +560,7 @@ public class GamePanel extends JPanel implements Runnable {
         return optionsPanel;
     }
 
-    //this method is not fully my own, I have referenced the source below, I give full credit for the base method to the OP
+    //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
     public static void writeHighScore(int highScore) {
@@ -596,9 +586,4 @@ public class GamePanel extends JPanel implements Runnable {
 
         return highScore;
     }
-
-
-
 }
-
-

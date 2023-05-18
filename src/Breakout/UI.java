@@ -25,7 +25,8 @@ public class UI extends JPanel {
 
     }
 
-    public void draw(Graphics2D g2d, int width, int height, int value) {
+    public void draw(Graphics2D g2d, int value) {
+
         g2d.setFont(atari);
         g2d.setColor(color);
         FontMetrics fontMetrics = g2d.getFontMetrics();
@@ -35,13 +36,14 @@ public class UI extends JPanel {
         int textY = y + textHeight / 2; // Center vertically
 
         //g2d.fillRect(x, y, width, height);
-        g2d.drawString(message + value, textX, textY);    }
+        g2d.drawString(message + value, textX, textY);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-        draw(g2d, 0,0,0);
+        draw(g2d,0);
         g2d.dispose();
     }
 }

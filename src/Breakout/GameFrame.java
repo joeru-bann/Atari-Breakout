@@ -23,7 +23,7 @@ public class GameFrame extends JFrame {
 
         setTitle("Brumble Breakout : Breaking Brumble");
         setResizable(false);
-        setBackground(Color.black);
+        setBackground(Color.white);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setVisible(true);

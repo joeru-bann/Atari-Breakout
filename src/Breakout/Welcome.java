@@ -9,7 +9,6 @@ public class Welcome extends Rectangle {
         super(x, y, welcomeWidth, welcomeHeight);
     }
 
-
     public void draw(Graphics g, Font atari, int GAME_WIDTH, int GAME_HEIGHT, String welcomeMessage, String modeMessage) {
         FontMetrics fm = g.getFontMetrics();
         String messageToDisplay = welcomeMessage;
@@ -17,11 +16,21 @@ public class Welcome extends Rectangle {
 
         g.setFont(atari);
         g.setColor(Color.white);
-        //welcome to brumbly
-        g.drawString(messageToDisplay, (GAME_WIDTH / 2) - fm.stringWidth(messageToDisplay) - 20, (GAME_HEIGHT / 2) - fm.getHeight());
-       //mode message
-       // g.drawString(modeMessageToDisplay, (GAME_WIDTH / 2) - fm.stringWidth(modeMessageToDisplay) - 20, (GAME_HEIGHT / 2 + 50) - fm.getHeight());
 
+        // Calculate horizontal centre
+        int messageX = (GAME_WIDTH - fm.stringWidth(welcomeMessage)) / 2;
+
+        // position vertically centered
+        int messageY = (GAME_HEIGHT - fm.getHeight()) / 2;
+
+        g.drawString(welcomeMessage, messageX, messageY);
+
+        int modeX = (GAME_WIDTH - fm.stringWidth(modeMessage)) / 2;
+
+        // drw mode message below welcome
+        int modeY = messageY + fm.getHeight() + 50;
+
+        g.drawString(modeMessage, modeX, modeY);
 
     }
 
