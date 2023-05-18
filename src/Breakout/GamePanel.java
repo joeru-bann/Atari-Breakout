@@ -1,4 +1,4 @@
-package Breakout;
+package src.Breakout;
 import java.io.*;
 import java.util.*;
 import java.awt.*;
@@ -58,6 +58,8 @@ public class GamePanel extends JPanel implements Runnable {
     String empty = "";
 
     private static final String FILE_PATH = "data/highscores.txt";
+    
+    String instructions = "press 'i' to see instructions";
 
     boolean attractModeActive = true;
     boolean soundPlaying;
@@ -217,7 +219,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         paddle1.draw(g);
         ball.draw(g, ballColour);
-        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage);
+        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructions);
 
 
         for (int p = 0; p < rows; p++) {
