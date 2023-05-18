@@ -9,14 +9,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="fixed font artifacts by removing second instance of drawing string (gamepanel + UI)">
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="new instruction string ('M') (welcome class)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Brick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/GameFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GameFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Breakout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Breakout.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/GameFrame.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/UI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/Welcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Welcome.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -169,7 +167,21 @@
       <option name="project" value="LOCAL" />
       <updated>1684285164586</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="new instruction string ('M') (welcome class)">
+      <created>1684370202773</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1684370202773</updated>
+    </task>
+    <task id="LOCAL-00011" summary="new instruction string ('M') (welcome class)">
+      <created>1684370234828</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1684370234828</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -191,6 +203,7 @@
     <MESSAGE value="high score now fully working, readScore method at beginning" />
     <MESSAGE value="refactrored the UI to utilize one class only, string is automatic size (will change looks bad), way more efficient now." />
     <MESSAGE value="fixed font artifacts by removing second instance of drawing string (gamepanel + UI)" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed font artifacts by removing second instance of drawing string (gamepanel + UI)" />
+    <MESSAGE value="new instruction string ('M') (welcome class)" />
+    <option name="LAST_COMMIT_MESSAGE" value="new instruction string ('M') (welcome class)" />
   </component>
 </project>

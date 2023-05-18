@@ -1,33 +1,37 @@
-package src.Breakout;
+package Breakout;
 
-import java.io.*;
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
-public class Welcome extends Rectangle {
-    Welcome(int x, int y, int welcomeWidth, int welcomeHeight) {
-        super(x, y, welcomeWidth, welcomeHeight);
+public class Welcome extends JPanel {
+    public Welcome(int x, int y, int welcomeWidth, int welcomeHeight) {
+        setBounds(x, y, welcomeWidth, welcomeHeight);
+        setLayout(new BorderLayout());
     }
 
-    public void draw(Graphics g, Font atari, int GAME_WIDTH, int GAME_HEIGHT, String welcomeMessage, String modeMessage, String instructions) {
-        FontMetrics fm = g.getFontMetrics();
-        String messageToDisplay = welcomeMessage;
-        String modeMessageToDisplay = modeMessage;
+    public void draw(Graphics g, Font atariFont, int GAME_WIDTH, int GAME_HEIGHT, String welcomeMessage, String modeMessage, String instructions) {
+        FontMetrics fm = g.getFontMetrics(atariFont);
 
-        g.setFont(atari);
+        g.setFont(atariFont);
         g.setColor(Color.white);
 
-        // Calculate horizontal centre
+        // Calculate horizontal center
         int messageX = (GAME_WIDTH - fm.stringWidth(welcomeMessage)) / 2;
 
-        // position vertically centered
+        // Position vertically centered
         int messageY = (GAME_HEIGHT - fm.getHeight()) / 2;
 
         g.drawString(welcomeMessage, messageX, messageY);
+        g.drawString(modeMessage, messageX, messageY + 40);
 
-        g.drawString(modeMessage, messageX, (messageY)+50);
-
-        g.drawString(instructions, (messageX)-100, (messageY)-100);
+        // Draw instructions with line breaks
+        String[] instructionLines = instructions.split("\n");
+        for (int i = 0; i < instructionLines.length; i++) {
+            String line = instructionLines[i];
+            int lineX = (GAME_WIDTH - fm.stringWidth(line)) / 2; // Calculate lineX based on the line width
+            int lineY = messageY + 60 + (i + 1) * fm.getHeight();
+            g.drawString(line, lineX, lineY);
+        }
     }
 
 }
