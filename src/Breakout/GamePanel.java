@@ -59,7 +59,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private static final String FILE_PATH = "data/highscores.txt";
     
-    String instructions = "press 'i' to see instructions";
+    String instructionMessage = "press 'i' to see instructionMessage";
 
     boolean attractModeActive = true;
     boolean soundPlaying;
@@ -151,6 +151,11 @@ public class GamePanel extends JPanel implements Runnable {
     public void destroyWelcome() {
         welcomeMessage = " ";  //clear message
         modeMessage = " ";
+        instructionMessage = " ";
+    }
+    public void showInstructions(){
+    instructionMessage = "move paddle: Left and Right arrow keys \n";
+    
     }
 
     public void playSound(String fileName) {
@@ -219,7 +224,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         paddle1.draw(g);
         ball.draw(g, ballColour);
-        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructions);
+        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
 
 
         for (int p = 0; p < rows; p++) {
@@ -480,6 +485,12 @@ public class GamePanel extends JPanel implements Runnable {
             if (e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
                 attractModeActive = false;
                 beginGame();
+                // modeButtons();
+            }
+            
+            if (e.getKeyCode() == KeyEvent.VK_I && attractModeActive == true) {
+                destroyWelcome();
+                showInstructions();
                 // modeButtons();
             }
 
