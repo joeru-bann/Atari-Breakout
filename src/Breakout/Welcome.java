@@ -1,4 +1,4 @@
-package Breakout;
+package src.Breakout;
 
 import java.io.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ public class Welcome extends Rectangle {
         super(x, y, welcomeWidth, welcomeHeight);
     }
 
-    public void draw(Graphics g, Font atari, int GAME_WIDTH, int GAME_HEIGHT, String welcomeMessage, String modeMessage) {
+    public void draw(Graphics g, Font atari, int GAME_WIDTH, int GAME_HEIGHT, String welcomeMessage, String modeMessage, String instructions) {
         FontMetrics fm = g.getFontMetrics();
         String messageToDisplay = welcomeMessage;
         String modeMessageToDisplay = modeMessage;
@@ -25,13 +25,9 @@ public class Welcome extends Rectangle {
 
         g.drawString(welcomeMessage, messageX, messageY);
 
-        int modeX = (GAME_WIDTH - fm.stringWidth(modeMessage)) / 2;
+        g.drawString(modeMessage, messageX, (messageY)+50);
 
-        // drw mode message below welcome
-        int modeY = messageY + fm.getHeight() + 50;
-
-        g.drawString(modeMessage, modeX, modeY);
-
+        g.drawString(instructions, (messageX)-100, (messageY)-100);
     }
 
 }
