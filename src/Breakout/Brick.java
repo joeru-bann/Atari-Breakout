@@ -12,7 +12,7 @@ public class Brick extends Rectangle {
     int row, column;
 
     Brick(int row, int column, int brickWidth, int brickHeight) {
-        super(((row * brickWidth) + 1 * (row + 1)), (brickHeight * 3) + ((column * brickHeight) + 1 * (column + 1)), brickWidth, brickHeight);
+        super(((row * brickWidth) + 1 * (row + 1)), (brickHeight * 3) + ((column * brickHeight) + 1 * (column + 1)), brickWidth, brickHeight); //create rectangle
         this.row = row;
         this.column = column;
     }
@@ -46,7 +46,7 @@ public class Brick extends Rectangle {
         }
 
         if (this.column > 5 && this.column < 8) {
-            g.setColor(Color.white);
+            g.setColor(Color.red);
         }
 
         g.fillRect(x, y, width, height);

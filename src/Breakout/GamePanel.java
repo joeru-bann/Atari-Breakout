@@ -41,11 +41,14 @@ public class GamePanel extends JPanel implements Runnable {
     int score = 0;
     int hits = 0;
     int choice = 0;
+
+    int bricksLeft = rows * columns;
     int modeChoice = 1;
 
     private UI livesUI;
     private UI scoreUI;
     private UI hScoreUI;
+    private UI bLeftUI;
     int inclinationSelection = 0;
 
     int highScore;
@@ -89,9 +92,10 @@ public class GamePanel extends JPanel implements Runnable {
         random = new Random();
 
          brick = new Brick[rows][columns];
-         livesUI = new UI(GAME_WIDTH - 500, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
+         livesUI = new UI(GAME_WIDTH - 600, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
          scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
          hScoreUI = new UI(GAME_WIDTH - 130, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
+         bLeftUI = new UI(GAME_WIDTH - 400, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
 
         ballColour = Color.white;
 
@@ -271,6 +275,8 @@ public class GamePanel extends JPanel implements Runnable {
         livesUI.draw((Graphics2D) g,  lives);
         scoreUI.draw((Graphics2D) g, score);
         hScoreUI.draw((Graphics2D) g, highScore);
+        bLeftUI.draw((Graphics2D) g, bricksLeft);
+
         Toolkit.getDefaultToolkit().sync();
         // Making sure display refreshes real-time for paint method
     }
@@ -437,25 +443,37 @@ public class GamePanel extends JPanel implements Runnable {
                             switch (t) {
                                 case 0:
                                     score += 7;
-
+                                    bricksLeft = bricksLeft-1;
                                     break;
                                 case 1:
                                     score += 7;
+                                    bricksLeft = bricksLeft-1;
+
                                     break;
                                 case 2:
                                     score += 5;
+                                    bricksLeft = bricksLeft-1;
+
                                     break;
                                 case 3:
                                     score += 5;
+                                    bricksLeft = bricksLeft-1;
+
                                     break;
                                 case 4:
                                     score += 3;
+                                    bricksLeft = bricksLeft-1;
+
                                     break;
                                 case 5:
                                     score += 3;
+                                    bricksLeft = bricksLeft-1;
+
                                     break;
                                 default:
                                     score += 1;
+                                    bricksLeft = bricksLeft-1;
+
                                     break;
                             }
 
