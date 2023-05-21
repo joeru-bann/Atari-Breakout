@@ -1,4 +1,5 @@
-package src.Breakout;
+package Breakout;
+
 import java.io.*;
 import java.util.*;
 import java.awt.*;
@@ -7,18 +8,27 @@ import java.awt.image.*;
 import javax.sound.sampled.*;
 
 import javax.swing.*;
+
 public class GamePanel extends JPanel implements Runnable {
+
     static final int GAME_WIDTH = 950;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 
-    //static final int PADDLE_WIDTH = 55;
+    private int screenWidth;
+    private int screenHeight;
+
+    private double scaleX;
+    private double scaleY;
+
     int PADDLE_WIDTH = 100;
-    //static final int PADDLE_HEIGHT = 10;
     int PADDLE_HEIGHT = 10;
 
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     static final int BALL_DIAMETER = 8;
+
+    int level = 1;
+    int brickCount = level * 10;
 
     final int rows = Math.round(GAME_WIDTH / brickWidth);
     static final int columns = 8;
@@ -30,36 +40,33 @@ public class GamePanel extends JPanel implements Runnable {
 
     static final int DISTANCE = 20;  // 0 == edge
 
-    JPanel optionsPanel = new JPanel();
-
     int lives;
     int score = 0;
     int hits = 0;
     int choice = 0;
-    int modeChoice = 1;
+
 
     private UI livesUI;
     private UI scoreUI;
     private UI hScoreUI;
-    private Welcome modeText;
-
+    private UI bLeftUI;
     int inclinationSelection = 0;
 
     int highScore;
+    private static final String FILE_PATH = "data/highscores.txt";
 
     String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
     String modeMessage = "PRESS 'M' TO SELECT MODE";
-
     String hScoreDisplay = "hscore"+ highScore;
+    String levelMessage = "press space to progress to next level";
     String empty = "";
-
-    private static final String FILE_PATH = "data/highscores.txt";
-
-    String instructionMessage = "press 'i' to see instructionMessage";
+    String instructionMessage = "press 'i' to see instructions";
 
     boolean attractModeActive = true;
     boolean soundPlaying;
     boolean allCleared;
+
+    boolean instructionsShown = false;
 
     Thread gameThread;
     BufferedImage buffer;
@@ -75,16 +82,23 @@ public class GamePanel extends JPanel implements Runnable {
     Random random;
     Clip sound;
 
-    GamePanel() {
+    GamePanel(int screenWidth, int screenHeight) {
+
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+        calculateScale();
+
         readHighScore();
         random = new Random();
 
-        brick = new Brick[rows][columns];
-        livesUI = new UI(GAME_WIDTH - 500, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
-        scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
-        hScoreUI = new UI(GAME_WIDTH - 130, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
+         brick = new Brick[rows][columns];
+         livesUI = new UI(GAME_WIDTH - 600, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
+         scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
+         hScoreUI = new UI(GAME_WIDTH - 130, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
+         bLeftUI = new UI(GAME_WIDTH - 400, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
 
         ballColour = Color.white;
+
         try {
             InputStream fontLocation = getClass().getResourceAsStream("atariFonts/Atari.ttf");
             atari = Font.createFont(Font.TRUETYPE_FONT, fontLocation).deriveFont(15f);
@@ -93,22 +107,36 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         this.setFocusable(true);
-        this.setPreferredSize(SCREEN_SIZE1);
         gameThread = new Thread(this);
         gameThread.start();
 
         attractModePaddles();
-        newBricks();
+        newBricks(1);
         newBall();
         newWelcome();
 
         this.setFocusable(true);
         this.setPreferredSize(SCREEN_SIZE1);
 
+
         this.addKeyListener(new AL());
+
         gameThread = new Thread(this);
         gameThread.start();
 
+    }
+
+    private void calculateScale() {
+        scaleX = (double) screenWidth / GAME_WIDTH;
+        scaleY = (double) screenHeight / GAME_HEIGHT;
+    }
+
+    public void updateScreenSize(int screenWidth, int screenHeight) {
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+        calculateScale();
+        revalidate();
+        repaint();
     }
 
     public void newPaddles() {
@@ -117,10 +145,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-    public void newBricks() {
+    public void newBricks(int level) {
+        int brickCount = level *10;
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
-                brick[p][l] = new Brick(p, l, brickWidth, brickHeight);
+                if(brickCount > 0) {
+                    brick[p][l] = new Brick(p, l, brickWidth, brickHeight);
+                    brickCount--;
+                }
             }
         }
     }
@@ -134,18 +166,39 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void newWelcome() {
-        welcome = new Welcome((GAME_WIDTH - (GAME_WIDTH / 15)) / 2, (GAME_HEIGHT - (GAME_HEIGHT / 15)) / 2, GAME_WIDTH / 15, GAME_HEIGHT / 15);
-        //modeText = new Welcome(GAME_WIDTH / 2, (GAME_HEIGHT / 2) - 50, GAME_WIDTH / 15, GAME_HEIGHT / 15);
+        welcome = new Welcome(0, 0, 0, 0);
     }
 
     public void destroyWelcome() {
         welcomeMessage = " ";  //clear message
         modeMessage = " ";
         instructionMessage = " ";
+        instructionsShown = false;
+
     }
 
+    public void resetWelcome() {
+        welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
+        modeMessage = "PRESS 'M' TO SELECT MODE";
+        instructionMessage = "press 'i' to see instructions";
+        instructionsShown = false;
+    }
     public void showInstructions(){
-        instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle /n to bounce the ball into the bricks \n  move paddle: Left and Right arrow keys";
+        instructionsShown = true;
+        instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys";
+    }
+
+    public void beginGame(int level) {
+
+        newPaddles();
+        newBall();
+        destroyWelcome();
+        newBricks(level);
+
+        int baseLives = 11;
+        lives = baseLives - level;
+        score = 0;
+        ballColour = Color.white;
     }
 
     public void playSound(String fileName) {
@@ -173,11 +226,14 @@ public class GamePanel extends JPanel implements Runnable {
 
         super.paintComponent(g);
 
+        Graphics2D g2d = (Graphics2D) g;
+
         buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         graphics = buffer.getGraphics();
 
         draw(graphics);
 
+        g2d.scale(scaleX, scaleY);
         g.drawImage(buffer, 0, 0, this);
     }
 
@@ -188,26 +244,26 @@ public class GamePanel extends JPanel implements Runnable {
 
             switch (choice) {  //altering choice anywhere in gamePanel allows the ball the change
                 case 0:
-                ballColour = Color.cyan;
-                break;
+                    ballColour = Color.cyan;
+                    break;
                 case 1:
-                ballColour = Color.magenta;
-                break;
+                    ballColour = Color.magenta;
+                    break;
                 case 2:
-                ballColour = Color.red;
-                break;
+                    ballColour = Color.red;
+                    break;
                 case 3:
-                ballColour = Color.orange;
-                break;
+                    ballColour = Color.orange;
+                    break;
                 case 4:
-                ballColour = Color.yellow;
-                break;
+                    ballColour = Color.yellow;
+                    break;
                 case 5:
-                ballColour = Color.green;
-                break;
+                    ballColour = Color.green;
+                    break;
                 default:
-                ballColour = Color.white;
-                break;
+                    ballColour = Color.white;
+                    break;
             }
         }
 
@@ -224,17 +280,22 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-        if (allCleared == true) {
+        if (allCleared == true && level < 11) {
             beginAttractMode();
-            welcomeMessage = "YOU WON! YIPEEE";
+            welcomeMessage = "congratulations completed the level";
             hScoreDisplay = ("High score: " + highScore);
-
+            destroyWelcome();
+            welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, levelMessage); //saying well done from levelmessage
+        }
+        else if (level > 10){
+            welcomeMessage = "YOU WON! YIPEEE";
         }
         //Keep draw statements here for atari font to work
-        // modeText.draw((Graphics2D) g, empty);
         livesUI.draw((Graphics2D) g,  lives);
         scoreUI.draw((Graphics2D) g, score);
         hScoreUI.draw((Graphics2D) g, highScore);
+        bLeftUI.draw((Graphics2D) g, brickCount);
+
         Toolkit.getDefaultToolkit().sync();
         // Making sure display refreshes real-time for paint method
     }
@@ -244,10 +305,6 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1.move();
         ball.move();
     }
-
-    public void changePaddle(int change){
-    }
-
     public void checkCollision() {
 
         if (paddle1.x <= 0)
@@ -346,17 +403,17 @@ public class GamePanel extends JPanel implements Runnable {
 
                 switch (inclinationSelection) {
                     case 0:
-                    inclination = 1.6;
-                    break;
+                        inclination = 1.6;
+                        break;
                     case 1:
-                    inclination = 1.4;
-                    break;
+                        inclination = 1.4;
+                        break;
                     case 2:
-                    inclination = 0.7;
-                    break;
+                        inclination = 0.7;
+                        break;
                     default:
-                    inclination = 0.55;
-                    break;
+                        inclination = 0.55;
+                        break;
                 }
 
                 inclinationSelection = random.nextInt(2);
@@ -402,28 +459,41 @@ public class GamePanel extends JPanel implements Runnable {
 
                             switch (t) {
                                 case 0:
-                                score += 7;
-
-                                break;
+                                    score += 7;
+                                    brickCount = brickCount-1;
+                                    break;
                                 case 1:
-                                score += 7;
-                                break;
+                                    score += 7;
+                                    brickCount = brickCount-1;
+
+                                    break;
                                 case 2:
-                                score += 5;
-                                break;
+                                    score += 5;
+                                    brickCount = brickCount-1;
+
+                                    break;
                                 case 3:
-                                score += 5;
-                                break;
+                                    score += 5;
+                                    brickCount = brickCount-1;
+
+                                    break;
                                 case 4:
-                                score += 3;
-                                break;
+                                    score += 3;
+                                    brickCount = brickCount-1;
+
+                                    break;
                                 case 5:
-                                score += 3;
-                                break;
+                                    score += 3;
+                                    brickCount = brickCount-1;
+
+                                    break;
                                 default:
-                                score += 1;
-                                break;
+                                    score += 1;
+                                    brickCount = brickCount-1;
+
+                                    break;
                             }
+
 
                         } else {
                             choice = random.nextInt(4);
@@ -473,17 +543,18 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
                 attractModeActive = false;
-                beginGame();
-                // modeButtons();
+                beginGame(1);
             }
-
             if (e.getKeyCode() == KeyEvent.VK_I && attractModeActive == true) {
                 destroyWelcome();
                 showInstructions();
-                // modeButtons();
             }
-
+            //navigating back to menu screen from instructions message
+            if (e.getKeyCode() == KeyEvent.VK_Q && (attractModeActive == true) && (instructionsShown == true)) {
+                resetWelcome(); //method sets strings to default messages
+            }
         }
+
 
         //stopping paddle after releasing key - resetting deltaX
         public void keyReleased(KeyEvent e) {
@@ -501,9 +572,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void checkIfLost(int lives) {
         int remainingLives = lives;
-
+        
         if (remainingLives < 1) { //if lost
             int ran = 0;
+            level = 1;
 
             ran = random.nextInt(2);
 
@@ -534,32 +606,7 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1 = new Paddle(0, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH, PADDLE_HEIGHT);
     }
 
-    public void beginGame() {
-        newPaddles();
-        newBall();
-        newBricks();
-        destroyWelcome();
 
-        lives = 3;
-        score = 0;
-        ballColour = Color.white;
-    }
-
-    public JPanel modeButtonsPanel() {
-        JPanel panel = new JPanel();
-        optionsPanel.setLayout(new FlowLayout());
-
-        JButton mode1 = new JButton("Atari");
-        optionsPanel.add(mode1);
-
-        JButton mode2 = new JButton("Frenzy");
-        optionsPanel.add(mode2);
-
-        JButton mode3 = new JButton("#*#^!&#!?");
-        optionsPanel.add(mode3);
-
-        return optionsPanel;
-    }
 
     //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
@@ -572,9 +619,7 @@ public class GamePanel extends JPanel implements Runnable {
             e.printStackTrace();
         }
     }
-
     public int readHighScore() {
-        //int highScore = 0;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line = reader.readLine();
@@ -587,33 +632,5 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         return highScore;
-    }
-    
-    
-    public boolean power ()
-    {
-     for (int r = 0; r < rows; r++) {
-            for (int t = 0; t < columns; t++) {
-                if (brick[r][t] != null) {
-                    if (ball.intersects(brick[r][t])) {
-                        
-
-                        if (attractModeActive != true) {
-                            
-
-                            
-
-                            return true;
-
-                        } else {
-                            choice = random.nextInt(4);
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-     return false;
-    
     }
 }

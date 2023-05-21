@@ -11,8 +11,10 @@ public class Brick extends Rectangle {
     int paddleSpeed = 6;
     int row, column;
 
+    Color purple = new Color(160, 32, 240);
+    // Adjust the parameters as needed for positioning and spacing
     Brick(int row, int column, int brickWidth, int brickHeight) {
-        super(((row * brickWidth) + 1 * (row + 1)), (brickHeight * 3) + ((column * brickHeight) + 1 * (column + 1)), brickWidth, brickHeight); //create rectangle
+        super((column * (brickWidth + 1)) + 30, (row * (brickHeight + 1)) + 50, brickWidth, brickHeight);
         this.row = row;
         this.column = column;
     }
@@ -46,7 +48,7 @@ public class Brick extends Rectangle {
         }
 
         if (this.column > 5 && this.column < 8) {
-            g.setColor(Color.red);
+            g.setColor(purple);
         }
 
         g.fillRect(x, y, width, height);
