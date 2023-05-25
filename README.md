@@ -4,14 +4,12 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <a href="https://github.com/iyyel/celestial-outbreak">
-    <img src="images/celestialoutbreak-logo.png" alt="Logo">
+    <img src="images/brumblybreakout-logo.png" alt="Logo">
   </a>
 
   <!-- <h3 align="center">Title</h3> -->
@@ -124,15 +122,9 @@ To install Brumbly Breakout
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/joeru-bann/Atari-Breakout.svg?style=for-the-badge
-[contributors-url]: [https://github.comjoeru-bann/Atari-Breakout/](https://github.com/joeru-bann/Atari-Breakout/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/joeru-bann/Atari-Breakout)
+[contributors-url]: https://github.com/joeru-bann/Atari-Breakout/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/joeru-bann/Atari-Breakout.svg?style=for-the-badge
 [forks-url]: https://github.com/joeru-bann/Atari-Breakout/network/members
 [stars-shield]: https://img.shields.io/github/stars/joeru-bann/Atari-Breakout.svg?style=for-the-badge
 [stars-url]: https://github.com/joeru-bann/Atari-Breakout/stargazers
-[issues-shield]: https://img.shields.io/github/issues/joeru-bann/Atari-Breakout.svg?style=for-the-badge
-[issues-url]: https://github.com/joeru-bann/Atari-Breakout/issues
-[license-shield]: https://img.shields.io/github/license/joeru-bann/Atari-Breakout.svg?style=for-the-badge
-[license-url]: https://github.com/iyyel/joeru-bann/Atari-Breakout/LICENSE.md
-<!-- [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/ -->
 [product-screenshot]: images/main_menu.png
