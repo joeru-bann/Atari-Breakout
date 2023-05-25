@@ -111,7 +111,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
 
         attractModePaddles();
-        newBricks(1);
+        newBricks();
         newBall();
         newWelcome();
 
@@ -145,14 +145,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-    public void newBricks(int level) {
-        int brickCount = level *10;
+
+    public void newBricks() {
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
-                if(brickCount > 0) {
-                    brick[p][l] = new Brick(p, l, brickWidth, brickHeight);
-                    brickCount--;
-                }
+                brick[p][l] = new Brick(p, l, brickWidth, brickHeight);
             }
         }
     }
@@ -193,10 +190,10 @@ public class GamePanel extends JPanel implements Runnable {
         newPaddles();
         newBall();
         destroyWelcome();
-        newBricks(level);
+        newBricks();
 
-        int baseLives = 11;
-        lives = baseLives - level;
+        //int baseLives = 11;
+        lives = 1;//= baseLives - level;
         score = 0;
         ballColour = Color.white;
     }
