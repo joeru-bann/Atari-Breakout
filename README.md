@@ -18,7 +18,7 @@
 
   <p align="center">
     <br />
-    A space-themed, Breakout-like sandbox 2D video game
+    Breakout recreation using 2D Graphics Java
     <br />
     <!--
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
@@ -123,8 +123,8 @@ To install Brumbly Breakout
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/iyyel/celestial-outbreak.svg?style=for-the-badge
-[contributors-url]: [https://github.com/iyyel/celestial-outbreak/](https://github.com/joeru-bann/Atari-Breakout/graphs/contributors
+[contributors-shield]: https://img.shields.io/github/contributors/joeru-bann/Atari-Breakout.svg?style=for-the-badge
+[contributors-url]: [https://github.comjoeru-bann/Atari-Breakout/](https://github.com/joeru-bann/Atari-Breakout/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/joeru-bann/Atari-Breakout)
 [forks-url]: https://github.com/joeru-bann/Atari-Breakout/network/members
 [stars-shield]: https://img.shields.io/github/stars/joeru-bann/Atari-Breakout.svg?style=for-the-badge
