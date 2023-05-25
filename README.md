@@ -66,7 +66,7 @@ Brumbly Breakout is a recreation of the famous "Atari Breakout" video game origi
 
 The goal of this project was to develop a simple recreation in Java as small project in an attempt to try develop my knowledge of Java graphics and UI utilization.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<p align="right"></p>
 
 ### Built With
 
@@ -75,7 +75,7 @@ Brumbly Breakout required to use the following:
 * [Java 19 jdk ]([https://java.com/en/](https://www.oracle.com/java/technologies/javase/jdk19-archive-downloads.html))
 * [Graphics2D](https://docs.oracle.com/javase/7/docs/api/java/awt/Graphics2D.html/) (Java library)
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<p align="right"></p>
 
 
 
@@ -102,7 +102,7 @@ To install Brumbly Breakout
      cd *Brumbly Breakout.java
    ```
 
-<p align="right">(<a href="#top">back to top</a>)</p>
+<p align="right"></p>
 
 
 
