@@ -8,8 +8,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/iyyel/celestial-outbreak">
-    <img src="images/brumblybreakout-logo.png" alt="Logo">
+  <a href="https://github.com/joeru-bann/Atari-Breakout">
+    <img src="images/brumblybreakout-logo.heif" alt="Logo">
   </a>
 
   <!-- <h3 align="center">Title</h3> -->
@@ -60,7 +60,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Brumbly Breakout][product-screenshot]]([https://github.com/iyyel/celestial-outbreak](https://github.com/joeru-bann/Atari-Breakout))
+[![Brumbly Breakout][product-screenshot]]([https://github.com/joeru-bann/Atari-Breakout])
 
 Brumbly Breakout is a recreation of the famous "Atari Breakout" video game originally developed by Steve Wozniak, Nolan Bushnell in 1970. 
 
@@ -95,7 +95,7 @@ To install Brumbly Breakout
 
 1. Clone the repo in your terminal
    ```sh
-   git clone [https://github.com/your_username_/Project-Name.git](https://github.com/joeru-bann/Atari-Breakout.git)
+   git clone https://github.com/joeru-bann/Atari-Breakout.git
    ```
 2. Navigate to game directory to launch
    ```sh
