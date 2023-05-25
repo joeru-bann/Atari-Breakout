@@ -100,9 +100,9 @@ To install Brumbly Breakout
    git clone [https://github.com/your_username_/Project-Name.git](https://github.com/joeru-bann/Atari-Breakout.git)
    ```
 2. Navigate to game directory to launch
-  ```sh
-    cd *Brumbly Breakout.java
-  ```
+   ```sh
+     cd *Brumbly Breakout.java
+   ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -119,3 +119,20 @@ To install Brumbly Breakout
 * [React Icons](https://react-icons.github.io/react-icons/search)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/iyyel/celestial-outbreak.svg?style=for-the-badge
+[contributors-url]: https://github.com/iyyel/celestial-outbreak/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/iyyel/celestial-outbreak.svg?style=for-the-badge
+[forks-url]: https://github.com/iyyel/celestial-outbreak/network/members
+[stars-shield]: https://img.shields.io/github/stars/iyyel/celestial-outbreak.svg?style=for-the-badge
+[stars-url]: https://github.com/iyyel/celestial-outbreak/stargazers
+[issues-shield]: https://img.shields.io/github/issues/iyyel/celestial-outbreak.svg?style=for-the-badge
+[issues-url]: https://github.com/iyyel/celestial-outbreak/issues
+[license-shield]: https://img.shields.io/github/license/iyyel/celestial-outbreak.svg?style=for-the-badge
+[license-url]: https://github.com/iyyel/celestial-outbreak/LICENSE.md
+<!-- [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/ -->
+[product-screenshot]: images/main_menu.png
