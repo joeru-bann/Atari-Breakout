@@ -124,15 +124,15 @@ To install Brumbly Breakout
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/iyyel/celestial-outbreak.svg?style=for-the-badge
-[contributors-url]: https://github.com/iyyel/celestial-outbreak/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/iyyel/celestial-outbreak.svg?style=for-the-badge
-[forks-url]: https://github.com/iyyel/celestial-outbreak/network/members
-[stars-shield]: https://img.shields.io/github/stars/iyyel/celestial-outbreak.svg?style=for-the-badge
-[stars-url]: https://github.com/iyyel/celestial-outbreak/stargazers
-[issues-shield]: https://img.shields.io/github/issues/iyyel/celestial-outbreak.svg?style=for-the-badge
-[issues-url]: https://github.com/iyyel/celestial-outbreak/issues
-[license-shield]: https://img.shields.io/github/license/iyyel/celestial-outbreak.svg?style=for-the-badge
-[license-url]: https://github.com/iyyel/celestial-outbreak/LICENSE.md
+[contributors-url]: [https://github.com/iyyel/celestial-outbreak/](https://github.com/joeru-bann/Atari-Breakout/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/joeru-bann/Atari-Breakout)
+[forks-url]: https://github.com/joeru-bann/Atari-Breakout/network/members
+[stars-shield]: https://img.shields.io/github/stars/joeru-bann/Atari-Breakout.svg?style=for-the-badge
+[stars-url]: https://github.com/joeru-bann/Atari-Breakout/stargazers
+[issues-shield]: https://img.shields.io/github/issues/joeru-bann/Atari-Breakout.svg?style=for-the-badge
+[issues-url]: https://github.com/joeru-bann/Atari-Breakout/issues
+[license-shield]: https://img.shields.io/github/license/joeru-bann/Atari-Breakout.svg?style=for-the-badge
+[license-url]: https://github.com/iyyel/joeru-bann/Atari-Breakout/LICENSE.md
 <!-- [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/ -->
 [product-screenshot]: images/main_menu.png
