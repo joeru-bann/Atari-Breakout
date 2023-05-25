@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
     static final int BALL_DIAMETER = 8;
 
     int level = 1;
-    int brickCount = level * 10;
+    int brickCount = 232;
 
     final int rows = Math.round(GAME_WIDTH / brickWidth);
     static final int columns = 8;
@@ -193,7 +193,7 @@ public class GamePanel extends JPanel implements Runnable {
         newBricks();
 
         //int baseLives = 11;
-        lives = 1;//= baseLives - level;
+        lives = 10;//= baseLives - level;
         score = 0;
         ballColour = Color.white;
     }
@@ -573,6 +573,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (remainingLives < 1) { //if lost
             int ran = 0;
             level = 1;
+            brickCount = 232;
 
             ran = random.nextInt(2);
 

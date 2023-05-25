@@ -9,7 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="merging, + beginnign level iteration (bricks not centered/correctly formatted)">
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="reset level changes //leftover varibels used (for future)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
     </list>
@@ -113,7 +113,7 @@
       <workItem from="1684452008095" duration="1825000" />
       <workItem from="1684549799430" duration="2401000" />
       <workItem from="1684706548375" duration="7543000" />
-      <workItem from="1684974894765" duration="483000" />
+      <workItem from="1684974894765" duration="2093000" />
     </task>
     <task id="LOCAL-00001" summary="beginning base classes with intro">
       <created>1683236216529</created>
@@ -206,7 +206,14 @@
       <option name="project" value="LOCAL" />
       <updated>1684711436847</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="reset level changes //leftover varibels used (for future)">
+      <created>1684975464497</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1684975464498</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -234,6 +241,7 @@
     <MESSAGE value="new instruction string ('M') (welcome class)" />
     <MESSAGE value="added bricks left counter, new ui element&#10;(next to do: add UI navigation from instructions + mode)" />
     <MESSAGE value="merging, + beginnign level iteration (bricks not centered/correctly formatted)" />
-    <option name="LAST_COMMIT_MESSAGE" value="merging, + beginnign level iteration (bricks not centered/correctly formatted)" />
+    <MESSAGE value="reset level changes //leftover varibels used (for future)" />
+    <option name="LAST_COMMIT_MESSAGE" value="reset level changes //leftover varibels used (for future)" />
   </component>
 </project>
