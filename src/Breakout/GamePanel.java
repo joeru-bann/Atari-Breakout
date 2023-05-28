@@ -156,11 +156,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     // Spawns a new Ball, makes it go to the bottom  resetting the hits.
     public void newBall() {
-        ball = new Ball((GAME_WIDTH / 2) - (BALL_DIAMETER / 2), (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2), BALL_DIAMETER, BALL_DIAMETER);
+        int ballX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
+        int ballY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
+        ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
         ball.setDY(1);
 
         hits = 0;
     }
+
 
     public void newWelcome() {
         welcome = new Welcome(0, 0, 0, 0);
@@ -276,18 +279,13 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         }
-
-        if (allCleared == true && level < 11) {
+        if (allCleared == true) {
             beginAttractMode();
-            welcomeMessage = "congratulations completed the level";
-            hScoreDisplay = ("High score: " + highScore);
-            destroyWelcome();
-            welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, levelMessage); //saying well done from levelmessage
-        }
-        else if (level > 10){
             welcomeMessage = "YOU WON! YIPEEE";
+            hScoreDisplay = ("High score: " + highScore);
+
         }
-        //Keep draw statements here for atari font to work
+       //Keep draw statements here for atari font to work
         livesUI.draw((Graphics2D) g,  lives);
         scoreUI.draw((Graphics2D) g, score);
         hScoreUI.draw((Graphics2D) g, highScore);
@@ -303,7 +301,12 @@ public class GamePanel extends JPanel implements Runnable {
         ball.move();
     }
     public void checkCollision() {
+        handleBoundaryCollision();
+        handlePaddleCollision();
+        handleBrickCollision();
+    }
 
+    private void handleBoundaryCollision() {
         if (paddle1.x <= 0)
             paddle1.x = 0;
 
@@ -316,191 +319,116 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (ball.y >= GAME_HEIGHT - BALL_DIAMETER) {
-            ball.dy = -ball.dy;
-
-            if (lives > 0) {
-                lives = lives - 1;  //subtracting lost life and changing ball colour;
-                playSound("lose_life.wav");
-                if(attractModeActive ==false ) {
-                    choice = random.nextInt(6);
-                }
-                paddle1.setPaddleWidth(PADDLE_WIDTH-7); //making paddle smaller as punishment
-            }
-
-            checkIfLost(lives);
-            newBall();
-            playSound("boundary_hit.wav");
+            handleBallOut();
         }
-        //bouncing ball when hitting edges (left/right) of window boundaries
-        if (ball.x <= 0) {
+
+        if (ball.x <= 0 || ball.x >= GAME_WIDTH - BALL_DIAMETER) {
             ball.dx = -ball.dx;
             playSound("boundary_hit.wav");
 
-            if (attractModeActive == true) {
+            if (attractModeActive) {
                 choice = random.nextInt(6);
             }
         }
+    }
 
-        if (ball.x >= GAME_WIDTH - BALL_DIAMETER) {
-            ball.dx = -ball.dx;
-            playSound("boundary_hit.wav");
+    private void handleBallOut() {
+        ball.dy = -ball.dy;
 
-            if (attractModeActive == true) {
+        if (lives > 0) {
+            lives--;
+            playSound("lose_life.wav");
+            if (!attractModeActive) {
                 choice = random.nextInt(6);
             }
+            paddle1.setPaddleWidth(PADDLE_WIDTH - 7);
         }
 
-        // handling collisions with the Paddle.
+        checkIfLost(lives);
+        newBall();
+        playSound("boundary_hit.wav");
+    }
+
+    private void handlePaddleCollision() {
         if (ball.intersects(paddle1)) {
-            double inclination;
+            double ballCenterX = ball.x + ball.width / 2.0;
+            double paddleCenterX = paddle1.x + paddle1.width / 2.0;
 
-            if (attractModeActive != true) {
+            double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
+            double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 
-                hits = hits + 1; //used for increasing score + ball speed
-
-                //making the ball go on an angle/inclination when colliding with paddle (slightly random for intent of fun)
-                if (ball.x + (BALL_DIAMETER / 2) <= paddle1.x + PADDLE_WIDTH / 8) {
-                    inclination = -1.6;
-                } else {
-                    if (ball.x + (BALL_DIAMETER / 2) <= paddle1.x + (PADDLE_WIDTH / 8) * 2) {
-                        inclination = -1.4;
-                    } else {
-                        if (ball.x + (BALL_DIAMETER / 2) <= paddle1.x + (PADDLE_WIDTH / 8) * 3) {
-                            inclination = -0.7;
-                        } else {
-                            if (ball.x + (BALL_DIAMETER / 2) <= paddle1.x + (PADDLE_WIDTH / 8) * 5) {
-                                inclination = 0.55;
-
-                                if (random.nextInt(2) == 0) {
-                                    inclination = inclination * -1;
-                                }
-
-                            } else {
-                                if (ball.x + (BALL_DIAMETER / 2) <= paddle1.x + (PADDLE_WIDTH / 8) * 6) {
-                                    inclination = 0.7;
-                                } else {
-                                    if (ball.x + (BALL_DIAMETER / 2) <= paddle1.x + (PADDLE_WIDTH / 8) * 7) {
-                                        inclination = 1.4;
-                                    } else {
-                                        inclination = 1.6;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            } else {
-
-                //choose a Random Inclination + ball colour
-
-                choice = random.nextInt(6);
-
-                inclinationSelection = random.nextInt(3);
-
-                switch (inclinationSelection) {
-                    case 0:
-                        inclination = 1.6;
-                        break;
-                    case 1:
-                        inclination = 1.4;
-                        break;
-                    case 2:
-                        inclination = 0.7;
-                        break;
-                    default:
-                        inclination = 0.55;
-                        break;
-                }
-
-                inclinationSelection = random.nextInt(2);
-
-                if (inclinationSelection == 0) {
-                    inclination = inclination * -1;
-                }
-
+            if (attractModeActive) {
+                inclination = getRandomInclination();
             }
 
-            // manipulating ball speed
-            if (hits < 4) {
-                ball.setDY(1);
-            }
-
-            if (hits >= 4 && hits < 12) {
-                ball.setDY(1.5);
-            }
-
-            if (hits >= 12) {
-                ball.setDY(2);
-            }
-
-            // setting the values inside the class after calculating the angle
+            normalizeDirection();
             ball.dy = -ball.dy;
             ball.setDX(inclination);
             playSound("paddle_hit.wav");
-
         }
+    }
 
-        // Colliding with brick
+    private double getRandomInclination() {
+        int inclinationSelection = random.nextInt(3);
+
+        switch (inclinationSelection) {
+            case 0:
+                return 1.6;
+            case 1:
+                return 1.4;
+            case 2:
+                return 0.7;
+            default:
+                return 0.55;
+        }
+    }
+
+    private void normalizeDirection() {
+        double magnitude = Math.sqrt(ball.dx * ball.dx + ball.dy * ball.dy);
+        ball.dx /= magnitude;
+        ball.dy /= magnitude;
+    }
+
+    private void handleBrickCollision() {
         for (int r = 0; r < rows; r++) {
             for (int t = 0; t < columns; t++) {
-                if (brick[r][t] != null) {
-                    if (ball.intersects(brick[r][t])) {
-                        ball.dy = -ball.dy;
-                        playSound("brick_hit.wav");
+                if (brick[r][t] != null && ball.intersects(brick[r][t])) {
+                    ball.dy = -ball.dy;
+                    playSound("brick_hit.wav");
 
-                        if (attractModeActive != true) {
-                            brick[r][t] = null;
-
-                            // Statement gives score based on the bricks position
-
-                            switch (t) {
-                                case 0:
-                                    score += 7;
-                                    brickCount = brickCount-1;
-                                    break;
-                                case 1:
-                                    score += 7;
-                                    brickCount = brickCount-1;
-
-                                    break;
-                                case 2:
-                                    score += 5;
-                                    brickCount = brickCount-1;
-
-                                    break;
-                                case 3:
-                                    score += 5;
-                                    brickCount = brickCount-1;
-
-                                    break;
-                                case 4:
-                                    score += 3;
-                                    brickCount = brickCount-1;
-
-                                    break;
-                                case 5:
-                                    score += 3;
-                                    brickCount = brickCount-1;
-
-                                    break;
-                                default:
-                                    score += 1;
-                                    brickCount = brickCount-1;
-
-                                    break;
-                            }
-
-
-                        } else {
-                            choice = random.nextInt(4);
-                        }
+                    if (!attractModeActive) { //if game is played
+                        handleBrickScore(t);
+                        brickCount--;
+                    } else { //if main menu
+                        choice = random.nextInt(4);
                     }
+
+                    brick[r][t] = null;
                 }
             }
         }
-
     }
+
+    private void handleBrickScore(int brickIndex) {
+        switch (brickIndex) {
+            case 0:
+            case 1:
+                score += 7;
+                break;
+            case 2:
+            case 3:
+                score += 5;
+                break;
+            case 4:
+            case 5:
+                score += 3;
+                break;
+            default:
+                score += 1;
+                break;
+        }
+    }
+
 
     public void run() {
 
