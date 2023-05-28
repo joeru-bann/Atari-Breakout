@@ -73,6 +73,8 @@ public class GamePanel extends JPanel implements Runnable {
     Graphics graphics;
 
     Paddle paddle1;
+
+    PowerUpBall powerUpBall1;
     Ball ball;
     Brick[][] brick;
     Welcome welcome;
@@ -195,6 +197,7 @@ public class GamePanel extends JPanel implements Runnable {
         destroyWelcome();
         newBricks();
 
+
         //int baseLives = 11;
         lives = 10;//= baseLives - level;
         score = 0;
@@ -232,7 +235,6 @@ public class GamePanel extends JPanel implements Runnable {
         graphics = buffer.getGraphics();
 
         draw(graphics);
-
         g2d.scale(scaleX, scaleY);
         g.drawImage(buffer, 0, 0, this);
     }
@@ -270,6 +272,7 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1.draw(g);
         ball.draw(g, ballColour);
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
+        newPowerBall(graphics);
 
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -389,6 +392,11 @@ public class GamePanel extends JPanel implements Runnable {
         ball.dy /= magnitude;
     }
 
+    public void newPowerBall(Graphics g){
+        powerUpBall1 = new PowerUpBall(-200, 300, 40, 40);
+        powerUpBall1.draw(g, Color.red);
+
+    }
     private void handleBrickCollision() {
         for (int r = 0; r < rows; r++) {
             for (int t = 0; t < columns; t++) {
@@ -399,6 +407,9 @@ public class GamePanel extends JPanel implements Runnable {
                     if (!attractModeActive) { //if game is played
                         handleBrickScore(t);
                         brickCount--;
+                        newPowerBall(graphics);
+
+
                     } else { //if main menu
                         choice = random.nextInt(4);
                     }
