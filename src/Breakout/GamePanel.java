@@ -11,6 +11,8 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
+    private Background bg;
+
     static final int GAME_WIDTH = 950;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
@@ -93,11 +95,12 @@ public class GamePanel extends JPanel implements Runnable {
         readHighScore();
         random = new Random();
 
-         brick = new Brick[rows][columns];
-         livesUI = new UI(GAME_WIDTH - 600, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
-         scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
-         hScoreUI = new UI(GAME_WIDTH - 130, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
-         bLeftUI = new UI(GAME_WIDTH - 400, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
+        bg = new Background();
+        brick = new Brick[rows][columns];
+        livesUI = new UI(GAME_WIDTH - 600, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
+        scoreUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
+        hScoreUI = new UI(GAME_WIDTH - 130, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
+        bLeftUI = new UI(GAME_WIDTH - 400, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
 
         ballColour = Color.white;
 
@@ -190,7 +193,12 @@ public class GamePanel extends JPanel implements Runnable {
         instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys";
     }
 
-    public void beginGame(int level) {
+    public void setBackgroundColor(Color color){
+        bg.setBackgroundColor(color);
+        bg.repaint();
+    }
+
+    public void beginGame() {
 
         newPaddles();
         newBall();
@@ -268,7 +276,7 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
             }
         }
-
+        bg.draw(g, 32,32,32);
         paddle1.draw(g);
         ball.draw(g, ballColour);
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
@@ -479,7 +487,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (e.getKeyCode() == KeyEvent.VK_SPACE && attractModeActive == true) {
                 attractModeActive = false;
-                beginGame(1);
+                beginGame();
             }
             if (e.getKeyCode() == KeyEvent.VK_I && attractModeActive == true) {
                 destroyWelcome();
