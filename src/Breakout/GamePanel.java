@@ -1,4 +1,4 @@
-package Breakout;
+package src.Breakout;
 
 import java.io.*;
 import java.util.*;
@@ -69,6 +69,8 @@ public class GamePanel extends JPanel implements Runnable {
     boolean allCleared;
 
     boolean instructionsShown = false;
+    
+    boolean createPowerUp = false;
 
     Thread gameThread;
     BufferedImage buffer;
@@ -85,6 +87,8 @@ public class GamePanel extends JPanel implements Runnable {
     Color ballColour;
     Random random;
     Clip sound;
+    
+    
 
     GamePanel(int screenWidth, int screenHeight) {
 
@@ -280,7 +284,7 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1.draw(g);
         ball.draw(g, ballColour);
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
-        newPowerBall(graphics);
+        newPowerUpBall(graphics);
 
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -289,6 +293,10 @@ public class GamePanel extends JPanel implements Runnable {
                     allCleared = false;
                 }
             }
+        }
+        if (createPowerUp == true){
+        powerUpBall1.draw(g, ballColour);
+        
         }
         if (allCleared == true) {
             beginAttractMode();
@@ -304,6 +312,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Toolkit.getDefaultToolkit().sync();
         // Making sure display refreshes real-time for paint method
+        
     }
 
     public void move() {
@@ -400,11 +409,7 @@ public class GamePanel extends JPanel implements Runnable {
         ball.dy /= magnitude;
     }
 
-    public void newPowerBall(Graphics g){
-        powerUpBall1 = new PowerUpBall(-200, 300, 40, 40);
-        powerUpBall1.draw(g, Color.red);
-
-    }
+    
     private void handleBrickCollision() {
         for (int r = 0; r < rows; r++) {
             for (int t = 0; t < columns; t++) {
@@ -415,7 +420,7 @@ public class GamePanel extends JPanel implements Runnable {
                     if (!attractModeActive) { //if game is played
                         handleBrickScore(t);
                         brickCount--;
-                        newPowerBall(graphics);
+                        newPowerUpBall(graphics);
 
 
                     } else { //if main menu
@@ -426,6 +431,13 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         }
+    }
+    public void newPowerUpBall(Graphics g) {
+        int powerBallX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
+        int powerBallY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
+        powerUpBall1 = new PowerUpBall (powerBallX, powerBallY, BALL_DIAMETER, BALL_DIAMETER);
+        ball.setDY(1);
+
     }
 
     private void handleBrickScore(int brickIndex) {
