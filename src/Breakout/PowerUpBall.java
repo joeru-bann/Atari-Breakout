@@ -1,4 +1,4 @@
-package Breakout;
+package src.Breakout;
 
 import java.awt.*;
 import java.util.*;
@@ -6,11 +6,15 @@ import java.util.*;
 
 public class PowerUpBall extends Rectangle
 {
-
     Random random;
+    GamePanel brickLocation;
     int powerVal;
     int DirY;
     int powerUpSpeed = 2;
+    int x;
+    int y;
+    int width;
+    int height;
 
     public PowerUpBall(int x, int y, int width, int height)
     {
@@ -21,6 +25,11 @@ public class PowerUpBall extends Rectangle
             vectorY = -1;
             setDirY(vectorY);
         }
+    }
+    public void locateBrokenBrick(){    
+        
+    
+    
     }
 
     public void setDirY(double vectorY) {
