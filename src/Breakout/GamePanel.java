@@ -420,6 +420,7 @@ public class GamePanel extends JPanel implements Runnable {
                     if (!attractModeActive) { //if game is played
                         handleBrickScore(t);
                         brickCount--;
+                        brick[r][t] = null;
                         //newPowerUpBall(graphics);
 
 
@@ -427,7 +428,7 @@ public class GamePanel extends JPanel implements Runnable {
                         choice = random.nextInt(4);
                     }
 
-                    brick[r][t] = null;
+
                 }
             }
         }
