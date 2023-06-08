@@ -1,4 +1,4 @@
-package src.Breakout;
+package Breakout;
 
 import java.awt.*;
 import java.util.*;

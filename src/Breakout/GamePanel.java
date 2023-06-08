@@ -1,4 +1,4 @@
-package src.Breakout;
+package Breakout;
 
 import java.io.*;
 import java.util.*;
@@ -284,7 +284,7 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1.draw(g);
         ball.draw(g, ballColour);
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
-        newPowerUpBall(graphics);
+        //newPowerUpBall(graphics);
 
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -420,7 +420,7 @@ public class GamePanel extends JPanel implements Runnable {
                     if (!attractModeActive) { //if game is played
                         handleBrickScore(t);
                         brickCount--;
-                        newPowerUpBall(graphics);
+                        //newPowerUpBall(graphics);
 
 
                     } else { //if main menu
@@ -432,11 +432,12 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
     }
+
     public void newPowerUpBall(Graphics g) {
         int powerBallX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
         int powerBallY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
         powerUpBall1 = new PowerUpBall (powerBallX, powerBallY, BALL_DIAMETER, BALL_DIAMETER);
-        ball.setDY(1);
+        //PowerUpBall.setDY(1);
 
     }
 
