@@ -47,7 +47,8 @@ public class GamePanel extends JPanel implements Runnable {
     int hits = 0;
     int choice = 0;
 
-
+    int bbx;
+    int bby;
     private UI livesUI;
     private UI scoreUI;
     private UI hScoreUI;
@@ -419,6 +420,7 @@ public class GamePanel extends JPanel implements Runnable {
 
                     if (!attractModeActive) { //if game is played
                         handleBrickScore(t);
+
                         brickCount--;
                         brokenBrick(r, t);
                         brick[r][t] = null;
@@ -436,7 +438,10 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void brokenBrick(int x, int y){
-        System.out.println("x: " + x + " y: " +y);
+        bbx = x;
+        bby = y;
+
+        System.out.println("x: " + bbx + " y: " + bby);
 
     }
     public void newPowerUpBall(Graphics g) {

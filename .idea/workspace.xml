@@ -9,7 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="begin adding powerupball function">
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="locating brokenBrick implementation methpd">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
     </list>
@@ -260,7 +260,21 @@
       <option name="project" value="LOCAL" />
       <updated>1685313475586</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="locating brokenBrick implementation methpd">
+      <created>1686522114387</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1686522114387</updated>
+    </task>
+    <task id="LOCAL-00020" summary="locating brokenBrick implementation methpd">
+      <created>1686522213898</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1686522213898</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -293,6 +307,8 @@
     <MESSAGE value="changing collision physics" />
     <MESSAGE value="changed collision physics" />
     <MESSAGE value="begin adding powerupball function" />
-    <option name="LAST_COMMIT_MESSAGE" value="begin adding powerupball function" />
+    <MESSAGE value="locating brokenBrick implementation method" />
+    <MESSAGE value="locating brokenBrick implementation methpd" />
+    <option name="LAST_COMMIT_MESSAGE" value="locating brokenBrick implementation methpd" />
   </component>
 </project>
