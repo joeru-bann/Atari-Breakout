@@ -420,6 +420,7 @@ public class GamePanel extends JPanel implements Runnable {
                     if (!attractModeActive) { //if game is played
                         handleBrickScore(t);
                         brickCount--;
+                        brokenBrick(r, t);
                         brick[r][t] = null;
                         //newPowerUpBall(graphics);
 
@@ -434,6 +435,10 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    public void brokenBrick(int x, int y){
+        System.out.println("x: " + x + " y: " +y);
+
+    }
     public void newPowerUpBall(Graphics g) {
         int powerBallX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
         int powerBallY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
