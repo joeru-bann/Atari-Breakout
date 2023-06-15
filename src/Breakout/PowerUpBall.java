@@ -7,7 +7,7 @@ import java.util.*;
 public class PowerUpBall extends Rectangle
 {
     Random random;
-    GamePanel brickLocation;
+    GamePanel game;
     int powerVal;
     int DirY;
     int powerUpSpeed = 2;
@@ -26,11 +26,7 @@ public class PowerUpBall extends Rectangle
             setDirY(vectorY);
         }
     }
-    public void locateBrokenBrick(){    
-        
-    
-    
-    }
+
 
     public void setDirY(double vectorY) {
         DirY = (int)(vectorY * powerUpSpeed);

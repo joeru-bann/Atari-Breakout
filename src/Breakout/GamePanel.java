@@ -424,7 +424,9 @@ public class GamePanel extends JPanel implements Runnable {
                         brickCount--;
                         brokenBrick(r, t);
                         brick[r][t] = null;
-                        //newPowerUpBall(graphics);
+                        newPowerUpBall(graphics);
+
+
 
 
                     } else { //if main menu
@@ -437,11 +439,18 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public void brokenBrick(int x, int y){
+    public int[] brokenBrick(int x, int y){
         bbx = x;
         bby = y;
 
         System.out.println("x: " + bbx + " y: " + bby);
+        return new int[] {bbx,bby};
+
+
+    }
+    public void getBCoordinates(){
+
+
 
     }
     public void newPowerUpBall(Graphics g) {
