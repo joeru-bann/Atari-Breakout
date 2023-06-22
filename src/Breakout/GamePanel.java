@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;  //user input controls
 import java.awt.image.*;
 import javax.sound.sampled.*;
-
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable {
     static final int GAME_WIDTH = 950;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
-
+    ArrayList<Ball> balls = new ArrayList<Ball>();
     private int screenWidth;
     private int screenHeight;
 
@@ -170,7 +170,7 @@ public class GamePanel extends JPanel implements Runnable {
         int ballY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
         ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
         ball.setDY(1);
-
+        balls.add(ball);
         hits = 0;
     }
 
@@ -283,7 +283,10 @@ public class GamePanel extends JPanel implements Runnable {
         }
         bg.draw(g, 32,32,32);
         paddle1.draw(g);
-        ball.draw(g, ballColour);
+
+        for (int x = 0; x < balls.size(); x++){
+            balls.get(x).draw(g, ballColour);
+        }
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
         //newPowerUpBall(graphics);
 
@@ -296,8 +299,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         if (createPowerUp == true){
-        powerUpBall1.draw(g, ballColour);
-        
+       //for (int u = 0; u < 100; u++) {
+           powerUpBall1.draw(g, ballColour);
+       //}
         }
         if (allCleared == true) {
             beginAttractMode();
@@ -439,7 +443,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public int[] brokenBrick(int x, int y){
+    public int [] brokenBrick(int x, int y){
         bbx = x;
         bby = y;
 
@@ -448,17 +452,15 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     }
-    public void getBCoordinates(){
 
-
-
-    }
-    public void newPowerUpBall(Graphics g) {
-        int powerBallX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
-        int powerBallY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
-        powerUpBall1 = new PowerUpBall (powerBallX, powerBallY, BALL_DIAMETER, BALL_DIAMETER);
-        //PowerUpBall.setDY(1);
-
+    public boolean newPowerUpBall(Graphics g) {
+        handleBrickCollision();
+        System.out.println(1);
+        powerUpBall1 = new PowerUpBall (bbx, bby, BALL_DIAMETER, BALL_DIAMETER);
+        //powerUpBall1.draw(g,Color.WHITE);
+        powerUpBall1.setDY(1);
+        return createPowerUp == true;
+        balls.add(powerUpBall1);
     }
 
     private void handleBrickScore(int brickIndex) {

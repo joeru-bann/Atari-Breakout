@@ -23,12 +23,12 @@ public class PowerUpBall extends Rectangle
         int vectorY = rand.nextInt(2);
         if (vectorY == 0){
             vectorY = -1;
-            setDirY(vectorY);
+            setDY(vectorY);
         }
     }
 
 
-    public void setDirY(double vectorY) {
+    public void setDY(double vectorY) {
         DirY = (int)(vectorY * powerUpSpeed);
     }
     public void move() {
