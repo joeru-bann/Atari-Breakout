@@ -1,12 +1,12 @@
-package Breakout;
 
+package src.Breakout;
 import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;  //user input controls
 import java.awt.image.*;
 import javax.sound.sampled.*;
-import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable {
     static final int GAME_WIDTH = 950;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
-    ArrayList<Ball> balls = new ArrayList<Ball>();
+
     private int screenWidth;
     private int screenHeight;
 
@@ -70,7 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
     boolean allCleared;
 
     boolean instructionsShown = false;
-    
+
     boolean createPowerUp = false;
 
     Thread gameThread;
@@ -88,8 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
     Color ballColour;
     Random random;
     Clip sound;
-    
-    
+
 
     GamePanel(int screenWidth, int screenHeight) {
 
@@ -128,9 +127,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         this.setPreferredSize(SCREEN_SIZE1);
 
-
         this.addKeyListener(new AL());
-
         gameThread = new Thread(this);
         gameThread.start();
 
@@ -155,7 +152,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-
     public void newBricks() {
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -170,10 +166,9 @@ public class GamePanel extends JPanel implements Runnable {
         int ballY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
         ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
         ball.setDY(1);
-        balls.add(ball);
+
         hits = 0;
     }
-
 
     public void newWelcome() {
         welcome = new Welcome(0, 0, 0, 0);
@@ -193,6 +188,7 @@ public class GamePanel extends JPanel implements Runnable {
         instructionMessage = "press 'i' to see instructions";
         instructionsShown = false;
     }
+
     public void showInstructions(){
         instructionsShown = true;
         instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys";
@@ -209,7 +205,6 @@ public class GamePanel extends JPanel implements Runnable {
         newBall();
         destroyWelcome();
         newBricks();
-
 
         //int baseLives = 11;
         lives = 10;//= baseLives - level;
@@ -283,10 +278,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
         bg.draw(g, 32,32,32);
         paddle1.draw(g);
-
-        for (int x = 0; x < balls.size(); x++){
-            balls.get(x).draw(g, ballColour);
-        }
+        ball.draw(g, ballColour);
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
         //newPowerUpBall(graphics);
 
@@ -299,9 +291,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         if (createPowerUp == true){
-       //for (int u = 0; u < 100; u++) {
-           powerUpBall1.draw(g, ballColour);
-       //}
+            //for (int u = 0; u < 100; u++) {
+            powerUpBall1.draw(g,Color.WHITE);
+            //}
         }
         if (allCleared == true) {
             beginAttractMode();
@@ -309,7 +301,7 @@ public class GamePanel extends JPanel implements Runnable {
             hScoreDisplay = ("High score: " + highScore);
 
         }
-       //Keep draw statements here for atari font to work
+        //Keep draw statements here for atari font to work
         livesUI.draw((Graphics2D) g,  lives);
         scoreUI.draw((Graphics2D) g, score);
         hScoreUI.draw((Graphics2D) g, highScore);
@@ -317,14 +309,18 @@ public class GamePanel extends JPanel implements Runnable {
 
         Toolkit.getDefaultToolkit().sync();
         // Making sure display refreshes real-time for paint method
-        
+
     }
 
     public void move() {
 
         paddle1.move();
         ball.move();
+        if (createPowerUp == true){
+            powerUpBall1.move();
+        }
     }
+
     public void checkCollision() {
         handleBoundaryCollision();
         handlePaddleCollision();
@@ -414,7 +410,6 @@ public class GamePanel extends JPanel implements Runnable {
         ball.dy /= magnitude;
     }
 
-    
     private void handleBrickCollision() {
         for (int r = 0; r < rows; r++) {
             for (int t = 0; t < columns; t++) {
@@ -426,17 +421,13 @@ public class GamePanel extends JPanel implements Runnable {
                         handleBrickScore(t);
 
                         brickCount--;
-                        brokenBrick(r, t);
                         brick[r][t] = null;
-                        newPowerUpBall(graphics);
-
-
+                        newPowerUpBall(graphics, brokenBrick(r, t));
 
 
                     } else { //if main menu
                         choice = random.nextInt(4);
                     }
-
 
                 }
             }
@@ -444,23 +435,17 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public int [] brokenBrick(int x, int y){
-        bbx = x;
-        bby = y;
 
         System.out.println("x: " + bbx + " y: " + bby);
         return new int[] {bbx,bby};
 
-
     }
-
-    public boolean newPowerUpBall(Graphics g) {
-        handleBrickCollision();
-        System.out.println(1);
-        powerUpBall1 = new PowerUpBall (bbx, bby, BALL_DIAMETER, BALL_DIAMETER);
-        //powerUpBall1.draw(g,Color.WHITE);
+    public void newPowerUpBall(Graphics g, int[] coordPB) {
+        int x = coordPB[0];
+        int y = coordPB[1];
+        powerUpBall1 = new PowerUpBall (x, y, BALL_DIAMETER, BALL_DIAMETER);
         powerUpBall1.setDY(1);
-        return createPowerUp == true;
-        balls.add(powerUpBall1);
+        createPowerUp = true;
     }
 
     private void handleBrickScore(int brickIndex) {
@@ -483,9 +468,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-
     public void run() {
-
         long lastTime = System.nanoTime();
         double amountOfFPS = 60.0;
         double duration = 1000000000 / amountOfFPS;
@@ -534,7 +517,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
 
-
         //stopping paddle after releasing key - resetting deltaX
         public void keyReleased(KeyEvent e) {
 
@@ -551,7 +533,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void checkIfLost(int lives) {
         int remainingLives = lives;
-        
+
         if (remainingLives < 1) { //if lost
             int ran = 0;
             level = 1;
@@ -561,7 +543,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             switch (ran){
                 case 1 : playSound("deep_you_lose.wav");
-                break;
+                    break;
                 case 2: playSound("you_losew.wav");
             }
             if(score > highScore){
@@ -587,7 +569,6 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
 
-
     //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
@@ -599,6 +580,7 @@ public class GamePanel extends JPanel implements Runnable {
             e.printStackTrace();
         }
     }
+
     public int readHighScore() {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
