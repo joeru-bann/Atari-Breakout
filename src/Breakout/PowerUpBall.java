@@ -1,4 +1,4 @@
-package src.Breakout;
+package Breakout;
 
 import java.awt.*;
 import java.util.*;
@@ -7,7 +7,7 @@ import java.util.*;
 public class PowerUpBall 
 {
     Random random;
-    GamePanel game;
+    GamePanel brickLocation;
     int powerVal;
     int DirY;
     int powerUpSpeed = 2;
@@ -18,13 +18,13 @@ public class PowerUpBall
 
     public PowerUpBall(int row, int column, int width, int height)
     {   
-        this.x = (row * width) + 1 * (row + 1);
-        this.y = (height * 3) + ((column * height) + 1 * (column + 1));
+        this.x = row;
+        this.y = column;
         this.width = width;
         this.height = height;
         
     }
-    // need to use brick hieght and width calculations from array to U.I in PowerUpBall function for x and y coordinates 
+    // need to use brick height and width calculations from array to U.I in PowerUpBall function for x and y coordinates
 
 
     public void setDY(double vectorY) {
