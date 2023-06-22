@@ -1,10 +1,10 @@
-package Breakout;
+package src.Breakout;
 
 import java.awt.*;
 import java.util.*;
 
 
-public class PowerUpBall extends Rectangle
+public class PowerUpBall 
 {
     Random random;
     GamePanel game;
@@ -16,16 +16,15 @@ public class PowerUpBall extends Rectangle
     int width;
     int height;
 
-    public PowerUpBall(int x, int y, int width, int height)
-    {
-        super(x, y, width, height);
-        Random rand = new Random();
-        int vectorY = rand.nextInt(2);
-        if (vectorY == 0){
-            vectorY = -1;
-            setDY(vectorY);
-        }
+    public PowerUpBall(int row, int column, int width, int height)
+    {   
+        this.x = (row * width) + 1 * (row + 1);
+        this.y = (height * 3) + ((column * height) + 1 * (column + 1));
+        this.width = width;
+        this.height = height;
+        
     }
+    // need to use brick hieght and width calculations from array to U.I in PowerUpBall function for x and y coordinates 
 
 
     public void setDY(double vectorY) {
@@ -37,5 +36,6 @@ public class PowerUpBall extends Rectangle
     public void draw(Graphics g, Color color) {
         g.setColor(color);
         g.fillOval(x, y, width, height);
+        System.out.println("row "+x+", column"+y);
     }
 }
