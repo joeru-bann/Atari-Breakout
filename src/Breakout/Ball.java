@@ -10,19 +10,15 @@ public class Ball extends Rectangle {
     double dy;
     private double speed;
 
+    boolean isPowerupBall = false;
+
     Ball(int x, int y, int width, int height, double speed) {
         super(x, y, width, height);
         this.speed = speed;
 
         random = new Random();
-        setRandomDirection();
     }
 
-    private void setRandomDirection() {
-        double angle = Math.toRadians(random.nextDouble() * 360);
-        dx = Math.cos(angle);
-        dy = Math.sin(angle);
-    }
 
     public void setDX(double vectorX) {
         dx = vectorX;

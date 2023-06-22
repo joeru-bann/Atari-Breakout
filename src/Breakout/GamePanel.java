@@ -17,6 +17,8 @@ public class GamePanel extends JPanel implements Runnable {
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     ArrayList<Ball> balls = new ArrayList<Ball>();
+
+    ArrayList<PowerUpBall> pballs = new ArrayList<PowerUpBall>();
     private int screenWidth;
     private int screenHeight;
 
@@ -64,6 +66,8 @@ public class GamePanel extends JPanel implements Runnable {
     String levelMessage = "press space to progress to next level";
     String empty = "";
     String instructionMessage = "press 'i' to see instructions";
+
+    String ballType = "default";
 
     boolean attractModeActive = true;
     boolean soundPlaying;
@@ -122,7 +126,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         attractModePaddles();
         newBricks();
-        newBall();
+        newBall(ballType);
         newWelcome();
 
         this.setFocusable(true);
@@ -141,13 +145,6 @@ public class GamePanel extends JPanel implements Runnable {
         scaleY = (double) screenHeight / GAME_HEIGHT;
     }
 
-    public void updateScreenSize(int screenWidth, int screenHeight) {
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
-        calculateScale();
-        revalidate();
-        repaint();
-    }
 
     public void newPaddles() {
         //new paddle instance from class
@@ -165,13 +162,19 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     // Spawns a new Ball, makes it go to the bottom  resetting the hits.
-    public void newBall() {
+    public void newBall(String ballType) {
         int ballX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
         int ballY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
-        ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
-        ball.setDY(1);
-        balls.add(ball);
-        hits = 0;
+        if (ballType == "default") {
+            ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
+            ball.setDY(1);
+            balls.add(ball);
+            hits = 0;
+        }
+        else {
+            ball.setDY(1);
+            pballs.add(powerUpBall1);
+        }
     }
 
 
@@ -204,9 +207,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void beginGame() {
-
+        ballType = "default";
         newPaddles();
-        newBall();
+        newBall(ballType);
         destroyWelcome();
         newBricks();
 
@@ -229,7 +232,6 @@ public class GamePanel extends JPanel implements Runnable {
                 System.out.println("Error occurred whilst attempting to play Breakout.audio");
             }
         }
-
         if (soundPlaying == true) {
             sound.start();
         }
@@ -284,9 +286,11 @@ public class GamePanel extends JPanel implements Runnable {
         bg.draw(g, 32,32,32);
         paddle1.draw(g);
         ball.draw(g, ballColour);
-        for (int x = 0; x < balls.size(); x++){
-            balls.get(x).draw(g, ballColour);
-        }
+
+//        for (int x = 0; x < balls.size(); x++){
+//            balls.get(x).draw(g, ballColour);
+//        }
+
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
 
         for (int p = 0; p < rows; p++) {
@@ -335,6 +339,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void handleBoundaryCollision() {
         balls.remove(ball);
+        pballs.remove(powerUpBall1);
         if (paddle1.x <= 0)
             paddle1.x = 0;
 
@@ -362,7 +367,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void handleBallOut() {
         ball.dy = -ball.dy;
-
+        paddle1.x = GAME_WIDTH / 2 - 50; //resetting paddle to middle
         if (lives > 0) {
             lives--;
             playSound("lose_life.wav");
@@ -373,7 +378,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         checkIfLost(lives);
-        newBall();
+        newBall(ballType);
         playSound("boundary_hit.wav");
     }
 
@@ -431,6 +436,8 @@ public class GamePanel extends JPanel implements Runnable {
                         brickCount--;
                         brokenBrick(r, t);
                         newPowerUpBall(graphics, new int[] {r,t});
+                        brick[r][t] = null;
+
 
                     } else { //if main menu
                         choice = random.nextInt(4);
@@ -457,6 +464,7 @@ public class GamePanel extends JPanel implements Runnable {
         int y = coordPB[1];
         powerUpBall1 = new PowerUpBall (bbx, bby, BALL_DIAMETER, BALL_DIAMETER);
         powerUpBall1.setDY(1);
+        //balls.add(powerUpBall1);
         createPowerUp = true;
     }
 
