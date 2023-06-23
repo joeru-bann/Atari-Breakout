@@ -36,6 +36,15 @@ public class PowerUpBall
     public void draw(Graphics g, Color color) {
         g.setColor(color);
         g.fillOval(x, y, width, height);
-        System.out.println("row "+x+", column"+y);
+    }
+
+    private Color color;
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }
