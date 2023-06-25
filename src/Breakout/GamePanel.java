@@ -490,8 +490,7 @@ public class GamePanel extends JPanel implements Runnable {
                         handleBrickScore(t);
 
                         brickCount--;
-                        brokenBrick(r, t);
-                        newPowerUpBall(graphics, new int[] {r,t});
+                        newPowerUpBall(graphics);
                         brick[r][t] = null;
 
 
@@ -504,22 +503,11 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    public int [] brokenBrick(int x, int y){
-        bbx = x;
-        bby = y;
-
-        System.out.println("x: " + bbx + " y: " + bby);
-        return new int[] {bbx,bby};
-    }
-
-    public void newPowerUpBall(Graphics g, int[] coordPB) {
-
-        int x = coordPB[0];
-        int y = coordPB[1];
-        System.out.println("row "+x+", column"+y);
-
+    public void newPowerUpBall(Graphics g) {
+        //System.out.println("row "+x+", column"+y);
         pball = new Ball (ball.x, ball.y, BALL_DIAMETER, BALL_DIAMETER, 5);
         pball.setDY(1);
+        pball.setDX(0.2);
         balls.add(pball);
         createPowerUp = true;
     }

@@ -10,7 +10,7 @@ public class PowerUpBall
     GamePanel brickLocation;
     int powerVal;
     int DirY;
-    int powerUpSpeed = 2;
+    int powerUpSpeed = 1;
     int x;
     int y;
     int width;
@@ -28,7 +28,7 @@ public class PowerUpBall
 
 
     public void setDY(double vectorY) {
-        DirY = (int)(vectorY * powerUpSpeed);
+        DirY = (int)(vectorY);
     }
     public void move() {
         y = y + DirY;
