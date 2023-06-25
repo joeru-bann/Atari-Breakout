@@ -1,6 +1,5 @@
 package Breakout;
 
-import java.awt.*;
 import javax.swing.*;
 
 //main method

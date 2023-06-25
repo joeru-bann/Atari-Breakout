@@ -40,7 +40,7 @@ public class Brick extends Rectangle {
         }
 
         if (this.column > 1 && this.column < 4) {
-            g.setColor(Color.yellow);
+            g.setColor(Color.orange);
         }
 
         if (this.column > 3 && this.column < 5) {
@@ -48,7 +48,8 @@ public class Brick extends Rectangle {
         }
 
         if (this.column > 5 && this.column < 8) {
-            g.setColor(purple);
+            //g.setColor(purple);
+            g.setColor(Color.blue);
         }
 
         g.fillRect(x, y, width, height);

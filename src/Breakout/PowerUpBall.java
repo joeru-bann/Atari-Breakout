@@ -4,23 +4,22 @@ import java.awt.*;
 import java.util.*;
 
 
-public class PowerUpBall extends Rectangle
+public class PowerUpBall 
 {
     Random random;
     GamePanel brickLocation;
     int powerVal;
     int DirY;
-    int powerUpSpeed = 2;
+    int powerUpSpeed = 1;
     int x;
     int y;
     int width;
     int height;
 
-    public PowerUpBall(int column, int row, int width, int height, int brickWidth, int brickHeight)
-    {
-        System.out.println("row="+row + "col="+column+"brickheight="+brickHeight+"brickwidth="+brickWidth);
-        this.y = (brickHeight * 3) + ((row * brickHeight));
-        this.x = (column * brickWidth + 25);
+    public PowerUpBall(int row, int column, int width, int height)
+    {   
+        this.x = row;
+        this.y = column;
         this.width = width;
         this.height = height;
         
@@ -29,7 +28,7 @@ public class PowerUpBall extends Rectangle
 
 
     public void setDY(double vectorY) {
-        DirY = (int)(vectorY * powerUpSpeed);
+        DirY = (int)(vectorY);
     }
     public void move() {
         y = y + DirY;
@@ -37,6 +36,15 @@ public class PowerUpBall extends Rectangle
     public void draw(Graphics g, Color color) {
         g.setColor(color);
         g.fillOval(x, y, width, height);
-        //System.out.println("row "+x+", column"+y);
+    }
+
+    private Color color;
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }
