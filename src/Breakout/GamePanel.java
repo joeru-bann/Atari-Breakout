@@ -13,8 +13,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     private Background bg;
 
-    static final int GAME_WIDTH = 950;
-    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
+    static final int GAME_WIDTH = 850;
+    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.1));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     ArrayList<Ball> balls = new ArrayList<Ball>();
 
@@ -411,7 +411,7 @@ public class GamePanel extends JPanel implements Runnable {
         double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
 
 
-        if (ball.y > 611 && ball.y < 613 && ball.intersects(paddle1)) {  //further down == bigger number so using > operator
+        if (ball.y > GAME_HEIGHT-54 && ball.y < GAME_HEIGHT-52 && ball.intersects(paddle1)) {  //further down == bigger number so using > operator
             System.out.println("intersects at" + " x:"+ball.x + "  y:" + ball.y);
 //            double ballCenterX = ball.x + ball.width / 2.0;
 //            double paddleCenterX = paddle1.x + paddle1.width / 2.0;
@@ -429,14 +429,14 @@ public class GamePanel extends JPanel implements Runnable {
             ball.setDX(inclination); //go into diagonal motion
             playSound("paddle_hit.wav");
         }
-        else if (ball.y > 615 || ball.x > 950 || ball.x < 0){ //ball is below or outside sides
+        else if (ball.y > GAME_HEIGHT-50 || ball.x > GAME_WIDTH || ball.x < 0){ //ball is below or outside sides
             balls.remove(ball);
-            if (createPowerUp == true && ball.y >= pball.y || ball.x > 950 || ball.x < 0){
+            if (createPowerUp == true && ball.y >= pball.y || ball.x > GAME_WIDTH || ball.x < 0){
                 pballs.remove(pball);
                 System.out.println("pball doesnt intersect");
             }
 
-            else if (createPowerUp && pball.y > 611 && pball.y < 613 && pball.intersects(paddle1)){
+            else if (createPowerUp && pball.y > GAME_HEIGHT-54 && pball.y < GAME_HEIGHT-52 && pball.intersects(paddle1)){
                 double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 
                 double pballCenterX = pball.x + ball.width / 2.0;
