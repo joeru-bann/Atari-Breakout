@@ -4,7 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 
-public class PowerUpBall 
+public class PowerUpBall extends Rectangle
 {
     Random random;
     GamePanel brickLocation;
@@ -16,10 +16,11 @@ public class PowerUpBall
     int width;
     int height;
 
-    public PowerUpBall(int row, int column, int width, int height)
-    {   
-        this.x = row;
-        this.y = column;
+    public PowerUpBall(int column, int row, int width, int height, int brickWidth, int brickHeight)
+    {
+        System.out.println("row="+row + "col="+column+"brickheight="+brickHeight+"brickwidth="+brickWidth);
+        this.y = (brickHeight * 3) + ((row * brickHeight));
+        this.x = (column * brickWidth + 25);
         this.width = width;
         this.height = height;
         
@@ -36,6 +37,6 @@ public class PowerUpBall
     public void draw(Graphics g, Color color) {
         g.setColor(color);
         g.fillOval(x, y, width, height);
-        System.out.println("row "+x+", column"+y);
+        //System.out.println("row "+x+", column"+y);
     }
 }

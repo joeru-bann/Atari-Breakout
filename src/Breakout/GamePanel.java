@@ -287,9 +287,9 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1.draw(g);
         ball.draw(g, ballColour);
 
-//        for (int x = 0; x < balls.size(); x++){
-//            balls.get(x).draw(g, ballColour);
-//        }
+        for (int x = 0; x < balls.size(); x++){
+            balls.get(x).draw(g, ballColour);
+        }
 
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
 
@@ -398,7 +398,13 @@ public class GamePanel extends JPanel implements Runnable {
             ball.dy = -ball.dy;
             ball.setDX(inclination);
             playSound("paddle_hit.wav");
+
+            if(powerUpBall1.intersects(paddle1)){
+                System.out.println("gg");
+                //breaks game "Cannot invoke "Breakout.PowerUpBall.intersects(java.awt.Rectangle)" because "this.powerUpBall1" is null"
+            }
         }
+
     }
 
     private double getRandomInclination() {
@@ -456,15 +462,13 @@ public class GamePanel extends JPanel implements Runnable {
         System.out.println("x: " + bbx + " y: " + bby);
         return new int[] {bbx,bby};
 
-
     }
 
     public void newPowerUpBall(Graphics g, int[] coordPB) {
         int x = coordPB[0];
         int y = coordPB[1];
-        powerUpBall1 = new PowerUpBall (bbx, bby, BALL_DIAMETER, BALL_DIAMETER);
+        powerUpBall1 = new PowerUpBall (bbx, bby, BALL_DIAMETER, BALL_DIAMETER, brickWidth, brickHeight );
         powerUpBall1.setDY(1);
-        //balls.add(powerUpBall1);
         createPowerUp = true;
     }
 

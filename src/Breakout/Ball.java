@@ -10,8 +10,6 @@ public class Ball extends Rectangle {
     double dy;
     private double speed;
 
-    boolean isPowerupBall = false;
-
     Ball(int x, int y, int width, int height, double speed) {
         super(x, y, width, height);
         this.speed = speed;
