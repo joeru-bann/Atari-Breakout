@@ -4,35 +4,21 @@ import java.awt.*;
 import java.util.*;
 
 
-public class PowerUpBall 
+public class PowerUpBall extends Ball
 {
-    Random random;
     GamePanel brickLocation;
     int powerVal;
     int DirY;
     int powerUpSpeed = 1;
-    int x;
-    int y;
-    int width;
-    int height;
 
-    public PowerUpBall(int row, int column, int width, int height)
+
+    public PowerUpBall(int x, int y, int width, int height, double speed)
     {   
-        this.x = row;
-        this.y = column;
-        this.width = width;
-        this.height = height;
+        super(x,y,width,height,speed);
         
     }
     // need to use brick height and width calculations from array to U.I in PowerUpBall function for x and y coordinates
 
-
-    public void setDY(double vectorY) {
-        DirY = (int)(vectorY);
-    }
-    public void move() {
-        y = y + DirY;
-    }
     public void draw(Graphics g, Color color) {
         g.setColor(color);
         g.fillOval(x, y, width, height);

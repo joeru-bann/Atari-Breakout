@@ -83,7 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     Paddle paddle1;
 
-    Ball pball;
+    PowerUpBall pball;
     Ball ball;
     Brick[][] brick;
     Welcome welcome;
@@ -320,7 +320,7 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         }
-        if (createPowerUp == true){
+        if (createPowerUp == true && pball != null){
            pball.draw(g, ballColour);
 
         }
@@ -346,7 +346,7 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1.move();
         ball.move();
 
-        if (createPowerUp == true){
+        if (createPowerUp == true && pball != null){
             pball.move();
         }
     }
@@ -405,6 +405,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void handlePaddleCollision() { //hitting paddle
+
         double ballCenterX = ball.x + ball.width / 2.0;
         double paddleCenterX = paddle1.x + paddle1.width / 2.0;
 
@@ -412,7 +413,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 
         if (ball.y > 611 && ball.y < 613 && ball.intersects(paddle1)) {  //further down == bigger number so using > operator
-            System.out.println("intersects at" + " x:"+ball.x + "  y:" + ball.y);
+            //System.out.println("intersects at" + " x:"+ball.x + "  y:" + ball.y);
 //            double ballCenterX = ball.x + ball.width / 2.0;
 //            double paddleCenterX = paddle1.x + paddle1.width / 2.0;
 //
@@ -431,29 +432,19 @@ public class GamePanel extends JPanel implements Runnable {
         }
         else if (ball.y > 615 || ball.x > 950 || ball.x < 0){ //ball is below or outside sides
             balls.remove(ball);
-            if (createPowerUp == true && ball.y >= pball.y || ball.x > 950 || ball.x < 0){
-                pballs.remove(pball);
-                System.out.println("pball doesnt intersect");
-            }
-
-            else if (createPowerUp && pball.y > 611 && pball.y < 613 && pball.intersects(paddle1)){
-                double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
-
-                double pballCenterX = pball.x + ball.width / 2.0;
-                double prelativePosition = (pballCenterX - paddleCenterX) / (paddle1.width / 2.0);
-
-                if (menuActive) {
-                    inclination = getRandomInclination();
-                }
-
-                pball.dy = -pball.dy;
-                normalizeDirection();
-
-                pball.setDX(inclination); //go into diagonal motion
-                playSound("paddle_hit.wav");
-            }
         }
 
+        if (createPowerUp == true && pball != null && (pball.y > 615 || pball.x > 950 || pball.x < 0)){
+            pballs.remove(pball);
+            pball = null;
+            System.out.println("side");
+            //System.out.println("pball doesnt intersect");
+        }
+        else if (createPowerUp && pball != null &&  pball.intersects(paddle1)){
+            pballs.remove(pball);
+            pball = null;
+            System.out.println("paddle");
+        }
 
     }
     private double getRandomInclination() {
@@ -505,10 +496,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void newPowerUpBall(Graphics g) {
         //System.out.println("row "+x+", column"+y);
-        pball = new Ball (ball.x, ball.y, BALL_DIAMETER, BALL_DIAMETER, 5);
+
+        pball = new PowerUpBall (ball.x, ball.y, BALL_DIAMETER, BALL_DIAMETER, 5);
         pball.setDY(1);
         pball.setDX(0.2);
-        balls.add(pball);
+        pballs.add(pball);
         createPowerUp = true;
     }
 
