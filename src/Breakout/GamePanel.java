@@ -34,6 +34,9 @@ public class GamePanel extends JPanel implements Runnable {
     int level = 1;
     int brickCount = 232;
 
+    int spawnChance;
+
+    int powerUp;
     final int rows = Math.round(GAME_WIDTH / brickWidth);
     static final int columns = 8;
 
@@ -437,13 +440,28 @@ public class GamePanel extends JPanel implements Runnable {
         if (createPowerUp == true && pball != null && (pball.y > 615 || pball.x > 950 || pball.x < 0)){
             pballs.remove(pball);
             pball = null;
-            System.out.println("side");
+
+            // System.out.println("side");
             //System.out.println("pball doesnt intersect");
         }
         else if (createPowerUp && pball != null &&  pball.intersects(paddle1)){
             pballs.remove(pball);
             pball = null;
+
+            powerUp = random.nextInt(5);
+
+            switch(powerUp){
+                case 1: System.out.println("expand paddle");
+                    paddle1 = new Paddle(0, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH, PADDLE_HEIGHT);
+                case 2: System.out.println("add another ball");
+                case 3: System.out.println("change background colour");
+                case 4: System.out.println("explode area on next impact");
+                case 5: System.out.println("make paddle move in 2d plain");
+                case 6: System.out.println("make paddle move in 2d plain");
+            }
+
             System.out.println("paddle");
+            //pball.dy = -pball.dy;
         }
 
     }
@@ -481,7 +499,10 @@ public class GamePanel extends JPanel implements Runnable {
                         handleBrickScore(t);
 
                         brickCount--;
-                        newPowerUpBall(graphics);
+                        spawnChance = random.nextInt(10);
+                        if(spawnChance > 5) {
+                            newPowerUpBall(graphics);
+                        }
                         brick[r][t] = null;
 
 
