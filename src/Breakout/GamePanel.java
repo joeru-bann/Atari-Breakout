@@ -34,6 +34,10 @@ public class GamePanel extends JPanel implements Runnable {
     int level = 1;
     int brickCount = 232;
 
+    int spawnChance;
+
+    int powerUp;
+    boolean powerUpStart = false;
     final int rows = Math.round(GAME_WIDTH / brickWidth);
     static final int columns = 8;
 
@@ -84,7 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
     Paddle paddle1;
 
     PowerUpBall pball;
-    Ball ball;
+    //Ball ball;
     Brick[][] brick;
     Welcome welcome;
     Mode mode;
@@ -93,6 +97,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     Random random;
     Clip sound;
+
+    long powerUpEnd = 0;
     
     
 
@@ -185,14 +191,10 @@ public class GamePanel extends JPanel implements Runnable {
         int ballX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
         int ballY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
         if (ballType == "default") {
-            ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
+            Ball ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
             ball.setDY(1);
             balls.add(ball);
-            hits = 0;
-        }
-        else {
-            ball.setDY(1);
-            balls.add(pball);
+            //hits = 0;
         }
     }
 
@@ -304,7 +306,10 @@ public class GamePanel extends JPanel implements Runnable {
         }
         bg.draw(g, 32,32,32);
         paddle1.draw(g);
-        ball.draw(g, Color.WHITE); //default ball colour
+        for(int i = 0; i < balls.size(); i++){
+           Ball arrayBall = balls.get(i);
+            arrayBall.draw(g, Color.WHITE); //default ball colour
+        }
 
 //        for (int x = 0; x < balls.size(); x++){
 //            balls.get(x).draw(g, ballColour);
@@ -361,8 +366,8 @@ public class GamePanel extends JPanel implements Runnable {
         if (paddle1.x <= 0)
             paddle1.x = 0;
 
-        if (paddle1.x >= GAME_WIDTH - PADDLE_WIDTH)
-            paddle1.x = GAME_WIDTH - PADDLE_WIDTH;
+        if (paddle1.x >= GAME_WIDTH - paddle1.width)
+            paddle1.x = GAME_WIDTH - paddle1.width;
 
         if (ball.y <= 0) { //roof
             ball.dy = -ball.dy;
@@ -375,7 +380,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if (ball.x <= 0 || ball.x >= GAME_WIDTH - BALL_DIAMETER) {
-            System.out.println("ballx boundary at" + ball.x);
             ball.dx = -ball.dx;
             playSound("boundary_hit.wav");
 
@@ -437,13 +441,39 @@ public class GamePanel extends JPanel implements Runnable {
         if (createPowerUp == true && pball != null && (pball.y > 615 || pball.x > 950 || pball.x < 0)){
             pballs.remove(pball);
             pball = null;
-            System.out.println("side");
+
+            // System.out.println("side");
             //System.out.println("pball doesnt intersect");
         }
         else if (createPowerUp && pball != null &&  pball.intersects(paddle1)){
             pballs.remove(pball);
             pball = null;
-            System.out.println("paddle");
+
+            //powerUp = random.nextInt(5);
+            powerUp = 1;
+
+            switch(powerUp){
+                case 0: System.out.println("expand paddle");
+                    paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH / 4, PADDLE_HEIGHT);
+                    break;
+                case 1: System.out.println("add another ball");
+                    newBall(ballType);
+                    break;
+                case 2: System.out.println("change background colour");
+                    break;
+                case 3: System.out.println("explode area on next impact");
+                    break;
+                case 4: System.out.println("make paddle move in 2d plain");
+                    break;
+                default:
+                    System.out.println("Error on powerUp switch case");
+            }
+            long fiveseconds = 5000000000L;
+            powerUpEnd = System.nanoTime() + fiveseconds;
+            powerUpStart = true;
+
+
+            //pball.dy = -pball.dy;
         }
 
     }
@@ -481,7 +511,10 @@ public class GamePanel extends JPanel implements Runnable {
                         handleBrickScore(t);
 
                         brickCount--;
-                        newPowerUpBall(graphics);
+                        spawnChance = random.nextInt(10);
+                        if(spawnChance > 5) {
+                            newPowerUpBall(graphics);
+                        }
                         brick[r][t] = null;
 
 
@@ -528,18 +561,20 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
 
         long lastTime = System.nanoTime();
-        double amountOfFPS = 60.0;
+        double amountOfFPS = 20.0;
         double duration = 1000000000 / amountOfFPS;
         double delta = 0;
 
         while (true) {
             long now = System.nanoTime();
             delta += (now - lastTime) / duration;
-            lastTime = now;
+                lastTime = now;
 
-            if (delta >= 1) {
+                if (delta >= 1) {
+
                 move();
                 checkCollision();
+                    powerUpEnder();
 
                 repaint();
                 delta--;
@@ -586,6 +621,16 @@ public class GamePanel extends JPanel implements Runnable {
                 paddle1.setDeltaX(0);
             }
         }
+    }
+    public void powerUpEnder(){
+        if(powerUpStart == true) {
+            if (powerUpEnd <= System.nanoTime()) {
+                paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
+                powerUpStart = false;
+            }
+
+        }
+
     }
     public void checkIfLost(int lives) {
         int remainingLives = lives;
