@@ -28,6 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
     int PADDLE_WIDTH = 100;
     int PADDLE_HEIGHT = 10;
 
+
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     static final int BALL_DIAMETER = 8;
 
@@ -37,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
     int spawnChance;
 
     int powerUp;
+    boolean powerUpStart = false;
     final int rows = Math.round(GAME_WIDTH / brickWidth);
     static final int columns = 8;
 
@@ -87,7 +89,9 @@ public class GamePanel extends JPanel implements Runnable {
     Paddle paddle1;
 
     PowerUpBall pball;
-    Ball ball;
+
+    Ball explosiveBall;
+
     Brick[][] brick;
     Welcome welcome;
     Mode mode;
@@ -96,6 +100,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     Random random;
     Clip sound;
+
+    long powerUpEnd = 0;
     
     
 
@@ -188,14 +194,10 @@ public class GamePanel extends JPanel implements Runnable {
         int ballX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
         int ballY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
         if (ballType == "default") {
-            ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
+            Ball ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 4);
             ball.setDY(1);
             balls.add(ball);
-            hits = 0;
-        }
-        else {
-            ball.setDY(1);
-            balls.add(pball);
+            //hits = 0;
         }
     }
 
@@ -307,8 +309,14 @@ public class GamePanel extends JPanel implements Runnable {
         }
         bg.draw(g, 32,32,32);
         paddle1.draw(g);
-        ball.draw(g, Color.WHITE); //default ball colour
+        for(int i = 0; i < balls.size(); i++){
+           Ball arrayBall = balls.get(i);
+            arrayBall.draw(g, Color.WHITE);//default ball colour
 
+        }
+        if(explosiveBall != null) {
+            explosiveBall.draw(g, Color.RED);
+        }
 //        for (int x = 0; x < balls.size(); x++){
 //            balls.get(x).draw(g, ballColour);
 //        }
@@ -347,7 +355,11 @@ public class GamePanel extends JPanel implements Runnable {
     public void move() {
 
         paddle1.move();
-        ball.move();
+        for(int i = 0; i < balls.size(); i++){
+            Ball arrayBall = balls.get(i);
+            arrayBall.move();; //default ball color
+        }
+
 
         if (createPowerUp == true && pball != null){
             pball.move();
@@ -364,23 +376,29 @@ public class GamePanel extends JPanel implements Runnable {
         if (paddle1.x <= 0)
             paddle1.x = 0;
 
-        if (paddle1.x >= GAME_WIDTH - PADDLE_WIDTH)
-            paddle1.x = GAME_WIDTH - PADDLE_WIDTH;
-
-        if (ball.y <= 0) { //roof
-            ball.dy = -ball.dy;
+        if (paddle1.x >= GAME_WIDTH - paddle1.width)
+            paddle1.x = GAME_WIDTH - paddle1.width;
+        for(int i = 0 ; i < balls.size(); i++){
+            Ball arrayBall = balls.get(i);
+        if (arrayBall.y <= 0) { //roof
+            arrayBall.dy = -arrayBall.dy;
             playSound("boundary_hit.wav");
         }
 
-        if ((ball.y >= GAME_HEIGHT - BALL_DIAMETER) || ball.x > 953 || (ball.x < 0 - BALL_DIAMETER - 2)) {
+        if ((arrayBall.y >= GAME_HEIGHT - BALL_DIAMETER) || arrayBall.x > 953 || (arrayBall.x < 0 - BALL_DIAMETER - 2)) {
             //System.out.println("handle out "+ ball.x + " y: "+ ball.y);
-            handleBallOut();
+            balls.remove(i);
+            if(balls.size() == 0){
+                handleBallOut();
+            }
+            if(explosiveBall == arrayBall){
+                explosiveBall = null;
+            }
         }
-
-        if (ball.x <= 0 || ball.x >= GAME_WIDTH - BALL_DIAMETER) {
-            System.out.println("ballx boundary at" + ball.x);
-            ball.dx = -ball.dx;
+        if (arrayBall.x <= 0 || arrayBall.x >= GAME_WIDTH - BALL_DIAMETER) {
+            arrayBall.dx = -arrayBall.dx;
             playSound("boundary_hit.wav");
+        }
 
             if (menuActive) {
                 choice = random.nextInt(6);
@@ -408,35 +426,48 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void handlePaddleCollision() { //hitting paddle
+        for(int i = 0; i < balls.size(); i++ ) {
+            Ball arrayBall = balls.get(i);
+            double ballCenterX = arrayBall.x + arrayBall.width / 2.0;
+            double paddleCenterX = paddle1.x + paddle1.width / 2.0;
 
-        double ballCenterX = ball.x + ball.width / 2.0;
-        double paddleCenterX = paddle1.x + paddle1.width / 2.0;
-
-        double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
+            double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
 
 
-        if (ball.y > 611 && ball.y < 613 && ball.intersects(paddle1)) {  //further down == bigger number so using > operator
-            //System.out.println("intersects at" + " x:"+ball.x + "  y:" + ball.y);
+            if (arrayBall.y > 611 && arrayBall.y < 613 && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
+                //System.out.println("intersects at" + " x:"+ball.x + "  y:" + ball.y);
 //            double ballCenterX = ball.x + ball.width / 2.0;
 //            double paddleCenterX = paddle1.x + paddle1.width / 2.0;
 //
 //            double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
-            double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
+                double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 
-            if (menuActive) {
-                inclination = getRandomInclination();
+                if (menuActive) {
+                    inclination = getRandomInclination();
+                }
+
+
+
+                    arrayBall.dy = -arrayBall.dy;
+
+
+
+
+                normalizeDirection(i);
+
+                // ball.setDX(inclination); //go into diagonal motion
+                //playSound("paddle_hit.wav");
+
+
+
+                    arrayBall.setDX(inclination); //go into diagonal motion
+                    playSound("paddle_hit.wav");
+
+
+
+
             }
-
-            ball.dy = -ball.dy;
-            normalizeDirection();
-
-            ball.setDX(inclination); //go into diagonal motion
-            playSound("paddle_hit.wav");
         }
-        else if (ball.y > 615 || ball.x > 950 || ball.x < 0){ //ball is below or outside sides
-            balls.remove(ball);
-        }
-
         if (createPowerUp == true && pball != null && (pball.y > 615 || pball.x > 950 || pball.x < 0)){
             pballs.remove(pball);
             pball = null;
@@ -448,23 +479,37 @@ public class GamePanel extends JPanel implements Runnable {
             pballs.remove(pball);
             pball = null;
 
-            powerUp = random.nextInt(5);
+            //powerUp = random.nextInt(5);
+            powerUp = 3;
 
             switch(powerUp){
-                case 1: System.out.println("expand paddle");
-                    paddle1 = new Paddle(0, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH, PADDLE_HEIGHT);
-                case 2: System.out.println("add another ball");
-                case 3: System.out.println("change background colour");
-                case 4: System.out.println("explode area on next impact");
-                case 5: System.out.println("make paddle move in 2d plain");
-                case 6: System.out.println("make paddle move in 2d plain");
-            }
+                case 0: System.out.println("expand paddle");
+                    paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH / 4, PADDLE_HEIGHT);
+                    break;
+                case 1: System.out.println("add another ball");
+                    newBall(ballType);
+                    break;
+                case 2: System.out.println("change background colour");
+                    break;
+                case 3: System.out.println("explode area on next impact");
+                    explosiveBall = balls.get(0);
 
-            System.out.println("paddle");
+                    break;
+                case 4: System.out.println("make paddle move in 2d plain");
+                    break;
+                default:
+                    System.out.println("Error on powerUp switch case");
+            }
+            long fiveseconds = 5000000000L;
+            powerUpEnd = System.nanoTime() + fiveseconds;
+            powerUpStart = true;
+
+
             //pball.dy = -pball.dy;
         }
 
     }
+
     private double getRandomInclination() {
         int inclinationSelection = random.nextInt(3);
 
@@ -480,49 +525,70 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    private void normalizeDirection() {
-        //System.out.println("normalizeDirection");
-        double magnitude = Math.sqrt((ball.dx * ball.dx + ball.dy * ball.dy));
-        ball.dx /= ((magnitude)*3);
-        ball.dy /= magnitude/1.2;
+    private void normalizeDirection(int i) {
+            Ball arrayBall = balls.get(i);
+            //System.out.println("normalizeDirection");
+            double magnitude = Math.sqrt((arrayBall.dx * arrayBall.dx + arrayBall.dy * arrayBall.dy));
+            arrayBall.dx /= ((magnitude) * 3);
+            arrayBall.dy /= magnitude / 1.2;
     }
 
     private void handleBrickCollision() {
-        for (int r = 0; r < rows; r++) {
-            for (int t = 0; t < columns; t++) {
-                if (brick[r][t] != null && ball.intersects(brick[r][t])) {
-                    ball.dy = -ball.dy;
-                    playSound("brick_hit.wav");
+        for(int i = 0; i < balls.size(); i++ ) {
+            Ball arrayBall = balls.get(i);
+            for (int r = 0; r < rows; r++) {
+                for (int t = 0; t < columns; t++) {
+                    if (brick[r][t] != null && arrayBall.intersects(brick[r][t])) {
+                        arrayBall.dy = -arrayBall.dy;
+                        playSound("brick_hit.wav");
                         //normalizeDirection();
 
-                    if (!menuActive) { //if game is played
-                        handleBrickScore(t);
 
-                        brickCount--;
-                        spawnChance = random.nextInt(10);
-                        if(spawnChance > 5) {
-                            newPowerUpBall(graphics);
+
+                        if (!menuActive) { //if game is played
+                            if (arrayBall == explosiveBall){
+                                for (int y = -1;y <= 1; y++) {
+                                    for (int x = -1; x <= 1; x++) {
+                                        if(r + y >= 0 && t + x >=0 && r + y < rows && t + x < columns) {
+                                            brick[r + y][t + x] = null;
+                                            brickCount--;
+                                            handleBrickScore(t + x);
+                                        }
+                                    }
+                                }
+                                explosiveBall = null;
+                            }else{
+                                handleBrickScore(t);
+                                brickCount--;
+                                brick[r][t] = null;
+                            }
+
+
+                            spawnChance = random.nextInt(10);
+                            if (spawnChance > 5) {
+                                newPowerUpBall(graphics , i );
+                            }
+
+
+
+                        } else { //if main menu
+                            choice = random.nextInt(4);
                         }
-                        brick[r][t] = null;
 
-
-                    } else { //if main menu
-                        choice = random.nextInt(4);
                     }
-
                 }
             }
         }
     }
 
-    public void newPowerUpBall(Graphics g) {
+    public void newPowerUpBall(Graphics g, int i) {
         //System.out.println("row "+x+", column"+y);
-
-        pball = new PowerUpBall (ball.x, ball.y, BALL_DIAMETER, BALL_DIAMETER, 5);
-        pball.setDY(1);
-        pball.setDX(0.2);
-        pballs.add(pball);
-        createPowerUp = true;
+        Ball arrayBall = balls.get(i);
+            pball = new PowerUpBall(arrayBall.x, arrayBall.y, BALL_DIAMETER, BALL_DIAMETER, 5);
+            pball.setDY(1);
+            pball.setDX(0.2);
+            pballs.add(pball);
+            createPowerUp = true;
     }
 
     private void handleBrickScore(int brickIndex) {
@@ -549,18 +615,20 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
 
         long lastTime = System.nanoTime();
-        double amountOfFPS = 60.0;
+        double amountOfFPS = 20.0;
         double duration = 1000000000 / amountOfFPS;
         double delta = 0;
 
         while (true) {
             long now = System.nanoTime();
             delta += (now - lastTime) / duration;
-            lastTime = now;
+                lastTime = now;
 
-            if (delta >= 1) {
+                if (delta >= 1) {
+
                 move();
                 checkCollision();
+                    powerUpEnder();
 
                 repaint();
                 delta--;
@@ -582,7 +650,18 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (e.getKeyCode() == KeyEvent.VK_SPACE && menuActive == true) {
                 menuActive = false;
-                balls.remove(ball);
+
+
+                //balls.remove(ball);
+
+                for(int i = 0; i < balls.size(); i++){
+                    Ball arrayBall = balls.get(i);
+                    balls.remove(i);;; //default ball colour
+
+                }
+
+
+
                 beginGame();
             }
             if (e.getKeyCode() == KeyEvent.VK_I && menuActive == true) {
@@ -607,6 +686,16 @@ public class GamePanel extends JPanel implements Runnable {
                 paddle1.setDeltaX(0);
             }
         }
+    }
+    public void powerUpEnder(){
+        if(powerUpStart == true) {
+            if (powerUpEnd <= System.nanoTime()) {
+                paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
+                powerUpStart = false;
+            }
+
+        }
+
     }
     public void checkIfLost(int lives) {
         int remainingLives = lives;
