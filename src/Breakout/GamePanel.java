@@ -72,6 +72,8 @@ public class GamePanel extends JPanel implements Runnable {
     String empty = "";
     String instructionMessage = "Press 'I' to see instructions";
 
+    String leaderBoard = "press 'l' to see leader board";
+
     String ballType = "default";
 
     boolean menuActive = true;
@@ -79,7 +81,8 @@ public class GamePanel extends JPanel implements Runnable {
     boolean allCleared;
 
     boolean instructionsShown = false;
-
+    boolean leaderBoardShown = false;
+    
     boolean createPowerUp = false;
 
     Thread gameThread;
@@ -102,8 +105,8 @@ public class GamePanel extends JPanel implements Runnable {
     Clip sound;
 
     long powerUpEnd = 0;
-
-
+    
+    
 
     GamePanel(int screenWidth, int screenHeight)  {
 
@@ -210,7 +213,9 @@ public class GamePanel extends JPanel implements Runnable {
         welcomeMessage = " ";  //clear message
         modeMessage = " ";
         instructionMessage = " ";
+        leaderBoard = " ";
         instructionsShown = false;
+        leaderBoardShown = false;
 
     }
 
@@ -218,12 +223,19 @@ public class GamePanel extends JPanel implements Runnable {
         welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
         modeMessage = "'M' TO SELECT MODE";
         instructionMessage = "'i' to see instructions";
+        leaderBoard = "press 'l' to see leader board";
         instructionsShown = false;
+        leaderBoardShown = false;
     }
     public void showInstructions(){
         instructionsShown = true;
         instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys \n \n 'space' to play or 'esc' go back";
     }
+    public void showLeaderBoard() {
+        leaderBoardShown = true;
+        leaderBoard = "1st " + highScore + "\n" + "2nd \n" + "3rd \n";
+    }
+
 
     public void setBackgroundColor(Color color){
         bg.setBackgroundColor(color);
@@ -321,7 +333,7 @@ public class GamePanel extends JPanel implements Runnable {
 //            balls.get(x).draw(g, ballColour);
 //        }
 
-        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
+        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage, leaderBoard);
 
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -349,7 +361,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         Toolkit.getDefaultToolkit().sync();
         // Making sure display refreshes real-time for paint method
-
+        
     }
 
     public void move() {
@@ -479,8 +491,8 @@ public class GamePanel extends JPanel implements Runnable {
             pballs.remove(pball);
             pball = null;
 
-            //powerUp = random.nextInt(5);
-            powerUp = 3;
+            powerUp = random.nextInt(4);
+
 
             switch(powerUp){
                 case 0: System.out.println("expand paddle");
@@ -490,13 +502,13 @@ public class GamePanel extends JPanel implements Runnable {
                     newBall(ballType);
                     break;
                 case 2: System.out.println("change background colour");
+
                     break;
                 case 3: System.out.println("explode area on next impact");
                     explosiveBall = balls.get(0);
 
                     break;
-                case 4: System.out.println("make paddle move in 2d plain");
-                    break;
+
                 default:
                     System.out.println("Error on powerUp switch case");
             }
@@ -670,6 +682,13 @@ public class GamePanel extends JPanel implements Runnable {
             }
             //navigating back to menu screen from instructions message
             if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive == true) && (instructionsShown == true)) {
+                resetWelcome(); //sets strings to default messages
+            }
+            if (e.getKeyCode() == KeyEvent.VK_L && menuActive == true) {
+                destroyWelcome();
+                showLeaderBoard();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive == true) && (leaderBoardShown == true)) {
                 resetWelcome(); //sets strings to default messages
             }
         }
