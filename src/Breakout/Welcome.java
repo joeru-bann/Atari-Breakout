@@ -41,7 +41,7 @@ public class Welcome extends JPanel {
         for (int i = 0; i < leaderBoardLines.length; i++) {
             String line = leaderBoardLines[i];
             int lineX = (GAME_WIDTH - fm.stringWidth(line)) / 2; // Calculate lineX based on the line width
-            int lineY = messageY + 60 + (i + 1) * fm.getHeight();
+            int lineY = messageY + 100 + (i + 1) * fm.getHeight();
             g.drawString(line, lineX, lineY);
         }
     }
