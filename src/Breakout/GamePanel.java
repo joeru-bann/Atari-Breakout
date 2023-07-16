@@ -720,15 +720,10 @@ public class GamePanel extends JPanel implements Runnable {
                 break;
                 case 1: playSound("you_losew.wav");
             }
-            for (int i = 0; i < highScore.length; i++) {
-                if (score > highScore[i]) {
-                    // Shift the scores down the leaderboard
-                    for (int j = highScore.length - 1; j > i; j--) {
-                        highScore[j] = highScore[j - 1];
-                    }
-                    highScore[i] = score;
-                    break; // Exit the loop after updating the leaderboard
-                }
+            if(score > highScore[1]){
+                highScore[1] = score;
+                writeHighScore(highScore[1]);
+
             }
 
             beginAttractMode();
