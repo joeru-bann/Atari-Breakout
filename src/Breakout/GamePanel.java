@@ -223,7 +223,7 @@ public class GamePanel extends JPanel implements Runnable {
         welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
         modeMessage = "'M' TO SELECT MODE";
         instructionMessage = "'i' to see instructions";
-        leaderBoard = "press 'l' to see leader board";
+        leaderBoard = "'l' to see leader board";
         instructionsShown = false;
         leaderBoardShown = false;
     }
