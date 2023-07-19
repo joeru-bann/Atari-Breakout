@@ -62,7 +62,11 @@ public class GamePanel extends JPanel implements Runnable {
     private UI bLeftUI;
     int inclinationSelection = 0;
 
-    int highScore;
+    int[] highScore = new int[3];
+
+    highScore[0] = 0;
+    highScore[1] = 0;
+    highScore[2] = 0;
     private static final String FILE_PATH = "data/highscores.txt";
 
     String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
@@ -72,6 +76,8 @@ public class GamePanel extends JPanel implements Runnable {
     String empty = "";
     String instructionMessage = "Press 'I' to see instructions";
 
+    String leaderBoard = "press 'L' to see leader board";
+
     String ballType = "default";
 
     boolean menuActive = true;
@@ -79,6 +85,7 @@ public class GamePanel extends JPanel implements Runnable {
     boolean allCleared;
 
     boolean instructionsShown = false;
+    boolean leaderBoardShown = false;
     
     boolean createPowerUp = false;
 
@@ -111,7 +118,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.screenHeight = screenHeight;
         calculateScale();
 
-        readHighScore();
+        readHighScores();
         random = new Random();
 
         bg = new Background();
@@ -132,7 +139,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread = new Thread(this);
         gameThread.start();
 
-        attractModePaddles();
+        menuModePaddles();
         newBricks();
         newBall(ballType);
         newWelcome();
@@ -176,10 +183,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void newPaddles() {
         //new paddle instance from class
+        PADDLE_WIDTH = 100; //resetting paddle to default width
         paddle1 = new Paddle((GAME_WIDTH - PADDLE_WIDTH) / 2, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
 
     }
-
 
     public void newBricks() {
         for (int p = 0; p < rows; p++) {
@@ -210,20 +217,29 @@ public class GamePanel extends JPanel implements Runnable {
         welcomeMessage = " ";  //clear message
         modeMessage = " ";
         instructionMessage = " ";
+        leaderBoard = " ";
         instructionsShown = false;
+        leaderBoardShown = false;
 
     }
 
     public void resetWelcome() {
         welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
         modeMessage = "'M' TO SELECT MODE";
-        instructionMessage = "'i' to see instructions";
+        instructionMessage = "'I' to see instructions";
+        leaderBoard = "'L' to see leader board";
         instructionsShown = false;
+        leaderBoardShown = false;
     }
     public void showInstructions(){
         instructionsShown = true;
-        instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys \n \n 'space' to play or 'esc' go back";
+        instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys \n \n 'space' to play or 'Q' go back";
     }
+    public void showLeaderBoard() {
+        leaderBoardShown = true;
+        leaderBoard = "1st " + highScore + "\n" + "2nd \n" + "3rd \n";
+    }
+
 
     public void setBackgroundColor(Color color){
         bg.setBackgroundColor(color);
@@ -232,6 +248,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void beginGame() {
         ballType = "default";
+
         newPaddles();
         newBall(ballType);
         destroyWelcome();
@@ -321,7 +338,7 @@ public class GamePanel extends JPanel implements Runnable {
 //            balls.get(x).draw(g, ballColour);
 //        }
 
-        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage);
+        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage, leaderBoard);
 
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -344,7 +361,7 @@ public class GamePanel extends JPanel implements Runnable {
        //Keep draw statements here for atari font to work
         livesUI.draw((Graphics2D) g,  lives);
         scoreUI.draw((Graphics2D) g, score);
-        hScoreUI.draw((Graphics2D) g, highScore);
+        hScoreUI.draw((Graphics2D) g, highScore[1]);
         bLeftUI.draw((Graphics2D) g, brickCount);
 
         Toolkit.getDefaultToolkit().sync();
@@ -383,6 +400,8 @@ public class GamePanel extends JPanel implements Runnable {
         if (arrayBall.y <= 0) { //roof
             arrayBall.dy = -arrayBall.dy;
             playSound("boundary_hit.wav");
+            paddle1.getPaddleWidth();
+
         }
 
         if ((arrayBall.y >= GAME_HEIGHT - BALL_DIAMETER) || arrayBall.x > 953 || (arrayBall.x < 0 - BALL_DIAMETER - 2)) {
@@ -406,7 +425,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void paddleSize(){
-        PADDLE_WIDTH = PADDLE_WIDTH - 7;
+        PADDLE_WIDTH = PADDLE_WIDTH - 10;
         paddle1.setPaddleWidth(PADDLE_WIDTH);
     }
     private void handleBallOut() { //below screen
@@ -416,6 +435,8 @@ public class GamePanel extends JPanel implements Runnable {
             playSound("lose_life.wav");
             if (!menuActive) {
                 choice = random.nextInt(6);
+                paddleSize();
+                paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
             }
             //paddleSize();
         }
@@ -433,38 +454,20 @@ public class GamePanel extends JPanel implements Runnable {
 
             double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
 
-
             if (arrayBall.y > 611 && arrayBall.y < 613 && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
-                //System.out.println("intersects at" + " x:"+ball.x + "  y:" + ball.y);
-//            double ballCenterX = ball.x + ball.width / 2.0;
-//            double paddleCenterX = paddle1.x + paddle1.width / 2.0;
-//
-//            double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
+
                 double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 
                 if (menuActive) {
                     inclination = getRandomInclination();
                 }
-
-
-
                     arrayBall.dy = -arrayBall.dy;
 
-
-
-
                 normalizeDirection(i);
-
                 // ball.setDX(inclination); //go into diagonal motion
                 //playSound("paddle_hit.wav");
-
-
-
                     arrayBall.setDX(inclination); //go into diagonal motion
                     playSound("paddle_hit.wav");
-
-
-
 
             }
         }
@@ -478,9 +481,8 @@ public class GamePanel extends JPanel implements Runnable {
         else if (createPowerUp && pball != null &&  pball.intersects(paddle1)){
             pballs.remove(pball);
             pball = null;
+            powerUp = random.nextInt(4);
 
-            //powerUp = random.nextInt(5);
-            powerUp = 3;
 
             switch(powerUp){
                 case 0: System.out.println("expand paddle");
@@ -490,13 +492,13 @@ public class GamePanel extends JPanel implements Runnable {
                     newBall(ballType);
                     break;
                 case 2: System.out.println("change background colour");
+
                     break;
                 case 3: System.out.println("explode area on next impact");
                     explosiveBall = balls.get(0);
 
                     break;
-                case 4: System.out.println("make paddle move in 2d plain");
-                    break;
+
                 default:
                     System.out.println("Error on powerUp switch case");
             }
@@ -615,7 +617,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
 
         long lastTime = System.nanoTime();
-        double amountOfFPS = 20.0;
+        double amountOfFPS = 60.0;
         double duration = 1000000000 / amountOfFPS;
         double delta = 0;
 
@@ -672,6 +674,13 @@ public class GamePanel extends JPanel implements Runnable {
             if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive == true) && (instructionsShown == true)) {
                 resetWelcome(); //sets strings to default messages
             }
+            if (e.getKeyCode() == KeyEvent.VK_L && menuActive == true) {
+                destroyWelcome();
+                showLeaderBoard();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive == true) && (leaderBoardShown == true)) {
+                resetWelcome(); //sets strings to default messages
+            }
         }
 
 
@@ -693,7 +702,6 @@ public class GamePanel extends JPanel implements Runnable {
                 paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
                 powerUpStart = false;
             }
-
         }
 
     }
@@ -704,7 +712,7 @@ public class GamePanel extends JPanel implements Runnable {
             int ran = 0;
             level = 1;
             brickCount = 232;
-
+            PADDLE_WIDTH = PADDLE_WIDTH + lives * 10;
             ran = random.nextInt(2);
 
             switch (ran){
@@ -712,19 +720,20 @@ public class GamePanel extends JPanel implements Runnable {
                 break;
                 case 1: playSound("you_losew.wav");
             }
-            if(score > highScore){
-                highScore = score;
-                writeHighScore(highScore);
+            if(score > highScore[1]){
+                highScore[1] = score;
+                writeHighScore(highScore[1]);
 
             }
+
             beginAttractMode();
         }
     }
 
     public void beginAttractMode() {
-        attractModePaddles();
+        menuModePaddles();
         newWelcome();
-        readHighScore(); //reading the most recent h score
+        readHighScores(); //reading the most recent h score
 
         menuActive = true;
         resetWelcome();
@@ -732,11 +741,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     }
 
-    public void attractModePaddles() {
+    public void menuModePaddles() {
         paddle1 = new Paddle(0, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH, PADDLE_HEIGHT);
     } 
-
-
 
     //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
@@ -749,18 +756,21 @@ public class GamePanel extends JPanel implements Runnable {
             e.printStackTrace();
         }
     }
-    public int readHighScore() {
+    public int[] readHighScores() {
+        int[] leaderboard = new int[3]; // Array to store the top 3 scores
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line = reader.readLine();
-            if (line != null) {
-                highScore = 3;
-                highScore = Integer.parseInt(line);
+            for (int i = 0; i < leaderboard.length; i++) {
+                String line = reader.readLine();
+                if (line != null) {
+                    leaderboard[i] = Integer.parseInt(line);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return highScore;
+        return leaderboard;
     }
+
 }

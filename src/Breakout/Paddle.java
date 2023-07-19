@@ -12,6 +12,7 @@ public class Paddle extends Rectangle {
 
     int paddleWidth;
     public int getPaddleWidth() {
+
         return paddleWidth;
     }
 
@@ -19,9 +20,9 @@ public class Paddle extends Rectangle {
     public void setPaddleWidth(int aWidth) {
         paddleWidth = aWidth;
     }
-    Paddle(int x, int y, int PADDLE_WIDTH, int PADDLE_HEIGHT) {
+    Paddle(int x, int y, int paddleWidth, int PADDLE_HEIGHT) {
 
-        super(x, y, PADDLE_WIDTH, PADDLE_HEIGHT); //make the rectangle
+        super(x, y, paddleWidth, PADDLE_HEIGHT); //make the rectangle
 
     }
 

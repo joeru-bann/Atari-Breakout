@@ -48,7 +48,6 @@ public class Brick extends Rectangle {
         }
 
         if (this.column > 5 && this.column < 8) {
-            //g.setColor(purple);
             g.setColor(Color.blue);
         }
 
