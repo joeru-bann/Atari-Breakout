@@ -233,8 +233,9 @@ public class GamePanel extends JPanel implements Runnable {
         instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys \n \n 'space' to play or 'Q' go back";
     }
     public void showLeaderBoard() {
+        readHighScores();
         leaderBoardShown = true;
-        lBoard = "1st " + leaderboard[0] + "\n" + "2nd \n" + "3rd \n";
+        lBoard = "1st " + leaderboard[0] + "\n" + "2nd " +  leaderboard[1] + "\n" + "3rd \n";
     }
 
 
@@ -422,7 +423,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     public void paddleSize(){
-        PADDLE_WIDTH = PADDLE_WIDTH - 10;
+        PADDLE_WIDTH = PADDLE_WIDTH - 10; // 1/10th of size
         paddle1.setPaddleWidth(PADDLE_WIDTH);
     }
     private void handleBallOut() { //below screen
@@ -435,12 +436,11 @@ public class GamePanel extends JPanel implements Runnable {
                 paddleSize();
                 paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
             }
-            //paddleSize();
         }
-
         checkIfLost(lives);
         newBall(ballType);
         playSound("boundary_hit.wav");
+
     }
 
     private void handlePaddleCollision() { //hitting paddle
@@ -503,8 +503,6 @@ public class GamePanel extends JPanel implements Runnable {
             powerUpEnd = System.nanoTime() + fiveseconds;
             powerUpStart = true;
 
-
-            //pball.dy = -pball.dy;
         }
 
     }
@@ -552,7 +550,6 @@ public class GamePanel extends JPanel implements Runnable {
                                             brick[r + y][t + x] = null;
                                             brickCount--;
                                             handleBrickScore(t + x);
-                                            checkIfLost(lives);
                                         }
                                     }
                                 }
@@ -586,7 +583,7 @@ public class GamePanel extends JPanel implements Runnable {
         Ball arrayBall = balls.get(i);
             pball = new PowerUpBall(arrayBall.x, arrayBall.y, BALL_DIAMETER, BALL_DIAMETER, 5);
             pball.setDY(1);
-            pball.setDX(0.2);
+            //pball.setDX(0.2);
             pballs.add(pball);
             createPowerUp = true;
     }
@@ -615,7 +612,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
 
         long lastTime = System.nanoTime();
-        double amountOfFPS = 20.0;
+        double amountOfFPS = 60.0;
         double duration = 1000000000 / amountOfFPS;
         double delta = 0;
 
@@ -651,17 +648,10 @@ public class GamePanel extends JPanel implements Runnable {
             if (e.getKeyCode() == KeyEvent.VK_SPACE && menuActive) {
                 menuActive = false;
 
-
-                //balls.remove(ball);
-
                 for(int i = 0; i < balls.size(); i++){
                     Ball arrayBall = balls.get(i);
                     balls.remove(i);//default ball colour
-
                 }
-
-
-
                 beginGame();
             }
             if (e.getKeyCode() == KeyEvent.VK_I && menuActive) {
@@ -720,15 +710,27 @@ public class GamePanel extends JPanel implements Runnable {
             }
             if(score > highScore[0]){
                 highScore[0] = score;
-                writeHighScore(highScore[0],0);
-            }
 
+            }
 
             beginMenuMode();
         }
-        while (remainingLives >= 1){
-            if (score > highScore[0]){
+        if (remainingLives >= 1){
+            if (score > highScore[0]){ //replacing 2nd
+                highScore[1] = highScore[0];
+
+                writeHighScore(highScore[1], 1);
                 highScore[0] = score;
+
+                writeHighScore(highScore[0],0);
+                System.out.println("CIL wrote: " + highScore[0]);
+                System.out.println("2nd place: " + highScore[1]);
+
+            }
+            else if (score < highScore[1] && score > highScore[2]){ //replacing 3rd
+                highScore[2] =  highScore[1];
+                writeHighScore(highScore[2], 2);
+                System.out.println("3rd place: " + highScore[2]);
             }
         }
     }
@@ -759,7 +761,7 @@ public class GamePanel extends JPanel implements Runnable {
                 if (place == i) {
                     writer.write(String.valueOf(currentHScore));
                     writer.newLine();
-                    System.out.println("wrote score: " + i + highScore[i]);
+                    //System.out.println("wrote score: " + i + highScore[i]);
                 }
             }
         } catch (IOException e) {
@@ -768,17 +770,14 @@ public class GamePanel extends JPanel implements Runnable {
         return highScore;
     }
     public int[] readHighScores() {
-
-
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 3; i++) {
                 String line = reader.readLine();
                 if (line != null) {
                     leaderboard[i] = Integer.parseInt(line);
                     System.out.println("read score: " + line);
                     highScore[i] = leaderboard[i];
-                    System.out.println("highscore: " + i);
                 }
             }
         } catch (IOException e) {
