@@ -11,7 +11,7 @@ import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    private Background bg;
+    private final Background bg;
 
     static final int GAME_WIDTH = 950;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
@@ -19,8 +19,8 @@ public class GamePanel extends JPanel implements Runnable {
     ArrayList<Ball> balls = new ArrayList<Ball>();
 
     ArrayList<PowerUpBall> pballs = new ArrayList<PowerUpBall>();
-    private int screenWidth;
-    private int screenHeight;
+    private final int screenWidth;
+    private final int screenHeight;
 
     private double scaleX;
     private double scaleY;
@@ -51,22 +51,19 @@ public class GamePanel extends JPanel implements Runnable {
 
     int lives;
     int score = 0;
-    int hits = 0;
     int choice = 0;
 
     int bbx;
     int bby;
-    private UI livesUI;
-    private UI scoreUI;
-    private UI hScoreUI;
-    private UI bLeftUI;
+    private final UI livesUI;
+    private final UI scoreUI;
+    private final UI hScoreUI;
+    private final UI bLeftUI;
     int inclinationSelection = 0;
 
-    int[] highScore = new int[3];
+    int[] highScore =  {0,0,0};
+    int[] leaderboard = new int[3]; // Array to store the top 3 scores
 
-    highScore[0] = 0;
-    highScore[1] = 0;
-    highScore[2] = 0;
     private static final String FILE_PATH = "data/highscores.txt";
 
     String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
@@ -76,7 +73,7 @@ public class GamePanel extends JPanel implements Runnable {
     String empty = "";
     String instructionMessage = "Press 'I' to see instructions";
 
-    String leaderBoard = "press 'L' to see leader board";
+    String lBoard = "press 'L' to see leader board";
 
     String ballType = "default";
 
@@ -162,7 +159,7 @@ public class GamePanel extends JPanel implements Runnable {
                 new Color(238, 130, 238) // Violet
         };
 
-        while (createPowerUp == true) {
+        while (createPowerUp) {
             for(Color rgbcolour : rainbowColours){
                 //pball.setColor(rgbcolour);
                 System.out.println(rgbcolour + " = rgb c");
@@ -217,7 +214,7 @@ public class GamePanel extends JPanel implements Runnable {
         welcomeMessage = " ";  //clear message
         modeMessage = " ";
         instructionMessage = " ";
-        leaderBoard = " ";
+        lBoard = " ";
         instructionsShown = false;
         leaderBoardShown = false;
 
@@ -227,7 +224,7 @@ public class GamePanel extends JPanel implements Runnable {
         welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
         modeMessage = "'M' TO SELECT MODE";
         instructionMessage = "'I' to see instructions";
-        leaderBoard = "'L' to see leader board";
+        lBoard = "'L' to see leader board";
         instructionsShown = false;
         leaderBoardShown = false;
     }
@@ -237,7 +234,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     public void showLeaderBoard() {
         leaderBoardShown = true;
-        leaderBoard = "1st " + highScore + "\n" + "2nd \n" + "3rd \n";
+        lBoard = "1st " + leaderboard[0] + "\n" + "2nd \n" + "3rd \n";
     }
 
 
@@ -273,7 +270,7 @@ public class GamePanel extends JPanel implements Runnable {
                 System.out.println("Error occurred whilst attempting to play Breakout.audio");
             }
         }
-        if (soundPlaying == true) {
+        if (soundPlaying) {
             sound.start();
         }
 
@@ -298,7 +295,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void draw(Graphics g) {
         allCleared = true;
 
-        if (menuActive == false) {
+        if (!menuActive) {
 
             switch (choice) {  //altering choice anywhere in gamePanel allows the ball the change
                 case 0:
@@ -338,7 +335,7 @@ public class GamePanel extends JPanel implements Runnable {
 //            balls.get(x).draw(g, ballColour);
 //        }
 
-        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage, leaderBoard);
+        welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, modeMessage, instructionMessage, lBoard);
 
         for (int p = 0; p < rows; p++) {
             for (int l = 0; l < columns; l++) {
@@ -348,12 +345,12 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
         }
-        if (createPowerUp == true && pball != null){
+        if (createPowerUp && pball != null){
            pball.draw(g, ballColour);
 
         }
-        if (allCleared == true) {
-            beginAttractMode();
+        if (allCleared) {
+            beginMenuMode();
             welcomeMessage = "YOU WON! YIPEEE";
             hScoreDisplay = ("High score: " + highScore);
 
@@ -361,7 +358,7 @@ public class GamePanel extends JPanel implements Runnable {
        //Keep draw statements here for atari font to work
         livesUI.draw((Graphics2D) g,  lives);
         scoreUI.draw((Graphics2D) g, score);
-        hScoreUI.draw((Graphics2D) g, highScore[1]);
+        hScoreUI.draw((Graphics2D) g, highScore[0]);
         bLeftUI.draw((Graphics2D) g, brickCount);
 
         Toolkit.getDefaultToolkit().sync();
@@ -374,11 +371,11 @@ public class GamePanel extends JPanel implements Runnable {
         paddle1.move();
         for(int i = 0; i < balls.size(); i++){
             Ball arrayBall = balls.get(i);
-            arrayBall.move();; //default ball color
+            arrayBall.move();//default ball color
         }
 
 
-        if (createPowerUp == true && pball != null){
+        if (createPowerUp && pball != null){
             pball.move();
         }
     }
@@ -404,7 +401,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         }
 
-        if ((arrayBall.y >= GAME_HEIGHT - BALL_DIAMETER) || arrayBall.x > 953 || (arrayBall.x < 0 - BALL_DIAMETER - 2)) {
+        if ((arrayBall.y >= GAME_HEIGHT - BALL_DIAMETER) || arrayBall.x > 953 || (arrayBall.x < -BALL_DIAMETER - 2)) {
             //System.out.println("handle out "+ ball.x + " y: "+ ball.y);
             balls.remove(i);
             if(balls.size() == 0){
@@ -471,7 +468,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             }
         }
-        if (createPowerUp == true && pball != null && (pball.y > 615 || pball.x > 950 || pball.x < 0)){
+        if (createPowerUp && pball != null && (pball.y > 615 || pball.x > 950 || pball.x < 0)){
             pballs.remove(pball);
             pball = null;
 
@@ -555,6 +552,7 @@ public class GamePanel extends JPanel implements Runnable {
                                             brick[r + y][t + x] = null;
                                             brickCount--;
                                             handleBrickScore(t + x);
+                                            checkIfLost(lives);
                                         }
                                     }
                                 }
@@ -617,7 +615,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
 
         long lastTime = System.nanoTime();
-        double amountOfFPS = 60.0;
+        double amountOfFPS = 20.0;
         double duration = 1000000000 / amountOfFPS;
         double delta = 0;
 
@@ -642,15 +640,15 @@ public class GamePanel extends JPanel implements Runnable {
     public class AL extends KeyAdapter {
         public void keyPressed(KeyEvent e) { //Player inputs for movement + navigation
 
-            if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && menuActive == false) {
+            if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !menuActive) {
                 paddle1.setDeltaX(-1);
             }
 
-            if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && menuActive == false) {
+            if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !menuActive) {
                 paddle1.setDeltaX(+1);
             }
 
-            if (e.getKeyCode() == KeyEvent.VK_SPACE && menuActive == true) {
+            if (e.getKeyCode() == KeyEvent.VK_SPACE && menuActive) {
                 menuActive = false;
 
 
@@ -658,7 +656,7 @@ public class GamePanel extends JPanel implements Runnable {
 
                 for(int i = 0; i < balls.size(); i++){
                     Ball arrayBall = balls.get(i);
-                    balls.remove(i);;; //default ball colour
+                    balls.remove(i);//default ball colour
 
                 }
 
@@ -666,19 +664,19 @@ public class GamePanel extends JPanel implements Runnable {
 
                 beginGame();
             }
-            if (e.getKeyCode() == KeyEvent.VK_I && menuActive == true) {
+            if (e.getKeyCode() == KeyEvent.VK_I && menuActive) {
                 destroyWelcome();
                 showInstructions();
             }
             //navigating back to menu screen from instructions message
-            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive == true) && (instructionsShown == true)) {
+            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (instructionsShown)) {
                 resetWelcome(); //sets strings to default messages
             }
-            if (e.getKeyCode() == KeyEvent.VK_L && menuActive == true) {
+            if (e.getKeyCode() == KeyEvent.VK_L && menuActive) {
                 destroyWelcome();
                 showLeaderBoard();
             }
-            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive == true) && (leaderBoardShown == true)) {
+            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (leaderBoardShown)) {
                 resetWelcome(); //sets strings to default messages
             }
         }
@@ -687,17 +685,17 @@ public class GamePanel extends JPanel implements Runnable {
         //stopping paddle after releasing key - resetting deltaX
         public void keyReleased(KeyEvent e) {
 
-            if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) & menuActive == false) {
+            if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) & !menuActive) {
                 paddle1.setDeltaX(0);
             }
 
-            if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && menuActive == false) {
+            if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !menuActive) {
                 paddle1.setDeltaX(0);
             }
         }
     }
     public void powerUpEnder(){
-        if(powerUpStart == true) {
+        if(powerUpStart) {
             if (powerUpEnd <= System.nanoTime()) {
                 paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
                 powerUpStart = false;
@@ -720,17 +718,22 @@ public class GamePanel extends JPanel implements Runnable {
                 break;
                 case 1: playSound("you_losew.wav");
             }
-            if(score > highScore[1]){
-                highScore[1] = score;
-                writeHighScore(highScore[1]);
-
+            if(score > highScore[0]){
+                highScore[0] = score;
+                writeHighScore(highScore[0],0);
             }
 
-            beginAttractMode();
+
+            beginMenuMode();
+        }
+        while (remainingLives >= 1){
+            if (score > highScore[0]){
+                highScore[0] = score;
+            }
         }
     }
 
-    public void beginAttractMode() {
+    public void beginMenuMode() {
         menuModePaddles();
         newWelcome();
         readHighScores(); //reading the most recent h score
@@ -748,22 +751,34 @@ public class GamePanel extends JPanel implements Runnable {
     //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
-    public static void writeHighScore(int highScore) {
-        try (FileWriter writer = new FileWriter(FILE_PATH)) {
-            writer.write(String.valueOf(highScore));
-            System.out.println("wrote score");
+    public int [] writeHighScore(int hScpre, int place) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for (int i = 0; i <= 2; i++, place++) {
+                int currentHScore;
+                        currentHScore = highScore[i];
+                if (place == i) {
+                    writer.write(String.valueOf(currentHScore));
+                    writer.newLine();
+                    System.out.println("wrote score: " + i + highScore[i]);
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return highScore;
     }
     public int[] readHighScores() {
-        int[] leaderboard = new int[3]; // Array to store the top 3 scores
+
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            for (int i = 0; i < leaderboard.length; i++) {
+
+            for (int i = 0; i < 2; i++) {
                 String line = reader.readLine();
                 if (line != null) {
                     leaderboard[i] = Integer.parseInt(line);
+                    System.out.println("read score: " + line);
+                    highScore[i] = leaderboard[i];
+                    System.out.println("highscore: " + i);
                 }
             }
         } catch (IOException e) {
