@@ -225,6 +225,7 @@ public class GamePanel extends JPanel implements Runnable {
         modeMessage = "'M' TO SELECT MODE";
         instructionMessage = "'I' to see instructions";
         lBoard = "'L' to see leader board";
+        lBoard = "'L' to see leader board";
         instructionsShown = false;
         leaderBoardShown = false;
     }
@@ -235,7 +236,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void showLeaderBoard() {
         readHighScores();
         leaderBoardShown = true;
-        lBoard = "1st " + leaderboard[0] + "\n" + "2nd " +  leaderboard[1] + "\n" + "3rd \n";
+        lBoard = "1st " + leaderboard[0] + "\n" + "2nd " +  leaderboard[1] + "\n" + "3rd " +  leaderboard[2] + "\n";
     }
 
 
@@ -612,7 +613,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void run() {
 
         long lastTime = System.nanoTime();
-        double amountOfFPS = 60.0;
+        double amountOfFPS = 20.0;
         double duration = 1000000000 / amountOfFPS;
         double delta = 0;
 
@@ -708,31 +709,39 @@ public class GamePanel extends JPanel implements Runnable {
                 break;
                 case 1: playSound("you_losew.wav");
             }
-            if(score > highScore[0]){
-                highScore[0] = score;
 
-            }
+                if (score > highScore[0]) { //replacing 2nd
+                    int thirdPlace;
+                    thirdPlace = highScore[1];
+                    highScore[1] = highScore[0];
+
+                    writeHighScore(highScore[1], 1);
+                    highScore[0] = score;
+
+                    highScore[2] = thirdPlace;
+                    writeHighScore(highScore[2], 2);
+
+                    writeHighScore(highScore[0], 0);
+                    System.out.println("CIL wrote: " + highScore[0]);
+                    System.out.println("2nd place: " + highScore[1]);
+
+                } else if (score > highScore[1] && score <= highScore[0]) { //replacing 2nd and 3rd
+                    highScore[2] = highScore[1];
+                    highScore[1] = score;
+                    writeHighScore(highScore[1], 1);
+                    writeHighScore(highScore[2], 2);
+                    System.out.println("3rd place: " + highScore[2]);
+                }else if (score <= highScore[1] && score > highScore[2]) { //replacing 3rd
+                    highScore[2] = score;
+                    writeHighScore(highScore[2], 2);
+                    System.out.println("3rd place: " + highScore[2]);
+                }
+
 
             beginMenuMode();
         }
-        if (remainingLives >= 1){
-            if (score > highScore[0]){ //replacing 2nd
-                highScore[1] = highScore[0];
 
-                writeHighScore(highScore[1], 1);
-                highScore[0] = score;
 
-                writeHighScore(highScore[0],0);
-                System.out.println("CIL wrote: " + highScore[0]);
-                System.out.println("2nd place: " + highScore[1]);
-
-            }
-            else if (score < highScore[1] && score > highScore[2]){ //replacing 3rd
-                highScore[2] =  highScore[1];
-                writeHighScore(highScore[2], 2);
-                System.out.println("3rd place: " + highScore[2]);
-            }
-        }
     }
 
     public void beginMenuMode() {
