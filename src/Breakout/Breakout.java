@@ -9,6 +9,9 @@ public class Breakout {
         JFrame frame = new JFrame(  "Brumble Breakout : Breaking Brumble");
         GamePanel window = new GamePanel(GamePanel.GAME_WIDTH, GamePanel.GAME_HEIGHT);
 
+//        Thread gameThread = new Thread(window);
+//        gameThread.start();
+
         frame.getContentPane().add(window);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

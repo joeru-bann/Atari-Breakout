@@ -18,7 +18,7 @@ public class Background extends JPanel {
 
     public void draw(Graphics g,int r,int gr,int b) {
         g.setColor(new Color(r, gr, b));
-        g.fillRect(0, 30, 1000, 585);
+        g.fillRect(0, 30, 1000, 855);
     }
     @Override
     protected void paintComponent(Graphics g) {

@@ -3,9 +3,6 @@ package Breakout;
 import java.awt.*;
 
 public class Paddle extends Rectangle {
-
-
-    int id;
     int dy;
     int dx;
     static int paddleSpeed = 9;
@@ -16,7 +13,6 @@ public class Paddle extends Rectangle {
         return paddleWidth;
     }
 
-
     public void setPaddleWidth(int aWidth) {
         paddleWidth = aWidth;
     }
@@ -25,11 +21,9 @@ public class Paddle extends Rectangle {
         super(x, y, paddleWidth, PADDLE_HEIGHT); //make the rectangle
 
     }
-
     public void setDeltaY(int yDirection) {
         dy = yDirection*paddleSpeed;
     }
-
     public void setDeltaX(int xDirection) {
         dx = xDirection*paddleSpeed;
     }
