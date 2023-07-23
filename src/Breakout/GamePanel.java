@@ -582,7 +582,7 @@ public class GamePanel extends JPanel implements Runnable {
                                 brick[r][t] = null;
                             }
                             spawnChance = random.nextInt(10);
-                            if (spawnChance > 5) {
+                            if (spawnChance > 5 && pball == null) {
                                 newPowerUpBall(graphics, i);
                             }
                         } else { //if main menu
