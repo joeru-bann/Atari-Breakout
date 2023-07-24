@@ -15,7 +15,7 @@ public class GamePanel extends JPanel implements Runnable {
     private Timer timer;
     private final Background bg;
     static final int GAME_WIDTH = 850;
-    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.1));
+    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
     ArrayList<Ball> balls = new ArrayList<Ball>();
 
@@ -341,7 +341,28 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         if (createPowerUp && pball != null) {
-            pball.draw(g, ballColour);
+
+            switch (powerUp){
+                case 0:
+                    pball.draw(g, Color.green);
+                    //System.out.println("green");
+                    break;
+                case 1:
+                    pball.draw(g, Color.magenta);
+                    //System.out.println("magenta");
+                    break;
+                case 2:
+                    pball.draw(g, Color.orange);
+                    //System.out.println("orange");
+                    break;
+                case 3:
+                    pball.draw(g, Color.yellow);
+                    // System.out.println("Yellow");
+                    break;
+
+
+            }
+
 
         }
         if (allCleared) {
@@ -474,8 +495,6 @@ public class GamePanel extends JPanel implements Runnable {
         } else if (createPowerUp && pball != null && pball.intersects(paddle1)) {
             pballs.remove(pball);
             pball = null;
-            powerUp = random.nextInt(4);
-
 
             switch (powerUp) {
                 case 0:
@@ -584,6 +603,7 @@ public class GamePanel extends JPanel implements Runnable {
                             spawnChance = random.nextInt(10);
                             if (spawnChance > 5 && pball == null) {
                                 newPowerUpBall(graphics, i);
+                                powerUp = random.nextInt(4);
                             }
                         } else { //if main menu
                             choice = random.nextInt(4);
@@ -596,11 +616,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void newPowerUpBall(Graphics g, int i) {
-        //System.out.println("row "+x+", column"+y);
         Ball arrayBall = balls.get(i);
         pball = new PowerUpBall(arrayBall.x, arrayBall.y, BALL_DIAMETER, BALL_DIAMETER, 5);
         pball.setDY(1);
-        //pball.setDX(0.2);
         pballs.add(pball);
         createPowerUp = true;
     }
