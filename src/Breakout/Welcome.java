@@ -9,7 +9,7 @@ public class Welcome extends JPanel {
         setLayout(new BorderLayout());
     }
 
-    public void draw(Graphics g, Font atariFont, int GAME_WIDTH, int GAME_HEIGHT, String welcomeMessage, String modeMessage, String instructions, String leaderBoard) {
+    public void draw(Graphics g, Font atariFont, int GAME_WIDTH, int GAME_HEIGHT, String welcomeMessage, String instructions, String leaderBoard, String powerUps) {
         FontMetrics fm = g.getFontMetrics(atariFont);
 
         g.setFont(atariFont);
@@ -22,8 +22,7 @@ public class Welcome extends JPanel {
         int messageY = (GAME_HEIGHT - fm.getHeight()) / 2;
 
         g.drawString(welcomeMessage, messageX, messageY);
-        g.drawString(modeMessage, messageX, messageY + 40);
-        //g.drawString(leaderBoard, messageX, messageY + 100);
+
 
         // Draw instructions with line breaks
         String[] instructionLines = instructions.split("\n");
@@ -44,6 +43,16 @@ public class Welcome extends JPanel {
             int lineY = messageY + 100 + (i + 1) * fm.getHeight();
             g.drawString(line, lineX, lineY);
         }
-    }
+        // Draw Power Up  type message with breaks
 
+        String[] powerUpsLines = powerUps.split("\n");
+        for (int i = 0; i < powerUpsLines.length; i++) {
+            String line = powerUpsLines[i];
+            int lineX = (GAME_WIDTH - fm.stringWidth(line)) / 2; // Calculate lineX based on the line width
+            int lineY = messageY + 20 + (i + 1) * fm.getHeight();
+            g.drawString(line, lineX, lineY);
+        }
+
+
+    }
 }
