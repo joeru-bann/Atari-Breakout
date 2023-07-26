@@ -8,31 +8,59 @@ import java.awt.image.*;
 import javax.sound.sampled.*;
 import java.util.ArrayList;
 import javax.swing.Timer;
-
+import java.awt.Toolkit;
 import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
-    private Timer timer;
     private final Background bg;
-    static final int GAME_WIDTH = 850;
-    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (0.7));
-    static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
-    ArrayList<Ball> balls = new ArrayList<Ball>();
 
-    ArrayList<PowerUpBall> pballs = new ArrayList<PowerUpBall>();
-    private final int screenWidth;
-    private final int screenHeight;
+    double screenFraction = 0.8; //80% of the screen size
+
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+    // Get the user true screen size (i.e usable bounds including taskbar)
+    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    Rectangle screenBounds = ge.getMaximumWindowBounds();
+
+    //using inclusive bounds for correct/usable dimensions
+    int screenWidth = (int) (screenBounds.getWidth() * screenFraction);
+    int screenHeight = (int) (screenBounds.getHeight() * screenFraction);
+
+    static final int GAME_WIDTH = 700;
+    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.5));
+
+    // Calculate the window size while maintaining the aspect ratio
+    double widthScaleFactor = (double) screenWidth / GAME_WIDTH;
+    double heightScaleFactor = (double) screenHeight / GAME_HEIGHT;
+    double scaleFactor = Math.min(widthScaleFactor, heightScaleFactor);
+
+    int newWidth = (int) (GAME_WIDTH * scaleFactor);
+    int newHeight = (int) (GAME_HEIGHT * scaleFactor);
+
+    // Calculate the margins to center the window for breakout frame
+    int horizontalMargin = ((screenBounds.width - newWidth) / 2);
+    int verticalMargin = (screenBounds.height - newHeight) / 2;
+
+    static final double UI_POSITION_RATIO = 0.9; // 90% from the top (10% from the bottom)
 
     private double scaleX;
     private double scaleY;
+
+    ArrayList<Ball> balls = new ArrayList<Ball>();
+
+    ArrayList<PowerUpBall> pballs = new ArrayList<PowerUpBall>();
+
 
     int PADDLE_WIDTH = 100;
     int PADDLE_HEIGHT = 10;
 
     int r;
-    int gr;
+    int gr; //bg values
     int b;
-    static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT);
+
+    int uiHeight = 180;
+    int uiSpacing  = 150;
+
     static final int BALL_DIAMETER = 8;
     int level = 1;
     int brickCount = 232;
@@ -45,20 +73,17 @@ public class GamePanel extends JPanel implements Runnable {
     static final int brickWidth = 32;
     static final int brickHeight = 10;
 
-    static final int BORDER_OFFSET = 20; //preventing paddle from touching upper & lower edges
-
     static final int DISTANCE = 20;  // 0 == edge
 
     int lives;
     int score = 0;
     int choice = 0;
 
-    int bbx;
-    int bby;
-    private final UI livesUI;
-    private final UI scoreUI;
-    private final UI hScoreUI;
-    private final UI bLeftUI;
+    private UI livesUI;
+    private UI scoreUI;
+    private UI hScoreUI;
+    private UI bLeftUI;
+
     int inclinationSelection = 0;
 
     int[] highScore = {0, 0, 0};
@@ -93,29 +118,21 @@ public class GamePanel extends JPanel implements Runnable {
     Ball explosiveBall;
     Brick[][] brick;
     Welcome welcome;
-    Mode mode;
     Font atari;
-    Color ballColour; //default ball
+    Color ballColour;
 
     Random random;
     Clip sound;
     long powerUpEnd = 0;
 
-    GamePanel(int screenWidth, int screenHeight) {
-
-        this.screenWidth = screenWidth;
-        this.screenHeight = screenHeight;
+    GamePanel() {
         calculateScale();
-
         readHighScores();
+        updateUIPositions();
         random = new Random();
 
         bg = new Background();
         brick = new Brick[rows][columns];
-        livesUI = new UI(GAME_WIDTH - 750, GAME_HEIGHT - 20, Color.RED, "Lives: ", atari);
-        scoreUI = new UI(GAME_WIDTH - 570, GAME_HEIGHT - 20, Color.GREEN, "Score: ", atari);
-        hScoreUI = new UI(GAME_WIDTH - 350, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
-        bLeftUI = new UI(GAME_WIDTH - 130, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
 
         try {
             InputStream fontLocation = getClass().getResourceAsStream("atariFonts/Atari.ttf");
@@ -123,7 +140,6 @@ public class GamePanel extends JPanel implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        this.setFocusable(true);
 
 
         menuModePaddles();
@@ -132,8 +148,7 @@ public class GamePanel extends JPanel implements Runnable {
         newWelcome();
 
         this.setFocusable(true);
-        this.setPreferredSize(SCREEN_SIZE1);
-
+        this.setPreferredSize(screenSize);
         this.addKeyListener(new AL());
 
         gameThread = new Thread(this);
@@ -162,11 +177,27 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-    private void calculateScale() {
-        scaleX = (double) screenWidth / GAME_WIDTH;
-        scaleY = (double) screenHeight / GAME_HEIGHT;
+    public void updateUIPositions() {
+        int visibleHeight = newHeight;
+        int visibleWidth = Math.min(getWidth(), GAME_WIDTH);
+
+        int uiPositionX = (int) ((visibleWidth));
+        int uiPositionY = (visibleHeight - uiHeight); // Place UI elements at the bottom of the screen
+
+        System.out.println(uiPositionX + " UI X");
+        System.out.println(uiPositionY + " UI Y");
+
+
+        livesUI = new UI(uiPositionX + (uiSpacing * 4), uiPositionY, Color.RED, "Lives: ", atari);
+        scoreUI = new UI(uiPositionX + (uiSpacing * 3), uiPositionY, Color.GREEN, "Score: ", atari);
+        hScoreUI = new UI(uiPositionX + (uiSpacing * 2), uiPositionY, Color.MAGENTA, "HighScore: ", atari);
+        bLeftUI = new UI(uiPositionX + (uiSpacing) - 50, uiPositionY, Color.YELLOW, "bricks: ", atari);
     }
 
+    private void calculateScale() {
+        scaleX = newWidth;
+        scaleY = newHeight;
+    }
 
     public void newPaddles() {
         //new paddle instance from class
@@ -234,12 +265,6 @@ public class GamePanel extends JPanel implements Runnable {
         lBoard = "1st " + leaderboard[0] + "\n" + "2nd " + leaderboard[1] + "\n" + "3rd " + leaderboard[2] + "\n";
     }
 
-
-    public void setBackgroundColor(Color color) {
-        bg.setBackgroundColor(color);
-        bg.repaint();
-    }
-
     public void beginGame() {
         ballType = "default";
 
@@ -248,8 +273,6 @@ public class GamePanel extends JPanel implements Runnable {
         destroyWelcome();
         newBricks();
 
-
-        //int baseLives = 11;
         lives = 10;//= baseLives - level;
         score = 0;
         ballColour = Color.white;
@@ -276,18 +299,41 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void paintComponent(Graphics g) {
-
         super.paintComponent(g);
 
-        Graphics2D g2d = (Graphics2D) g;
+        double scaleX = (double) getWidth() / GAME_WIDTH;
+        double scaleY = (double) getHeight() / GAME_HEIGHT;
 
-        buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-        graphics = buffer.getGraphics();
+        // Calculate the new scaled dimensions
+        int newScaledWidth = (int) (GAME_WIDTH * scaleFactor);
+        int newScaledHeight = (int) (GAME_HEIGHT * scaleFactor);
 
+        // Calculate the margins to center the content
+        int horizontalMargin = (getWidth() - newWidth) / 2;
+        int verticalMargin = (getHeight() - newHeight) / 2;
+
+        // Create a new buffer if it doesn't exist yet or if its dimensions have changed
+        if (buffer == null || buffer.getWidth() != getWidth() || buffer.getHeight() != getHeight()) {
+            buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+            graphics = buffer.getGraphics();
+        }
+
+        // Clear the buffer
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0, 0, getWidth(), getHeight());
+
+        // Draw the game content onto the buffer
         draw(graphics);
-        g2d.scale(scaleX, scaleY);
-        g.drawImage(buffer, 0, 0, this);
+
+        // Clear the screen
+        g.clearRect(0, 0, getWidth(), getHeight());
+
+        // Scale and draw the buffer to the screen
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.scale(scaleFactor, scaleFactor);
+        g.drawImage(buffer, horizontalMargin, verticalMargin, this);
     }
+
 
     public void draw(Graphics g) {
         allCleared = true;
@@ -318,7 +364,7 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
             }
         }
-        bg.draw(g, r, gr, b);
+        bg.draw(g, r, gr, b, newWidth, GAME_HEIGHT);
         paddle1.draw(g);
         for (int i = 0; i < balls.size(); i++) {
             Ball arrayBall = balls.get(i);
@@ -474,7 +520,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
 
-            if (arrayBall.y < GAME_HEIGHT - 54 && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
+            if (arrayBall.y > (paddle1.y) -5 && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
 
                 double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 

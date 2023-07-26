@@ -7,16 +7,17 @@ import javax.swing.*;
 public class Breakout {
     public static void main(String[] args) {
         JFrame frame = new JFrame(  "Brumble Breakout : Breaking Brumble");
-        GamePanel window = new GamePanel(GamePanel.GAME_WIDTH, GamePanel.GAME_HEIGHT);
+        GamePanel window = new GamePanel();
 
-//        Thread gameThread = new Thread(window);
-//        gameThread.start();
-
-        frame.getContentPane().add(window);
+        //frame.getContentPane().add(window);
+        //frame.pack();
+        frame.add(window);
+        frame.setSize(window.newWidth, window.newHeight);
+        //frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-        frame.repaint();
         frame.setResizable(false);
+        frame.setLocation(window.horizontalMargin, window.verticalMargin);
+        frame.setVisible(true);
+
     }
 }

@@ -10,9 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="added colours to individual powerUps slightly bugged with paddle collisions and powerup activation">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Background.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Background.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Breakout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Breakout.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/Welcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Welcome.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -139,6 +141,7 @@
       <workItem from="1685310526624" duration="4019000" />
       <workItem from="1685339288524" duration="1165000" />
       <workItem from="1685489794487" duration="2594000" />
+      <workItem from="1690328758314" duration="4594000" />
     </task>
     <task id="LOCAL-00001" summary="beginning base classes with intro">
       <created>1683236216529</created>
