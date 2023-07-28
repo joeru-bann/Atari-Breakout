@@ -333,8 +333,6 @@ public class GamePanel extends JPanel implements Runnable {
         g2d.scale(scaleFactor, scaleFactor);
         g.drawImage(buffer, horizontalMargin, verticalMargin, this);
     }
-
-
     public void draw(Graphics g) {
         allCleared = true;
 
@@ -364,7 +362,7 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
             }
         }
-        bg.draw(g, r, gr, b, newWidth, GAME_HEIGHT);
+        bg.draw(g, r, gr, b, newWidth , GAME_HEIGHT);
         paddle1.draw(g);
         for (int i = 0; i < balls.size(); i++) {
             Ball arrayBall = balls.get(i);
@@ -536,7 +534,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             }
         }
-        if (createPowerUp && pball != null && (pball.y > GAME_HEIGHT - 54 || pball.x > 950 || pball.x < 0)) {
+        if (createPowerUp && pball != null && (pball.y > GAME_HEIGHT || pball.x > 950 || pball.x < 0)) {
             pballs.remove(pball);
             pball = null;
             //System.out.println("pball doesnt intersect");
@@ -805,26 +803,21 @@ public class GamePanel extends JPanel implements Runnable {
                     int thirdPlace;
                     thirdPlace = highScore[1];
                     highScore[1] = highScore[0];
-
-                    writeHighScore(highScore[1], 1);
                     highScore[0] = score;
 
                     highScore[2] = thirdPlace;
-                    writeHighScore(highScore[2], 2);
-
-                    writeHighScore(highScore[0], 0);
+                    writeHighScore();
                     System.out.println("CIL wrote: " + highScore[0]);
                     System.out.println("2nd place: " + highScore[1]);
 
-                } else if (score > highScore[1] && score <= highScore[0]) { //replacing 2nd and 3rd
+                } else if (score > highScore[1]) { //replacing 2nd and 3rd
                     highScore[2] = highScore[1];
                     highScore[1] = score;
-                    writeHighScore(highScore[1], 1);
-                    writeHighScore(highScore[2], 2);
+                    writeHighScore();
                     System.out.println("3rd place: " + highScore[2]);
-                }else if (score <= highScore[1] && score > highScore[2]) { //replacing 3rd
+                }else if (score > highScore[2]) { //replacing 3rd
                     highScore[2] = score;
-                    writeHighScore(highScore[2], 2);
+                    writeHighScore();
                     System.out.println("3rd place: " + highScore[2]);
                 }
 
@@ -853,16 +846,16 @@ public class GamePanel extends JPanel implements Runnable {
     //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
-    public int [] writeHighScore(int hScpre, int place) {
+    public int [] writeHighScore() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (int i = 0; i <= 2; i++, place++) {
+            for (int i = 0; i <= 2; i++) {
                 int currentHScore;
                         currentHScore = highScore[i];
-                if (place == i) {
+
                     writer.write(String.valueOf(currentHScore));
                     writer.newLine();
                     //System.out.println("wrote score: " + i + highScore[i]);
-                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();

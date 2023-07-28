@@ -9,11 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="added colours to individual powerUps slightly bugged with paddle collisions and powerup activation">
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="power up intersect update as well as leader board fully working">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/Background.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Background.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/Breakout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Breakout.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" afterDir="false" />
     </list>
@@ -341,6 +339,7 @@
     <MESSAGE value="paddlewidth method, highscore array / leaderboard" />
     <MESSAGE value="leaderboard and paddle size changing" />
     <MESSAGE value="added colours to individual powerUps slightly bugged with paddle collisions and powerup activation" />
-    <option name="LAST_COMMIT_MESSAGE" value="added colours to individual powerUps slightly bugged with paddle collisions and powerup activation" />
+    <MESSAGE value="power up intersect update as well as leader board fully working" />
+    <option name="LAST_COMMIT_MESSAGE" value="power up intersect update as well as leader board fully working" />
   </component>
 </project>
