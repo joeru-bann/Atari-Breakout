@@ -116,9 +116,9 @@ public class GamePanel extends JPanel implements Runnable {
         brick = new Brick[rows][columns];
 
         livesUI = new UI(GAME_WIDTH - 600, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
-        scoreUI = new UI(GAME_WIDTH - 400, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
-        hScoreUI = new UI(GAME_WIDTH - 130, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
-        bLeftUI = new UI(GAME_WIDTH - 850, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
+        scoreUI = new UI(GAME_WIDTH - 450, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
+        hScoreUI = new UI(GAME_WIDTH - 100, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
+        bLeftUI = new UI(GAME_WIDTH - 270, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
 
         try {
             InputStream fontLocation = getClass().getResourceAsStream("atariFonts/Atari.ttf");
@@ -680,6 +680,18 @@ public class GamePanel extends JPanel implements Runnable {
 
 
     public class AL extends KeyAdapter {
+        public void mouseDragged(MouseEvent e) {
+            int mouseX = e.getX();
+            int paddleX = (int) paddle1.getX();
+            int paddleWidth = paddle1.getPaddleWidth();
+
+            int x = paddle1.x;
+         int y = paddle1.y;
+
+            int deltaX = mouseX - (paddleX + paddleWidth / 2);
+
+
+        }
         public void keyPressed(KeyEvent e) { //Player inputs for movement + navigation
 
             if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !menuActive) {
