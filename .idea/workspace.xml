@@ -9,10 +9,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="solo working leaderboard arrray scores">
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="power up intersect update as well as leader board fully working">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -338,6 +339,7 @@
     <MESSAGE value="paddlewidth method, highscore array / leaderboard" />
     <MESSAGE value="leaderboard and paddle size changing" />
     <MESSAGE value="added colours to individual powerUps slightly bugged with paddle collisions and powerup activation" />
-    <option name="LAST_COMMIT_MESSAGE" value="added colours to individual powerUps slightly bugged with paddle collisions and powerup activation" />
+    <MESSAGE value="power up intersect update as well as leader board fully working" />
+    <option name="LAST_COMMIT_MESSAGE" value="power up intersect update as well as leader board fully working" />
   </component>
 </project>

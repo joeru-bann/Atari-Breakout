@@ -1,6 +1,5 @@
 package Breakout;
 
-import java.awt.geom.AffineTransform;
 import java.io.*;
 import java.util.*;
 import java.awt.*;
@@ -23,43 +22,34 @@ public class GamePanel extends JPanel implements Runnable {
     GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     Rectangle screenBounds = ge.getMaximumWindowBounds();
 
-
+    //using inclusive bounds for correct/usable dimensions
     int screenWidth = (int) (screenBounds.getWidth() * screenFraction);
     int screenHeight = (int) (screenBounds.getHeight() * screenFraction);
 
-    // Desired aspect ratio for the game (should match the screen aspect ratio)
-    static double GAME_ASPECT_RATIO = 1.5; // 1.5 is the aspect ratio used in your example
-
-    // Adjust GAME_HEIGHT to match the screen aspect ratio
-    int GAME_WIDTH = 700;
-    int GAME_HEIGHT = (int) (GAME_WIDTH * GAME_ASPECT_RATIO);
+    static final int GAME_WIDTH = 700;
+    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.5));
 
     // Calculate the window size while maintaining the aspect ratio
     double widthScaleFactor = (double) screenWidth / GAME_WIDTH;
     double heightScaleFactor = (double) screenHeight / GAME_HEIGHT;
-
-    // Calculate the scale factor based on the desired aspect ratio
     double scaleFactor = Math.min(widthScaleFactor, heightScaleFactor);
 
-
-
-    // Calculate the new width and height using the scaleFactor
     int newWidth = (int) (GAME_WIDTH * scaleFactor);
     int newHeight = (int) (GAME_HEIGHT * scaleFactor);
 
-
     // Calculate the margins to center the window for breakout frame
-    int horizontalMargin = (screenBounds.width - newWidth) / 2;
+    int horizontalMargin = ((screenBounds.width - newWidth) / 2);
     int verticalMargin = (screenBounds.height - newHeight) / 2;
 
     static final double UI_POSITION_RATIO = 0.9; // 90% from the top (10% from the bottom)
+
+    private double scaleX;
+    private double scaleY;
 
     ArrayList<Ball> balls = new ArrayList<Ball>();
 
     ArrayList<PowerUpBall> pballs = new ArrayList<PowerUpBall>();
 
-    int scaleX;
-    int scaleY;
 
     int PADDLE_WIDTH = 100;
     int PADDLE_HEIGHT = 10;
@@ -68,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     int gr; //bg values
     int b;
 
-    int uiHeight = 160;
+    int uiHeight = 180;
     int uiSpacing  = 150;
 
     static final int BALL_DIAMETER = 8;
@@ -139,7 +129,6 @@ public class GamePanel extends JPanel implements Runnable {
         calculateScale();
         readHighScores();
         updateUIPositions();
-        setDoubleBuffered(true);
         random = new Random();
 
         bg = new Background();
@@ -159,7 +148,7 @@ public class GamePanel extends JPanel implements Runnable {
         newWelcome();
 
         this.setFocusable(true);
-        //this.setPreferredSize(screenSize);
+        this.setPreferredSize(screenSize);
         this.addKeyListener(new AL());
 
         gameThread = new Thread(this);
@@ -308,39 +297,42 @@ public class GamePanel extends JPanel implements Runnable {
         soundPlaying = false;
     }
 
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-        @Override
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
+        double scaleX = (double) getWidth() / GAME_WIDTH;
+        double scaleY = (double) getHeight() / GAME_HEIGHT;
 
-            // Calculate the scale factors for width and height
-            double scaleX = (double) getWidth() / GAME_WIDTH;
-            double scaleY = (double) getHeight() / GAME_HEIGHT;
-            double scale = Math.min(scaleX, scaleY);
+        // Calculate the new scaled dimensions
+        int newScaledWidth = (int) (GAME_WIDTH * scaleFactor);
+        int newScaledHeight = (int) (GAME_HEIGHT * scaleFactor);
 
-            // Calculate the new scaled dimensions
-            int newScaledWidth = (int) (GAME_WIDTH * scale);
-            int newScaledHeight = (int) (GAME_HEIGHT * scale);
+        // Calculate the margins to center the content
+        int horizontalMargin = (getWidth() - newWidth) / 2;
+        int verticalMargin = (getHeight() - newHeight) / 2;
 
-            // Create a new BufferedImage with the scaled dimensions
-            BufferedImage scaledImage = new BufferedImage(newScaledWidth, newScaledHeight, BufferedImage.TYPE_INT_RGB);
-            Graphics2D g2d = scaledImage.createGraphics();
-
-            // Clear the scaled image
-            g2d.setColor(Color.BLACK);
-            g2d.fillRect(0, 0, newScaledWidth, newScaledHeight);
-
-            // Draw the game content onto the scaled image with scaling
-            g2d.scale(scale, scale);
-            draw(g2d);
-
-            // Dispose the graphics object used for the scaled image
-            g2d.dispose();
-
-            // Draw the scaled image to the screen using Graphics.drawImage
-            g.drawImage(scaledImage, 0, 0, this);
+        // Create a new buffer if it doesn't exist yet or if its dimensions have changed
+        if (buffer == null || buffer.getWidth() != getWidth() || buffer.getHeight() != getHeight()) {
+            buffer = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+            graphics = buffer.getGraphics();
         }
 
+        // Clear the buffer
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0, 0, getWidth(), getHeight());
+
+        // Draw the game content onto the buffer
+        draw(graphics);
+
+        // Clear the screen
+        g.clearRect(0, 0, getWidth(), getHeight());
+
+        // Scale and draw the buffer to the screen
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.scale(scaleFactor, scaleFactor);
+        g.drawImage(buffer, horizontalMargin, verticalMargin, this);
+    }
     public void draw(Graphics g) {
         allCleared = true;
 
@@ -370,7 +362,7 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
             }
         }
-        bg.draw(g, r, gr, b, newWidth, newHeight);
+        bg.draw(g, r, gr, b, newWidth , GAME_HEIGHT);
         paddle1.draw(g);
         for (int i = 0; i < balls.size(); i++) {
             Ball arrayBall = balls.get(i);
@@ -380,6 +372,9 @@ public class GamePanel extends JPanel implements Runnable {
         if (explosiveBall != null) {
             explosiveBall.draw(g, Color.RED);
         }
+//        for (int x = 0; x < balls.size(); x++){
+//            balls.get(x).draw(g, ballColour);
+//        }
 
         welcome.draw(g, atari, GAME_WIDTH, GAME_HEIGHT, welcomeMessage, instructionMessage, lBoard, powerTypeMessage);
 
@@ -539,7 +534,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             }
         }
-        if (createPowerUp && pball != null && (pball.y > GAME_HEIGHT - 54 || pball.x > 950 || pball.x < 0)) {
+        if (createPowerUp && pball != null && (pball.y > GAME_HEIGHT || pball.x > 950 || pball.x < 0)) {
             pballs.remove(pball);
             pball = null;
             //System.out.println("pball doesnt intersect");
@@ -808,26 +803,21 @@ public class GamePanel extends JPanel implements Runnable {
                     int thirdPlace;
                     thirdPlace = highScore[1];
                     highScore[1] = highScore[0];
-
-                    writeHighScore(highScore[1], 1);
                     highScore[0] = score;
 
                     highScore[2] = thirdPlace;
-                    writeHighScore(highScore[2], 2);
-
-                    writeHighScore(highScore[0], 0);
+                    writeHighScore();
                     System.out.println("CIL wrote: " + highScore[0]);
                     System.out.println("2nd place: " + highScore[1]);
 
-                } else if (score > highScore[1] && score <= highScore[0]) { //replacing 2nd and 3rd
+                } else if (score > highScore[1]) { //replacing 2nd and 3rd
                     highScore[2] = highScore[1];
                     highScore[1] = score;
-                    writeHighScore(highScore[1], 1);
-                    writeHighScore(highScore[2], 2);
+                    writeHighScore();
                     System.out.println("3rd place: " + highScore[2]);
-                }else if (score <= highScore[1] && score > highScore[2]) { //replacing 3rd
+                }else if (score > highScore[2]) { //replacing 3rd
                     highScore[2] = score;
-                    writeHighScore(highScore[2], 2);
+                    writeHighScore();
                     System.out.println("3rd place: " + highScore[2]);
                 }
 
@@ -856,16 +846,16 @@ public class GamePanel extends JPanel implements Runnable {
     //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
-    public int [] writeHighScore(int hScpre, int place) {
+    public int [] writeHighScore() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (int i = 0; i <= 2; i++, place++) {
+            for (int i = 0; i <= 2; i++) {
                 int currentHScore;
                         currentHScore = highScore[i];
-                if (place == i) {
+
                     writer.write(String.valueOf(currentHScore));
                     writer.newLine();
                     //System.out.println("wrote score: " + i + highScore[i]);
-                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
