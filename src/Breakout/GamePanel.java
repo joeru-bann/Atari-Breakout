@@ -33,9 +33,6 @@ import java.awt.event.MouseMotionListener;
 
     int PADDLE_WIDTH = 100;
     int PADDLE_HEIGHT = 10;
-    private double mouseSens = 0.1;
-
-    private int initialMouseX;
 
 
     int r;
@@ -91,8 +88,8 @@ import java.awt.event.MouseMotionListener;
     boolean instructionsShown = false;
     boolean leaderBoardShown = false;
     boolean powerUpTypesShown = false;
-
     boolean createPowerUp = false;
+    boolean keyPressed = false;
 
     Thread gameThread;
     BufferedImage buffer;
@@ -671,8 +668,8 @@ import java.awt.event.MouseMotionListener;
     }
 
     //MouseListening methods for movememnt interactions
-
         public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
+        if(!keyPressed) {
             int mouseX = e.getX();
             int paddleWidth = (int) paddle1.getWidth();
             int paddleX = mouseX - paddleWidth / 2;
@@ -681,6 +678,7 @@ import java.awt.event.MouseMotionListener;
             paddleX = Math.max(0, Math.min(paddleX, GAME_WIDTH - paddleWidth));
 
             paddle1.x = paddleX;
+        }
         }
         public void mousePressed(MouseEvent e) {
         }
@@ -702,7 +700,7 @@ import java.awt.event.MouseMotionListener;
 
     public class AL extends KeyAdapter {
         public void keyPressed(KeyEvent e) { //Keyboard inputs for movement + navigation
-
+            keyPressed = true;
             if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !menuActive) {
                 paddle1.setDeltaX((int) -1.4);
             }
@@ -746,6 +744,7 @@ import java.awt.event.MouseMotionListener;
 
         //stopping paddle after releasing key - resetting deltaX
         public void keyReleased(KeyEvent e) {
+            keyPressed = false;
 
             if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) & !menuActive) {
                 paddle1.setDeltaX(0);
