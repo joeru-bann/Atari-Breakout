@@ -10,8 +10,11 @@ import java.util.ArrayList;
 import javax.swing.Timer;
 import java.awt.Toolkit;
 import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class GamePanel extends JPanel implements Runnable {
+    public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener {
     private final Background bg;
 
     static final int GAME_WIDTH = 700;
@@ -30,6 +33,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     int PADDLE_WIDTH = 100;
     int PADDLE_HEIGHT = 10;
+    private double mouseSens = 0.1;
+
+    private int initialMouseX;
+
 
     int r;
     int gr; //bg values
@@ -107,6 +114,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
 
+        addMouseMotionListener(this);
+        addMouseListener(this);
+
         calculateScale();
         readHighScores();
         //updateUIPositions();
@@ -163,23 +173,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-//    public void updateUIPositions() {
-//        //int visibleHeight = newHeight;
-//        int visibleWidth = Math.min(getWidth(), GAME_WIDTH);
-//
-//        int uiPositionX = (int) ((visibleWidth));
-//       // int uiPositionY = (visibleHeight - uiHeight); // Place UI elements at the bottom of the screen
-//
-//        System.out.println(uiPositionX + " UI X");
-//        System.out.println(uiPositionY + " UI Y");
-//
-//
-//        livesUI = new UI(uiPositionX + (uiSpacing * 4), uiPositionY, Color.RED, "Lives: ", atari);
-//        scoreUI = new UI(uiPositionX + (uiSpacing * 3), uiPositionY, Color.GREEN, "Score: ", atari);
-//        hScoreUI = new UI(uiPositionX + (uiSpacing * 2), uiPositionY, Color.MAGENTA, "HighScore: ", atari);
-//        bLeftUI = new UI(uiPositionX + (uiSpacing) - 50, uiPositionY, Color.YELLOW, "bricks: ", atari);
-//    }
-
     private void calculateScale() {
         scaleX = (double) screenWidth / GAME_WIDTH;
         scaleY = (double) screenHeight / GAME_HEIGHT;
@@ -212,7 +205,6 @@ public class GamePanel extends JPanel implements Runnable {
             //hits = 0;
         }
     }
-
 
     public void newWelcome() {
         welcome = new Welcome(0, 0, 0, 0);
@@ -678,21 +670,38 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    //MouseListening methods for movememnt interactions
 
-    public class AL extends KeyAdapter {
-        public void mouseDragged(MouseEvent e) {
+        public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
             int mouseX = e.getX();
-            int paddleX = (int) paddle1.getX();
-            int paddleWidth = paddle1.getPaddleWidth();
+            int paddleWidth = (int) paddle1.getWidth();
+            int paddleX = mouseX - paddleWidth / 2;
 
-            int x = paddle1.x;
-         int y = paddle1.y;
+            // Make sure the paddle does not move out of the panel
+            paddleX = Math.max(0, Math.min(paddleX, GAME_WIDTH - paddleWidth));
 
-            int deltaX = mouseX - (paddleX + paddleWidth / 2);
-
+            paddle1.x = paddleX;
+        }
+        public void mousePressed(MouseEvent e) {
+        }
+        public void mouseDragged(MouseEvent e) {
 
         }
-        public void keyPressed(KeyEvent e) { //Player inputs for movement + navigation
+        public void mouseEntered(MouseEvent e) {
+            System.out.println("entered");
+        }
+        public void mouseExited(MouseEvent e) {
+            System.out.println("exited");
+        }
+        public void mouseClicked(MouseEvent e) {
+        }
+        public void mouseReleased(MouseEvent e) {
+        }
+        public void actionPerformed(ActionEvent e) { //placeholder bypassing abstract class
+        }
+
+    public class AL extends KeyAdapter {
+        public void keyPressed(KeyEvent e) { //Keyboard inputs for movement + navigation
 
             if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !menuActive) {
                 paddle1.setDeltaX((int) -1.4);
@@ -734,7 +743,6 @@ public class GamePanel extends JPanel implements Runnable {
                 resetWelcome(); //sets strings to default messages
             }
         }
-
 
         //stopping paddle after releasing key - resetting deltaX
         public void keyReleased(KeyEvent e) {
