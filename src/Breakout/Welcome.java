@@ -1,5 +1,4 @@
 package Breakout;
-// leo was here
 import javax.swing.*;
 import java.awt.*;
 

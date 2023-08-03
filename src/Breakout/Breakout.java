@@ -17,5 +17,6 @@ public class Breakout {
         frame.setVisible(true);
         frame.repaint();
         frame.setResizable(false);
+        window.addKeyListener(window);
     }
 }
