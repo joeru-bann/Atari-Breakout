@@ -488,7 +488,7 @@ import java.awt.event.MouseMotionListener;
 
             double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
 
-            if (arrayBall.y > (paddle1.y) -5 && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
+            if (arrayBall.y > (paddle1.y) -10 && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
 
                 double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 
