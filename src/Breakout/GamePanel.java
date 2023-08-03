@@ -808,7 +808,8 @@ import java.awt.event.MouseMotionListener;
 
         public void pauseMenu(){
                 if (paused){
-                    welcomeMessage = "PAUSED \n  press space to continue";
+                    welcomeMessage = "PAUSED";
+                    powerTypeMessage = "press SPACE to continue";
                 }
                 else if (!paused){
                     destroyWelcome();
