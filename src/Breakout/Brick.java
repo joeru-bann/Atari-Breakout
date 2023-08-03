@@ -18,20 +18,6 @@ public class Brick extends Rectangle {
         this.row = row;
         this.column = column;
     }
-
-    public void setDeltaY(int yDirection) {
-        dy = yDirection * paddleSpeed;
-    }
-
-    public void setDeltaX(int xDirection) {
-        dx = xDirection * paddleSpeed;
-    }
-
-    public void move() {
-        y = y + dy;
-        x = x + dx;
-    }
-
     public void draw(Graphics g) {
 
         // decide which color has to be applied to each row of Bricks.
@@ -50,7 +36,6 @@ public class Brick extends Rectangle {
         if (this.column > 5 && this.column < 8) {
             g.setColor(Color.blue);
         }
-
         g.fillRect(x, y, width, height);
     }
 

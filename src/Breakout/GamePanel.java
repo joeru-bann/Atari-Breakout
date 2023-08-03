@@ -375,9 +375,11 @@ import java.awt.event.MouseMotionListener;
 
         }
         if (allCleared) {
+            allCleared = false;
             beginMenuMode();
-            welcomeMessage = "YOU WON! YIPEEE";
+            welcomeMessage = "YOU ! YWONIPEEE";
             hScoreDisplay = ("High score: " + highScore);
+            writeHighScore();
 
         }
         //Keep draw statements here for atari font to work
@@ -548,7 +550,6 @@ import java.awt.event.MouseMotionListener;
             long fiveseconds = 5000000000L;
             powerUpEnd = System.nanoTime() + fiveseconds;
             powerUpStart = true;
-
         }
 
     }
@@ -575,7 +576,6 @@ import java.awt.event.MouseMotionListener;
 
     private void normalizeDirection(int i) {
         Ball arrayBall = balls.get(i);
-        //System.out.println("normalizeDirection");
         double magnitude = Math.sqrt((arrayBall.dx * arrayBall.dx + arrayBall.dy * arrayBall.dy));
         arrayBall.dx /= ((magnitude) * 3);
         arrayBall.dy /= magnitude / 1.2;
@@ -707,7 +707,6 @@ import java.awt.event.MouseMotionListener;
         public void mousePressed(MouseEvent e) {
         }
         public void mouseDragged(MouseEvent e) {
-
         }
         public void mouseEntered(MouseEvent e) {
             System.out.println("entered");
@@ -721,12 +720,9 @@ import java.awt.event.MouseMotionListener;
         }
         public void actionPerformed(ActionEvent e) { //placeholder
         }
-
         @Override
         public void keyTyped(KeyEvent e) {
-
         }
-
         @Override
         public void keyPressed(KeyEvent e) { //Keyboard inputs for movement + navigation
             keyPressed = true;
@@ -772,6 +768,7 @@ import java.awt.event.MouseMotionListener;
                             paused = true;
                             lastPauseTime = System.nanoTime();
                             System.out.println("pause");
+                            pauseMenu();
                         }
                     }
                     else if (paused){
@@ -781,6 +778,7 @@ import java.awt.event.MouseMotionListener;
                         long pauseDuration = now - lastPauseTime;
                         totalPausedTime += pauseDuration;
                         System.out.println("unpause");
+                        pauseMenu();
                     }
                 }
             if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (powerUpTypesShown)) {
@@ -807,6 +805,16 @@ import java.awt.event.MouseMotionListener;
             }
         }
 
+        public void pauseMenu(){
+                if (paused){
+                    welcomeMessage = "PAUSED \n  press space to continue";
+                }
+                else if (!paused){
+                    destroyWelcome();
+                }
+
+
+        }
     public void powerUpEnder(){
         if(powerUpStart) {
             if (powerUpEnd <= System.nanoTime()) {
@@ -814,7 +822,6 @@ import java.awt.event.MouseMotionListener;
                 powerUpStart = false;
             }
         }
-
     }
     public void checkIfLost(int lives) {
         int remainingLives = lives;

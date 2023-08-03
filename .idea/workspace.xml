@@ -9,9 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="reverted to old aspect / res changes">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="god hacks enabled + spacebar for pause">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Brick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -312,7 +312,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690755847537</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="god hacks enabled + spacebar for pause">
+      <created>1691024665667</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1691024665667</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -351,6 +358,7 @@
     <MESSAGE value="power up intersect update as well as leader board fully working" />
     <MESSAGE value="working on fixing aspect ratio" />
     <MESSAGE value="reverted to old aspect / res changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="reverted to old aspect / res changes" />
+    <MESSAGE value="god hacks enabled + spacebar for pause" />
+    <option name="LAST_COMMIT_MESSAGE" value="god hacks enabled + spacebar for pause" />
   </component>
 </project>
