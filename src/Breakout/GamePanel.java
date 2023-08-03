@@ -1,5 +1,6 @@
 package Breakout;
 
+import java.awt.font.FontRenderContext;
 import java.io.*;
 import java.util.*;
 import java.awt.*;
@@ -133,14 +134,15 @@ import java.awt.event.MouseMotionListener;
         bg = new Background();
         brick = new Brick[rows][columns];
 
-        livesUI = new UI(GAME_WIDTH - 600, GAME_HEIGHT -20, Color.RED, "Lives: ", atari);
+        livesUI = new UI(GAME_WIDTH - 600, GAME_HEIGHT - 20, Color.RED, "Lives: ", atari);
         scoreUI = new UI(GAME_WIDTH - 450, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
-        hScoreUI = new UI(GAME_WIDTH - 100, GAME_HEIGHT - 20, Color.MAGENTA, "HighScore: ", atari);
-        bLeftUI = new UI(GAME_WIDTH - 270, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
+        hScoreUI = new UI(GAME_WIDTH - 120, GAME_HEIGHT - 20, Color.MAGENTA, "High: ", atari);
+        bLeftUI = new UI(GAME_WIDTH - 300, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
 
         try {
             InputStream fontLocation = getClass().getResourceAsStream("atariFonts/Atari.ttf");
-            atari = Font.createFont(Font.TRUETYPE_FONT, fontLocation).deriveFont(12f);
+            atari = Font.createFont(Font.TRUETYPE_FONT, fontLocation).deriveFont(13f);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -253,7 +255,6 @@ import java.awt.event.MouseMotionListener;
     }
 
     public void beginGame() {
-        running = true;
         ballType = "default";
         time.start();
         newPaddles();
@@ -264,6 +265,10 @@ import java.awt.event.MouseMotionListener;
         lives = 10;//= baseLives - level;
         score = 0;
         ballColour = Color.white;
+        running = true;
+        menuActive = false;
+        System.out.println("begingame");
+
     }
 
     public void playSound(String fileName) {
@@ -733,19 +738,13 @@ import java.awt.event.MouseMotionListener;
             if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !menuActive) {
                 paddle1.setDeltaX((int) +1.4);
             }
-
-            if (e.getKeyCode() == KeyEvent.VK_SPACE && menuActive) {
-                menuActive = false;
-
-                for(int i = 0; i < balls.size(); i++){
-                    Ball arrayBall = balls.get(i);
-                    balls.remove(i);//default ball colour
-                }
-                beginGame();
-            }
             if (e.getKeyCode() == KeyEvent.VK_I && menuActive) {
                 destroyWelcome();
                 showInstructions();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_P && menuActive) {
+                    destroyWelcome();
+                    showPowerUpTypes();
             }
             //navigating back to menu screen from instructions message
             if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (instructionsShown)) {
@@ -757,21 +756,16 @@ import java.awt.event.MouseMotionListener;
             }
                 if (e.getKeyCode() == KeyEvent.VK_SPACE && !processingP) {
                     processingP = true; // Set the flag to true while processing the "P" key
-                    System.out.println("p pressed");
-                    if (menuActive) {
-                        destroyWelcome();
-                        showPowerUpTypes();
-                    } else if (running && !menuActive) {
+
+                    if (running && !menuActive) {
                         if (!paused) {
                             running = false;
-                            // put your pauseMenu() etc method here harrison
                             paused = true;
                             lastPauseTime = System.nanoTime();
                             System.out.println("pause");
                             pauseMenu();
                         }
-                    }
-                    else if (paused){
+                    } else if (paused) {
                         long now = System.nanoTime();
                         running = true;
                         paused = false;
@@ -779,6 +773,13 @@ import java.awt.event.MouseMotionListener;
                         totalPausedTime += pauseDuration;
                         System.out.println("unpause");
                         pauseMenu();
+                    }
+                    else if(menuActive){
+                        for(int i = 0; i < balls.size(); i++){
+                            Ball arrayBall = balls.get(i);
+                            balls.remove(i);//default ball colour
+                        }
+                        beginGame();
                     }
                 }
             if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (powerUpTypesShown)) {
@@ -789,7 +790,7 @@ import java.awt.event.MouseMotionListener;
             }
         }
 
-        //stopping paddle after releasing key - resetting deltaX
+        //stopping paddle after releasing key
         public void keyReleased(KeyEvent e) {
             keyPressed = false;
 
