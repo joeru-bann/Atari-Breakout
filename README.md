@@ -60,7 +60,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Brumbly Breakout][product-screenshot]]([https://github.com/joeru-bann/Atari-Breakout])
+![Brumbly Breakout](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdHWsl8BQ4L7NK3SRccXft52I7vdEnV5uO1f4UMkK6sLiTrnz2DyYc3g8u7EEMjBFUQOU&usqp=CAU)
 
 Brumbly Breakout is a recreation of the famous "Atari Breakout" video game originally developed by Steve Wozniak, Nolan Bushnell in 1970.
 
