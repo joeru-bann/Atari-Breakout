@@ -759,7 +759,7 @@ import java.awt.event.MouseMotionListener;
                 destroyWelcome();
                 showLeaderBoard();
             }
-                if (e.getKeyCode() == KeyEvent.VK_P && !processingP) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE && !processingP) {
                     processingP = true; // Set the flag to true while processing the "P" key
                     System.out.println("p pressed");
                     if (menuActive) {
@@ -802,7 +802,7 @@ import java.awt.event.MouseMotionListener;
             if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !menuActive) {
                 paddle1.setDeltaX(0);
             }
-            if(e.getKeyCode() == KeyEvent.VK_P){
+            if(e.getKeyCode() == KeyEvent.VK_SPACE){
                 processingP = false;
             }
         }
@@ -820,7 +820,6 @@ import java.awt.event.MouseMotionListener;
         int remainingLives = lives;
         
         if (remainingLives < 1) { //if lose/lost
-            running = false;
             int ran = 0;
             level = 1;
             brickCount = 232;
