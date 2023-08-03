@@ -31,6 +31,7 @@
   </p>
 </div>
 
+![bron](https://github.com/joeru-bann/Atari-Breakout/assets/102632048/d0d36029-460f-4c28-bcd2-447b7ca4e679)
 
 <!-- TABLE OF CONTENTS -->
 <details>
