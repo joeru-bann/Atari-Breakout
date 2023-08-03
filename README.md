@@ -9,7 +9,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/joeru-bann/Atari-Breakout">
-    <img src="images/brumblybreakout-logo.heif" alt="Logo">
+    <img src="https://cdn2.wanderlust.co.uk/media/1192/dreamstime_l_17793244.jpg?anchor=center&mode=crop&width=1920&height=858&format=auto&rnd=131455360000000000" alt="Logo">
   </a>
 
   <!-- <h3 align="center">Title</h3> -->
@@ -31,6 +31,7 @@
   </p>
 </div>
 
+![bron](https://github.com/joeru-bann/Atari-Breakout/assets/102632048/d0d36029-460f-4c28-bcd2-447b7ca4e679)
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -60,7 +61,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Brumbly Breakout][product-screenshot]]([https://github.com/joeru-bann/Atari-Breakout])
+![Brumbly Breakout](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdHWsl8BQ4L7NK3SRccXft52I7vdEnV5uO1f4UMkK6sLiTrnz2DyYc3g8u7EEMjBFUQOU&usqp=CAU)
 
 Brumbly Breakout is a recreation of the famous "Atari Breakout" video game originally developed by Steve Wozniak, Nolan Bushnell in 1970.
 
@@ -128,3 +129,4 @@ To install Brumbly Breakout
 [stars-shield]: https://img.shields.io/github/stars/joeru-bann/Atari-Breakout.svg?style=for-the-badge
 [stars-url]: https://github.com/joeru-bann/Atari-Breakout/stargazers
 [product-screenshot]: images/main_menu.png
+
