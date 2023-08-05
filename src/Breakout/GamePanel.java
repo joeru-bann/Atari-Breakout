@@ -441,8 +441,9 @@ import java.awt.event.MouseMotionListener;
             double paddleCenterX = paddle1.x + paddle1.width / 2.0;
 
             double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
+            int ballTrueY = arrayBall.y - arrayBall.height;
 
-            if (arrayBall.y > (paddle1.y) -10 && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
+            if (ballTrueY <= paddle1.y && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
 
                 double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 
@@ -451,9 +452,19 @@ import java.awt.event.MouseMotionListener;
                 }
                 arrayBall.dy = -arrayBall.dy;
 
-                normalizeDirection(i);
+                // Calculate the rate of change of the vertical component
+                double previousY = arrayBall.y - arrayBall.dy;
+                double verticalChange = Math.abs(arrayBall.y - previousY);
 
-                arrayBall.setDX(inclination); //go into diagonal motion
+                // Check if the ball has a low vertical change (slow rebound)
+                if (verticalChange < 1.0) { // Tweak this threshold value as needed
+                    // Increase the vertical motion of the ball
+                    arrayBall.setDX(inclination);
+                    arrayBall.dy *= 1.3; // You can adjust this factor to control vertical speed
+                } else {
+                    normalizeDirection(i);
+                    arrayBall.setDX(inclination); //go into diagonal motion
+                }
                 playSound("paddle_hit.wav");
 
             }
@@ -465,18 +476,14 @@ import java.awt.event.MouseMotionListener;
         } else if (createPowerUp && pball != null && pball.intersects(paddle1)) {
             pballs.remove(pball);
             pball = null;
-
             switch (powerUp) {
                 case 0 -> {
-                    System.out.println("expand paddle");
                     paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH / 4, PADDLE_HEIGHT);
                 }
                 case 1 -> {
-                    System.out.println("add another ball");
                     newBall(ballType);
                 }
                 case 2 -> {
-                    System.out.println("change bg");
                     int powerTime = 4000; //2 secs
                     int ranR = changeBG(1, 255);
                     int ranG = changeBG(1, 255);
@@ -505,7 +512,6 @@ import java.awt.event.MouseMotionListener;
             powerUpEnd = System.nanoTime() + fiveseconds;
             powerUpStart = true;
         }
-
     }
 
     public int changeBG(int min, int max) {

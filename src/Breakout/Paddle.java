@@ -9,7 +9,6 @@ public class Paddle extends Rectangle {
 
     int paddleWidth;
     public int getPaddleWidth() {
-
         return paddleWidth;
     }
 
@@ -20,9 +19,6 @@ public class Paddle extends Rectangle {
 
         super(x, y, paddleWidth, PADDLE_HEIGHT); //make the rectangle
 
-    }
-    public void setDeltaY(int yDirection) {
-        dy = yDirection*paddleSpeed;
     }
     public void setDeltaX(int xDirection) {
         dx = xDirection*paddleSpeed;
@@ -37,11 +33,5 @@ public class Paddle extends Rectangle {
         g.setColor(new Color(160, 160, 255));
         g.fillRect(x, y, width, height);
     }
-
-    public static void setPaddleSpeed(int newPaddleSpeed){
-        paddleSpeed = newPaddleSpeed;
-
-    }
-
 
 }
