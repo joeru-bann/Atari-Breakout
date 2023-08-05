@@ -2,9 +2,6 @@ package Breakout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
-
 public class UI extends JPanel {
     private int x;
     private int y;
@@ -12,10 +9,7 @@ public class UI extends JPanel {
     private int height;
     private Color color;
     private String message;
-
     private Font atari;
-
-
     public UI(int x, int y, Color color, String message, Font atari) {
         this.x = x;
         this.y = y;

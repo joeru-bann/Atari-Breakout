@@ -10,10 +10,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="base of pausemenu working">
-      <change afterPath="$PROJECT_DIR$/package.bluej" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Brumbly Breakout.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Brumbly Breakout.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Background.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Background.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Ball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Breakout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Breakout.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Brick.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Mode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/PowerUpBall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/PowerUpBall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/UI.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

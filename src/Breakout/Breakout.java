@@ -1,10 +1,6 @@
 package Breakout;
 
 import javax.swing.*;
-import java.awt.event.MouseMotionListener;
-
-import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseMotionListener;
-
 //main method
 
 public class Breakout {

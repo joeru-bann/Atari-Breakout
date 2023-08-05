@@ -3,8 +3,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
-
-
 public class Background extends JPanel {
 
     private Color backgroundColor;

@@ -1,16 +1,13 @@
 package Breakout;
 
-import java.awt.font.FontRenderContext;
 import java.io.*;
 import java.util.*;
 import java.awt.*;
 import javax.swing.Timer;
-import java.util.concurrent.TimeUnit;
 import java.awt.event.*;  //user input controls
 import java.awt.image.*;
 import javax.sound.sampled.*;
 import java.util.ArrayList;
-import javax.swing.Timer;
 import java.awt.Toolkit;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -22,7 +19,6 @@ import java.awt.event.MouseMotionListener;
 
     static final int GAME_WIDTH = 700;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.1));
-
     private final int screenWidth;
     private final int screenHeight;
 
@@ -31,8 +27,8 @@ import java.awt.event.MouseMotionListener;
 
     static final Dimension SCREEN_SIZE1 = new Dimension(GAME_WIDTH, GAME_HEIGHT);
 
-    ArrayList<Ball> balls = new ArrayList<Ball>();
-    ArrayList<PowerUpBall> pballs = new ArrayList<PowerUpBall>();
+    ArrayList<Ball> balls = new ArrayList<>();
+    ArrayList<PowerUpBall> pballs = new ArrayList<>();
 
     int PADDLE_WIDTH = 100;
     int PADDLE_HEIGHT = 10;
@@ -41,18 +37,10 @@ import java.awt.event.MouseMotionListener;
     private boolean running;
     private boolean paused;
     private boolean processingP = false;
-    private long pauseStartTime = 0;
-    private long pauseEndTime = 0;
     private long lastPauseTime = 0;
     private long totalPausedTime = 0;
 
-    int r;
-    int gr; //bg values
-    int b;
-
-    int uiHeight = 180;
-    int uiSpacing  = 150;
-
+    int r, gr, b; //bg values
     static final int BALL_DIAMETER = 8;
     int level = 1;
     int brickCount = 232;
@@ -71,12 +59,10 @@ import java.awt.event.MouseMotionListener;
     int score = 0;
     int choice = 0;
 
-    private UI livesUI;
-    private UI scoreUI;
-    private UI hScoreUI;
-    private UI bLeftUI;
-
-    int inclinationSelection = 0;
+    private final UI livesUI;
+    private final UI scoreUI;
+    private final UI hScoreUI;
+    private final UI bLeftUI;
 
     int[] highScore = {0, 0, 0};
     int[] leaderboard = new int[3]; // Array to store the top 3 scores
@@ -85,7 +71,7 @@ import java.awt.event.MouseMotionListener;
 
     String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
     String powerTypeMessage = "Press 'P' To see power up types";
-    String hScoreDisplay = "hscore" + highScore;
+    String hScoreDisplay = "hscore" + Arrays.toString(highScore);
     String instructionMessage = "Press 'I' to see instructions";
 
     String lBoard = "press 'L' to see leader board";
@@ -112,7 +98,6 @@ import java.awt.event.MouseMotionListener;
     Welcome welcome;
     Font atari;
     Color ballColour;
-
     Random random;
     Clip sound;
     long powerUpEnd = 0;
@@ -208,7 +193,7 @@ import java.awt.event.MouseMotionListener;
     public void newBall(String ballType) {
         int ballX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
         int ballY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
-        if (ballType == "default") {
+        if (Objects.equals(ballType, "default")) {
             Ball ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 5);
             ball.setDY(1);
             balls.add(ball);
@@ -310,27 +295,13 @@ import java.awt.event.MouseMotionListener;
         if (!menuActive) {
 
             switch (choice) {  //altering choice anywhere in gamePanel allows the ball the change
-                case 0:
-                    ballColour = Color.cyan;
-                    break;
-                case 1:
-                    ballColour = Color.magenta;
-                    break;
-                case 2:
-                    ballColour = Color.red;
-                    break;
-                case 3:
-                    ballColour = Color.orange;
-                    break;
-                case 4:
-                    ballColour = Color.yellow;
-                    break;
-                case 5:
-                    ballColour = Color.green;
-                    break;
-                default:
-                    ballColour = Color.white;
-                    break;
+                case 0 -> ballColour = Color.cyan;
+                case 1 -> ballColour = Color.magenta;
+                case 2 -> ballColour = Color.red;
+                case 3 -> ballColour = Color.orange;
+                case 4 -> ballColour = Color.yellow;
+                case 5 -> ballColour = Color.green;
+                default -> ballColour = Color.white;
             }
         }
         bg.draw(g, r, gr, b, GAME_WIDTH , GAME_HEIGHT);
@@ -356,27 +327,12 @@ import java.awt.event.MouseMotionListener;
         }
         if (createPowerUp && pball != null) {
 
-            switch (powerUp){
-                case 0:
-                    pball.draw(g, Color.green);
-                    //System.out.println("green");
-                    break;
-                case 1:
-                    pball.draw(g, Color.magenta);
-                    //System.out.println("magenta");
-                    break;
-                case 2:
-                    pball.draw(g, Color.orange);
-                    //System.out.println("orange");
-                    break;
-                case 3:
-                    pball.draw(g, Color.yellow);
-                    // System.out.println("Yellow");
-                    break;
-
-
+            switch (powerUp) {
+                case 0 -> pball.draw(g, Color.green);
+                case 1 -> pball.draw(g, Color.magenta);
+                case 2 -> pball.draw(g, Color.orange);
+                case 3 -> pball.draw(g, Color.yellow);
             }
-
 
         }
         if (allCleared) {
@@ -405,8 +361,6 @@ import java.awt.event.MouseMotionListener;
             Ball arrayBall = balls.get(i);
             arrayBall.move();//default ball color
         }
-
-
         if (createPowerUp && pball != null) {
             pball.move();
         }
@@ -513,15 +467,15 @@ import java.awt.event.MouseMotionListener;
             pball = null;
 
             switch (powerUp) {
-                case 0:
+                case 0 -> {
                     System.out.println("expand paddle");
                     paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH / 4, PADDLE_HEIGHT);
-                    break;
-                case 1:
+                }
+                case 1 -> {
                     System.out.println("add another ball");
                     newBall(ballType);
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     System.out.println("change bg");
                     int powerTime = 4000; //2 secs
                     int ranR = changeBG(1, 255);
@@ -530,27 +484,22 @@ import java.awt.event.MouseMotionListener;
                     r = ranR;
                     gr = ranG;
                     b = ranB;
-
                     System.out.println("r= " + ranR + " g= " + ranG + " b= " + ranB);
                     Timer timer = new Timer(powerTime, new ActionListener() {
                         public void actionPerformed(ActionEvent e) { //resetting
-                           r = 0;
-                           gr = 0;
-                           b = 0;
+                            r = 0;
+                            gr = 0;
+                            b = 0;
                         }
                     });
                     timer.setRepeats(false); //false to run once
                     timer.start();
-
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     System.out.println("explode area on next impact");
                     explosiveBall = balls.get(0);
-
-                    break;
-
-                default:
-                    System.out.println("Error on powerUp switch case");
+                }
+                default -> System.out.println("Error on powerUp switch case");
             }
             long fiveseconds = 5000000000L;
             powerUpEnd = System.nanoTime() + fiveseconds;
@@ -567,18 +516,13 @@ import java.awt.event.MouseMotionListener;
     private double getRandomInclination() {
         int inclinationSelection = random.nextInt(3);
 
-        switch (inclinationSelection) {
-            case 0:
-                return 1.6;
-            case 1:
-                return 1.4;
-            case 2:
-                return 1;
-            default:
-                return 0.7;
-        }
+        return switch (inclinationSelection) {
+            case 0 -> 1.6;
+            case 1 -> 1.4;
+            case 2 -> 1;
+            default -> 0.7;
+        };
     }
-
     private void normalizeDirection(int i) {
         Ball arrayBall = balls.get(i);
         double magnitude = Math.sqrt((arrayBall.dx * arrayBall.dx + arrayBall.dy * arrayBall.dy));
@@ -616,7 +560,7 @@ import java.awt.event.MouseMotionListener;
                             }
                             spawnChance = random.nextInt(10);
                             if (spawnChance > 5 && pball == null) {
-                                newPowerUpBall(graphics, i);
+                                newPowerUpBall(i);
                                 powerUp = random.nextInt(4);
                             }
                         } else { //if main menu
@@ -629,7 +573,7 @@ import java.awt.event.MouseMotionListener;
         }
     }
 
-    public void newPowerUpBall(Graphics g, int i) {
+    public void newPowerUpBall(int i) {
         Ball arrayBall = balls.get(i);
         pball = new PowerUpBall(arrayBall.x, arrayBall.y, BALL_DIAMETER, BALL_DIAMETER, 5);
         pball.setDY(1);
@@ -639,21 +583,10 @@ import java.awt.event.MouseMotionListener;
 
     private void handleBrickScore(int brickIndex) {
         switch (brickIndex) {
-            case 0:
-            case 1:
-                score += 7;
-                break;
-            case 2:
-            case 3:
-                score += 5;
-                break;
-            case 4:
-            case 5:
-                score += 3;
-                break;
-            default:
-                score += 1;
-                break;
+            case 0, 1 -> score += 7;
+            case 2, 3 -> score += 5;
+            case 4, 5 -> score += 3;
+            default -> score += 1;
         }
     }
 
@@ -695,7 +628,6 @@ import java.awt.event.MouseMotionListener;
             }
         }
 
-
         //MouseListening methods for movememnt interactions
         public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
         if(!keyPressed) {
@@ -707,7 +639,7 @@ import java.awt.event.MouseMotionListener;
             paddleX = Math.max(0, Math.min(paddleX, GAME_WIDTH - paddleWidth));
 
             paddle1.x = paddleX;
-        }
+            }
         }
         public void mousePressed(MouseEvent e) {
         }
@@ -725,10 +657,8 @@ import java.awt.event.MouseMotionListener;
         }
         public void actionPerformed(ActionEvent e) { //placeholder
         }
-        @Override
         public void keyTyped(KeyEvent e) {
         }
-        @Override
         public void keyPressed(KeyEvent e) { //Keyboard inputs for movement + navigation
             keyPressed = true;
             if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !menuActive) {
@@ -776,7 +706,7 @@ import java.awt.event.MouseMotionListener;
                     }
                     else if(menuActive){
                         for(int i = 0; i < balls.size(); i++){
-                            Ball arrayBall = balls.get(i);
+                            //Ball arrayBall = balls.get(i);
                             balls.remove(i);//default ball colour
                         }
                         beginGame();
@@ -814,8 +744,6 @@ import java.awt.event.MouseMotionListener;
                 else if (!paused){
                     destroyWelcome();
                 }
-
-
         }
     public void powerUpEnder(){
         if(powerUpStart) {
@@ -826,21 +754,18 @@ import java.awt.event.MouseMotionListener;
         }
     }
     public void checkIfLost(int lives) {
-        int remainingLives = lives;
-        
-        if (remainingLives < 1) { //if lose/lost
+
+        if (lives < 1) { //if lose/lost
             int ran = 0;
             level = 1;
             brickCount = 232;
             PADDLE_WIDTH = PADDLE_WIDTH + lives * 10;
             ran = random.nextInt(2);
 
-            switch (ran){
-                case 0 : playSound("deep_you_lose.wav");
-                break;
-                case 1: playSound("you_losew.wav");
+            switch (ran) {
+                case 0 -> playSound("deep_you_lose.wav");
+                case 1 -> playSound("you_losew.wav");
             }
-
                 if (score > highScore[0]) { //replacing 2nd
                     int thirdPlace;
                     thirdPlace = highScore[1];
@@ -862,24 +787,18 @@ import java.awt.event.MouseMotionListener;
                     writeHighScore();
                     System.out.println("3rd place: " + highScore[2]);
                 }
-
-
             beginMenuMode();
         }
-
-
     }
 
     public void beginMenuMode() {
         menuActive = true;
-
         menuModePaddles();
         newWelcome();
         readHighScores(); //reading the most recent h score
 
         resetWelcome();
         welcomeMessage = "PRESS SPACE TO TRY AGAIN";
-
     }
 
     public void menuModePaddles() {
@@ -889,7 +808,7 @@ import java.awt.event.MouseMotionListener;
     //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
-    public int [] writeHighScore() {
+    public void writeHighScore() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (int i = 0; i <= 2; i++) {
                 int currentHScore;
@@ -903,7 +822,6 @@ import java.awt.event.MouseMotionListener;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return highScore;
     }
     public int[] readHighScores() {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
@@ -922,5 +840,4 @@ import java.awt.event.MouseMotionListener;
 
         return leaderboard;
     }
-
 }
