@@ -29,7 +29,7 @@ public class Brick extends Rectangle {
             g.setColor(Color.orange);
         }
 
-        if (this.column > 3 && this.column < 5) {
+        if (this.column > 3 && this.column <= 5) {
             g.setColor(Color.green);
         }
 

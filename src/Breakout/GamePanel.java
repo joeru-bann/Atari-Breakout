@@ -21,7 +21,7 @@ import java.awt.event.MouseMotionListener;
     private final Background bg;
 
     static final int GAME_WIDTH = 700;
-    static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.1));
+    static final int GAME_HEIGHT = (int) (GAME_WIDTH +(1.1));
 
     private final int screenWidth;
     private final int screenHeight;
@@ -34,7 +34,7 @@ import java.awt.event.MouseMotionListener;
     ArrayList<Ball> balls = new ArrayList<Ball>();
     ArrayList<PowerUpBall> pballs = new ArrayList<PowerUpBall>();
 
-    int PADDLE_WIDTH = 100;
+    int PADDLE_WIDTH = 600;
     int PADDLE_HEIGHT = 10;
 
     Timer time;
@@ -191,7 +191,7 @@ import java.awt.event.MouseMotionListener;
 
     public void newPaddles() {
         //new paddle instance from class
-        PADDLE_WIDTH = 100; //resetting paddle to default width
+        PADDLE_WIDTH = 600; //resetting paddle to default width
         paddle1 = new Paddle((GAME_WIDTH - PADDLE_WIDTH) / 2, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
 
     }
@@ -381,10 +381,10 @@ import java.awt.event.MouseMotionListener;
         }
         if (allCleared) {
             allCleared = false;
+            writeLeaderBoard();
             beginMenuMode();
             welcomeMessage = "YOU ! YWONIPEEE";
             hScoreDisplay = ("High score: " + highScore);
-            writeHighScore();
 
         }
         //Keep draw statements here for atari font to work
@@ -495,7 +495,7 @@ import java.awt.event.MouseMotionListener;
                 if (menuActive) {
                     inclination = getRandomInclination();
                 }
-                arrayBall.dy = -arrayBall.dy;
+                arrayBall.dy = -Math.abs(arrayBall.dy);
 
                 normalizeDirection(i);
 
@@ -592,7 +592,7 @@ import java.awt.event.MouseMotionListener;
             for (int r = 0; r < rows; r++) {
                 for (int t = 0; t < columns; t++) {
                     if (brick[r][t] != null && arrayBall.intersects(brick[r][t])) {
-                        arrayBall.dy = -arrayBall.dy;
+                        arrayBall.dy = arrayBall.dy; //undochange
                         playSound("brick_hit.wav");
                         //normalizeDirection();
 
@@ -839,39 +839,41 @@ import java.awt.event.MouseMotionListener;
                 break;
                 case 1: playSound("you_losew.wav");
             }
-
-                if (score > highScore[0]) { //replacing 2nd
-                    int thirdPlace;
-                    thirdPlace = highScore[1];
-                    highScore[1] = highScore[0];
-                    highScore[0] = score;
-
-                    highScore[2] = thirdPlace;
-                    writeHighScore();
-                    System.out.println("CIL wrote: " + highScore[0]);
-                    System.out.println("2nd place: " + highScore[1]);
-
-                } else if (score > highScore[1]) { //replacing 2nd and 3rd
-                    highScore[2] = highScore[1];
-                    highScore[1] = score;
-                    writeHighScore();
-                    System.out.println("3rd place: " + highScore[2]);
-                }else if (score > highScore[2]) { //replacing 3rd
-                    highScore[2] = score;
-                    writeHighScore();
-                    System.out.println("3rd place: " + highScore[2]);
-                }
-
-
+            writeLeaderBoard();
             beginMenuMode();
         }
 
 
     }
+public void writeLeaderBoard(){
+    if (score > highScore[0]) { //replacing 2nd
+        int thirdPlace;
+        thirdPlace = highScore[1];
+        highScore[1] = highScore[0];
+        highScore[0] = score;
 
+        highScore[2] = thirdPlace;
+        writeHighScore();
+        System.out.println("CIL wrote: " + highScore[0]);
+        System.out.println("2nd place: " + highScore[1]);
+
+    } else if (score > highScore[1]) { //replacing 2nd and 3rd
+        highScore[2] = highScore[1];
+        highScore[1] = score;
+        writeHighScore();
+        System.out.println("3rd place: " + highScore[2]);
+    }else if (score > highScore[2]) { //replacing 3rd
+        highScore[2] = score;
+        writeHighScore();
+        System.out.println("3rd place: " + highScore[2]);
+    }
+
+
+
+}
     public void beginMenuMode() {
         menuActive = true;
-
+        newBricks();
         menuModePaddles();
         newWelcome();
         readHighScores(); //reading the most recent h score
