@@ -9,13 +9,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="base of pausemenu working">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Brick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/GamePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GamePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/data/highscores.txt" afterDir="false" />
-    </list>
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="(may still have errors)made fixes to brick colours, leaderboard's, and paddle collisions" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -342,7 +336,15 @@
       <option name="project" value="LOCAL" />
       <updated>1691033053186</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="(may still have errors)made fixes to brick colours, leaderboard's, and paddle collisions">
+      <option name="closed" value="true" />
+      <created>1691474922721</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1691474922721</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -384,6 +386,7 @@
     <MESSAGE value="god hacks enabled + spacebar for pause" />
     <MESSAGE value="base of pause menu working" />
     <MESSAGE value="base of pausemenu working" />
-    <option name="LAST_COMMIT_MESSAGE" value="base of pausemenu working" />
+    <MESSAGE value="(may still have errors)made fixes to brick colours, leaderboard's, and paddle collisions" />
+    <option name="LAST_COMMIT_MESSAGE" value="(may still have errors)made fixes to brick colours, leaderboard's, and paddle collisions" />
   </component>
 </project>
