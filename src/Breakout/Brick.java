@@ -1,14 +1,7 @@
 package Breakout;
 import java.awt.*;
-import java.awt.event.*;
 
 public class Brick extends Rectangle {
-
-
-    int id;
-    int dy;
-    int dx;
-    int paddleSpeed = 6;
     int row, column;
 
     Color purple = new Color(160, 32, 240);

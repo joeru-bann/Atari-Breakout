@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.*;
 
 public class Ball extends Rectangle {
-
     private Random random;
     double dx;
     double dy;
@@ -16,12 +15,9 @@ public class Ball extends Rectangle {
 
         random = new Random();
     }
-
-
     public void setDX(double vectorX) {
         dx = vectorX;
     }
-
     public void setDY(double vectorY) {
         dy = vectorY;
     }
