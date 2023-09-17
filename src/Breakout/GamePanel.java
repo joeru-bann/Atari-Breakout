@@ -30,6 +30,8 @@ import java.awt.event.MouseMotionListener;
     ArrayList<Ball> balls = new ArrayList<>();
     ArrayList<PowerUpBall> pballs = new ArrayList<>();
 
+    PointerInfo cursor = MouseInfo.getPointerInfo();
+    int cursorX;
     int PADDLE_WIDTH = 100;
     int PADDLE_HEIGHT = 10;
 
@@ -64,10 +66,8 @@ import java.awt.event.MouseMotionListener;
     private final UI hScoreUI;
     private final UI bLeftUI;
 
-        int inclinationSelection = 0;
-
-
-        int[] highScore = {0, 0, 0};
+    int inclinationSelection = 0;
+    int[] highScore = {0, 0, 0};
     int[] leaderboard = new int[3]; // Array to store the top 3 scores
 
     private static final String FILE_PATH = "data/highscores.txt";
@@ -641,8 +641,9 @@ import java.awt.event.MouseMotionListener;
 
         //MouseListening methods for movememnt interactions
         public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
-        if(!keyPressed) {
-            int mouseX = e.getX();
+        int mouseX;
+        if(!keyPressed && !paused) {
+             mouseX = e.getX();
             int paddleWidth = (int) paddle1.getWidth();
             int paddleX = mouseX - paddleWidth / 2;
 
@@ -651,6 +652,10 @@ import java.awt.event.MouseMotionListener;
 
             paddle1.x = paddleX;
             }
+            else {
+                mouseX = cursorX;
+        }
+
         }
         public void mousePressed(MouseEvent e) {
         }
@@ -714,6 +719,7 @@ import java.awt.event.MouseMotionListener;
                         totalPausedTime += pauseDuration;
                         System.out.println("unpause");
                         pauseMenu();
+                        //cursorX =  (int) c.getX();
                     }
                     else if(menuActive){
                         for(int i = 0; i < balls.size(); i++){
@@ -748,11 +754,14 @@ import java.awt.event.MouseMotionListener;
         }
 
         public void pauseMenu(){
-                if (paused){
+            Point c = cursor.getLocation();
+
+            if (paused){ //pausing
                     welcomeMessage = "PAUSED";
                     powerTypeMessage = "press SPACE to continue";
                 }
-                else if (!paused){
+                else if (!paused){  //unpausing
+                 cursorX = (int) c.getX(); System.out.println("set cursorX to point");
                     destroyWelcome();
                 }
         }
@@ -789,20 +798,21 @@ import java.awt.event.MouseMotionListener;
             highScore[0] = score;
 
             highScore[2] = thirdPlace;
-            writeHighScore();
+//            writeLeaderBoard();
             System.out.println("CIL wrote: " + highScore[0]);
             System.out.println("2nd place: " + highScore[1]);
 
         } else if (score > highScore[1]) { //replacing 2nd and 3rd
             highScore[2] = highScore[1];
             highScore[1] = score;
-            writeHighScore();
+//            writeHighScore();
             System.out.println("3rd place: " + highScore[2]);
         } else if (score > highScore[2]) { //replacing 3rd
             highScore[2] = score;
-            writeHighScore();
+//            writeHighScore();
             System.out.println("3rd place: " + highScore[2]);
         }
+        writeHighScore();
     }
 
     public void beginMenuMode() {
@@ -845,7 +855,6 @@ import java.awt.event.MouseMotionListener;
                 String line = reader.readLine();
                 if (line != null) {
                     leaderboard[i] = Integer.parseInt(line);
-                    System.out.println("read score: " + line);
                     highScore[i] = leaderboard[i];
                 }
             }
