@@ -30,8 +30,8 @@ import java.awt.event.MouseMotionListener;
     ArrayList<Ball> balls = new ArrayList<>();
     ArrayList<PowerUpBall> pballs = new ArrayList<>();
 
-    PointerInfo cursor = MouseInfo.getPointerInfo();
-    int cursorX;
+    Point cursorPos;
+
     int PADDLE_WIDTH = 100;
     int PADDLE_HEIGHT = 10;
 
@@ -601,6 +601,15 @@ import java.awt.event.MouseMotionListener;
         }
     }
 
+    private void setCursorPos(Point point){
+        try{
+            Robot robot = new Robot();
+            robot.mouseMove(point.x, point.y);
+        } catch (AWTException ex){
+            ex.printStackTrace();
+        }
+
+    }
         @Override
         public void run() {
             double desiredFPS = 100.0;
@@ -643,6 +652,7 @@ import java.awt.event.MouseMotionListener;
         public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
         int mouseX;
         if(!keyPressed && !paused) {
+            cursorPos = e.getPoint();
              mouseX = e.getX();
             int paddleWidth = (int) paddle1.getWidth();
             int paddleX = mouseX - paddleWidth / 2;
@@ -652,10 +662,7 @@ import java.awt.event.MouseMotionListener;
 
             paddle1.x = paddleX;
             }
-            else {
-                mouseX = cursorX;
-        }
-
+            else {}
         }
         public void mousePressed(MouseEvent e) {
         }
@@ -704,14 +711,14 @@ import java.awt.event.MouseMotionListener;
                     processingP = true; // Set the flag to true while processing the "P" key
 
                     if (running && !menuActive) {
-                        if (!paused) {
+                        if (!paused) { //pausing
                             running = false;
                             paused = true;
                             lastPauseTime = System.nanoTime();
                             System.out.println("pause");
                             pauseMenu();
                         }
-                    } else if (paused) {
+                    } else if (paused) { //unpausing
                         long now = System.nanoTime();
                         running = true;
                         paused = false;
@@ -719,7 +726,9 @@ import java.awt.event.MouseMotionListener;
                         totalPausedTime += pauseDuration;
                         System.out.println("unpause");
                         pauseMenu();
-                        //cursorX =  (int) c.getX();
+                        if (cursorPos !=null){
+                            setCursorPos(cursorPos);
+                        }
                     }
                     else if(menuActive){
                         for(int i = 0; i < balls.size(); i++){
@@ -754,15 +763,13 @@ import java.awt.event.MouseMotionListener;
         }
 
         public void pauseMenu(){
-            Point c = cursor.getLocation();
-
             if (paused){ //pausing
                     welcomeMessage = "PAUSED";
                     powerTypeMessage = "press SPACE to continue";
                 }
                 else if (!paused){  //unpausing
-                 cursorX = (int) c.getX(); System.out.println("set cursorX to point");
                     destroyWelcome();
+
                 }
         }
     public void powerUpEnder(){
