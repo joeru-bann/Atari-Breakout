@@ -601,10 +601,10 @@ import java.awt.event.MouseMotionListener;
         }
     }
 
-    private void setCursorPos(Point point){
+    private void setCursorPos(int x, int y){
         try{
             Robot robot = new Robot();
-            robot.mouseMove(point.x, point.y);
+            robot.mouseMove(x, y);
         } catch (AWTException ex){
             ex.printStackTrace();
         }
@@ -650,10 +650,9 @@ import java.awt.event.MouseMotionListener;
 
         //MouseListening methods for movememnt interactions
         public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
-        int mouseX;
         if(!keyPressed && !paused) {
             cursorPos = e.getPoint();
-             mouseX = e.getX();
+             int mouseX = e.getX();
             int paddleWidth = (int) paddle1.getWidth();
             int paddleX = mouseX - paddleWidth / 2;
 
@@ -727,7 +726,10 @@ import java.awt.event.MouseMotionListener;
                         System.out.println("unpause");
                         pauseMenu();
                         if (cursorPos !=null){
-                            setCursorPos(cursorPos);
+                            Point windowXY = getLocationOnScreen();
+                            int x = windowXY.x + cursorPos.x;
+                            int y = windowXY.y + cursorPos.y;
+                            setCursorPos(x, y);
                         }
                     }
                     else if(menuActive){
