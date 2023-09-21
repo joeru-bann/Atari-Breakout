@@ -66,7 +66,6 @@ import java.awt.event.MouseMotionListener;
     private final UI hScoreUI;
     private final UI bLeftUI;
 
-    int inclinationSelection = 0;
     int[] highScore = {0, 0, 0};
     int[] leaderboard = new int[3]; // Array to store the top 3 scores
 
@@ -114,7 +113,6 @@ import java.awt.event.MouseMotionListener;
 
         calculateScale();
         readHighScores();
-        //updateUIPositions();
 
         time = new Timer(80,this);
         random = new Random();
@@ -148,27 +146,7 @@ import java.awt.event.MouseMotionListener;
         gameThread = new Thread(this);
         gameThread.start();
 
-        Color[] rainbowColours = {
-                Color.RED,
-                Color.ORANGE,
-                Color.YELLOW,
-                Color.GREEN,
-                Color.BLUE,
-                new Color(75, 0, 130), // Indigo
-                new Color(238, 130, 238) // Violet
-        };
 
-        while (createPowerUp) {
-            for (Color rgbcolour : rainbowColours) {
-                //pball.setColor(rgbcolour);
-                System.out.println(rgbcolour + " = rgb c");
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
     }
 
     private void calculateScale() {
@@ -448,7 +426,7 @@ import java.awt.event.MouseMotionListener;
             double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
             int ballTrueY = arrayBall.y - arrayBall.height;
 
-            if (ballTrueY <= paddle1.y && arrayBall.intersects(paddle1)) {  //further down == bigger number so using > operator
+            if (ballTrueY <= paddle1.y && arrayBall.intersects(paddle1)) {
 
                 double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 
@@ -462,13 +440,13 @@ import java.awt.event.MouseMotionListener;
                 double verticalChange = Math.abs(arrayBall.y - previousY);
 
                 // Check if the ball has a low vertical change (slow rebound)
-                if (verticalChange < 1.0) { // Tweak this threshold value as needed
+                if (verticalChange < 1.0) { //
                     // Increase the vertical motion of the ball
                     arrayBall.setDX(inclination);
                     arrayBall.dy *= 1.3; // You can adjust this factor to control vertical speed
                 } else {
                     normalizeDirection(i);
-                    arrayBall.setDX(inclination); //go into diagonal motion
+                    arrayBall.setDX(inclination);
                 }
                 playSound("paddle_hit.wav");
 
@@ -477,7 +455,6 @@ import java.awt.event.MouseMotionListener;
         if (createPowerUp && pball != null && (pball.y > GAME_HEIGHT || pball.x > 950 || pball.x < 0)) {
             pballs.remove(pball);
             pball = null;
-            //System.out.println("pball doesnt intersect");
         } else if (createPowerUp && pball != null && pball.intersects(paddle1)) {
             pballs.remove(pball);
             pball = null;
@@ -637,9 +614,8 @@ import java.awt.event.MouseMotionListener;
                 } else if (paused) {
                     // Calculate the paused time
                     long pauseDuration = now - lastPauseTime - totalPausedTime;
-                    // Add a delay to avoid busy-waiting
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(1);   // Add a delay to avoid busy-waiting
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -648,7 +624,7 @@ import java.awt.event.MouseMotionListener;
             }
         }
 
-        //MouseListening methods for movememnt interactions
+        //MouseListening methods for movement interactions
         public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
         if(!keyPressed && !paused) {
             cursorPos = e.getPoint();
@@ -698,7 +674,7 @@ import java.awt.event.MouseMotionListener;
                     destroyWelcome();
                     showPowerUpTypes();
             }
-            //navigating back to menu screen from instructions message
+            //navigating to menu from instructions
             if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (instructionsShown)) {
                 resetWelcome(); //sets strings to default messages
             }
@@ -734,17 +710,13 @@ import java.awt.event.MouseMotionListener;
                     }
                     else if(menuActive){
                         for(int i = 0; i < balls.size(); i++){
-                            //Ball arrayBall = balls.get(i);
                             balls.remove(i);//default ball colour
                         }
                         beginGame();
                     }
                 }
-            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (powerUpTypesShown)) {
-                resetWelcome(); //sets strings to default messages
-            }
-            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (leaderBoardShown)) {
-                resetWelcome(); //sets strings to default messages
+            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && ((powerUpTypesShown)||(leaderBoardShown))) {
+                resetWelcome();
             }
         }
 
@@ -807,18 +779,15 @@ import java.awt.event.MouseMotionListener;
             highScore[0] = score;
 
             highScore[2] = thirdPlace;
-//            writeLeaderBoard();
             System.out.println("CIL wrote: " + highScore[0]);
             System.out.println("2nd place: " + highScore[1]);
 
         } else if (score > highScore[1]) { //replacing 2nd and 3rd
             highScore[2] = highScore[1];
             highScore[1] = score;
-//            writeHighScore();
             System.out.println("3rd place: " + highScore[2]);
         } else if (score > highScore[2]) { //replacing 3rd
             highScore[2] = score;
-//            writeHighScore();
             System.out.println("3rd place: " + highScore[2]);
         }
         writeHighScore();
@@ -839,7 +808,7 @@ import java.awt.event.MouseMotionListener;
         paddle1 = new Paddle(0, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH, PADDLE_HEIGHT);
     } 
 
-    //this method is not fully my own, I have referenced the source below, I give partial credit for the base method to the OP
+    //this method is not my own, I have referenced the source below, I give credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
 
     public void writeHighScore() {
@@ -850,8 +819,6 @@ import java.awt.event.MouseMotionListener;
 
                     writer.write(String.valueOf(currentHScore));
                     writer.newLine();
-                    //System.out.println("wrote score: " + i + highScore[i]);
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -870,7 +837,6 @@ import java.awt.event.MouseMotionListener;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return leaderboard;
     }
 }
