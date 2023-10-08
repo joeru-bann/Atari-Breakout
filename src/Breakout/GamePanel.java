@@ -17,7 +17,7 @@ import java.awt.event.MouseMotionListener;
     public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener, KeyListener {
     private final Background bg;
 
-    static final int GAME_WIDTH = 700;
+    static final int GAME_WIDTH = 694;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.1));
     private final int screenWidth;
     private final int screenHeight;
@@ -49,9 +49,9 @@ import java.awt.event.MouseMotionListener;
     int spawnChance;
     int powerUp;
     boolean powerUpStart = false;
+
     final int rows = Math.round(GAME_WIDTH / brickWidth);
     static final int columns = 8;
-
     static final int brickWidth = 32;
     static final int brickHeight = 10;
 
@@ -238,7 +238,6 @@ import java.awt.event.MouseMotionListener;
     }
 
     public void playSound(String fileName) {
-
         if (!soundPlaying) {
             try {
                 sound = AudioSystem.getClip();
@@ -252,7 +251,6 @@ import java.awt.event.MouseMotionListener;
         if (soundPlaying) {
             sound.start();
         }
-
         soundPlaying = false;
     }
 
@@ -314,7 +312,6 @@ import java.awt.event.MouseMotionListener;
                 case 2 -> pball.draw(g, Color.orange);
                 case 3 -> pball.draw(g, Color.yellow);
             }
-
         }
         if (allCleared) {
             allCleared = false;
@@ -322,8 +319,6 @@ import java.awt.event.MouseMotionListener;
             beginMenuMode();
             welcomeMessage = "YOU ! YWONIPEEE";
             hScoreDisplay = ("High score: " + highScore);
-//            writeHighScore();
-
         }
         //Keep draw statements here for atari font to work
         livesUI.draw((Graphics2D) g, lives);
@@ -332,12 +327,10 @@ import java.awt.event.MouseMotionListener;
         bLeftUI.draw((Graphics2D) g, brickCount);
 
         Toolkit.getDefaultToolkit().sync();
-        // Making sure display refreshes real-time for paint method
-
-    }
+        //real-time refresh
+     }
 
     public void move() {
-
         paddle1.move();
         for (int i = 0; i < balls.size(); i++) {
             Ball arrayBall = balls.get(i);
@@ -358,7 +351,6 @@ import java.awt.event.MouseMotionListener;
 
         if (paddle1.x <= 0)
             paddle1.x = 0;
-
         if (paddle1.x >= GAME_WIDTH - paddle1.width)
             paddle1.x = GAME_WIDTH - paddle1.width;
         for (int i = 0; i < balls.size(); i++) {
