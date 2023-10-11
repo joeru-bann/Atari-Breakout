@@ -465,7 +465,6 @@ import java.awt.event.MouseMotionListener;
                     r = ranR;
                     gr = ranG;
                     b = ranB;
-                    System.out.println("r= " + ranR + " g= " + ranG + " b= " + ranB);
                     Timer timer = new Timer(powerTime, new ActionListener() {
                         public void actionPerformed(ActionEvent e) { //resetting
                             r = 0;
@@ -477,7 +476,6 @@ import java.awt.event.MouseMotionListener;
                     timer.start();
                 }
                 case 3 -> {
-                    System.out.println("explode area on next impact");
                     explosiveBall = balls.get(0);
                 }
                 default -> System.out.println("Error on powerUp switch case");
@@ -516,12 +514,12 @@ import java.awt.event.MouseMotionListener;
             for (int r = 0; r < rows; r++) {
                 for (int t = 0; t < columns; t++) {
                     if (brick[r][t] != null && arrayBall.intersects(brick[r][t])) {
-                        arrayBall.dy = -arrayBall.dy;
+                        arrayBall.dy = -(arrayBall.dy);
                         playSound("brick_hit.wav");
                         //normalizeDirection();
+                        brick[r][t] = null;
 
-
-                        if (!menuActive) { //if game is played
+                        if (!menuActive) { //if game is active
                             if (arrayBall == explosiveBall) {
                                 for (int y = -1; y <= 1; y++) {
                                     for (int x = -1; x <= 1; x++) {
@@ -748,7 +746,8 @@ import java.awt.event.MouseMotionListener;
     }
     public void checkIfLost(int lives) {
 
-        if (lives < 1) { //if lose/lost
+        if (lives < 1) { //if player lost/dies
+            r = 0; gr = 0; b=0;
             int ran = 0;
             level = 1;
             brickCount = 232;
