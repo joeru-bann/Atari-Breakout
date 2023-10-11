@@ -14,10 +14,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener, KeyListener {
+    public class GamePanel extends JPanel implements Runnable, MouseListener, MouseMotionListener, ActionListener, KeyListener {
     private final Background bg;
 
-    static final int GAME_WIDTH = 694;
+    static final int GAME_WIDTH = 700;
     static final int GAME_HEIGHT = (int) (GAME_WIDTH * (1.1));
     private final int screenWidth;
     private final int screenHeight;
@@ -49,9 +49,9 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
     int spawnChance;
     int powerUp;
     boolean powerUpStart = false;
-
     final int rows = Math.round(GAME_WIDTH / brickWidth);
     static final int columns = 8;
+
     static final int brickWidth = 32;
     static final int brickHeight = 10;
 
@@ -238,6 +238,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
     }
 
     public void playSound(String fileName) {
+
         if (!soundPlaying) {
             try {
                 sound = AudioSystem.getClip();
@@ -251,6 +252,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
         if (soundPlaying) {
             sound.start();
         }
+
         soundPlaying = false;
     }
 
@@ -312,6 +314,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
                 case 2 -> pball.draw(g, Color.orange);
                 case 3 -> pball.draw(g, Color.yellow);
             }
+
         }
         if (allCleared) {
             allCleared = false;
@@ -319,6 +322,8 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
             beginMenuMode();
             welcomeMessage = "YOU ! YWONIPEEE";
             hScoreDisplay = ("High score: " + highScore);
+//            writeHighScore();
+
         }
         //Keep draw statements here for atari font to work
         livesUI.draw((Graphics2D) g, lives);
@@ -327,10 +332,12 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
         bLeftUI.draw((Graphics2D) g, brickCount);
 
         Toolkit.getDefaultToolkit().sync();
-        //real-time refresh
+        // Making sure display refreshes real-time for paint method
+
     }
 
     public void move() {
+
         paddle1.move();
         for (int i = 0; i < balls.size(); i++) {
             Ball arrayBall = balls.get(i);
@@ -351,6 +358,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 
         if (paddle1.x <= 0)
             paddle1.x = 0;
+
         if (paddle1.x >= GAME_WIDTH - paddle1.width)
             paddle1.x = GAME_WIDTH - paddle1.width;
         for (int i = 0; i < balls.size(); i++) {
@@ -579,48 +587,48 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
         }
 
     }
-    @Override
-    public void run() {
-        double desiredFPS = 100.0;
-        double desiredFrameTime = 1_000_000_000 / desiredFPS; // Calculate the desired frame time in nanoseconds
+        @Override
+        public void run() {
+            double desiredFPS = 100.0;
+            double desiredFrameTime = 1_000_000_000 / desiredFPS; // Calculate the desired frame time in nanoseconds
 
-        long lastTime = System.nanoTime();
-        double deltaTime = 0;
+            long lastTime = System.nanoTime();
+            double deltaTime = 0;
 
-        while (true) {
-            long now = System.nanoTime();
-            long elapsedTime = now - lastTime;
-            lastTime = now;
+            while (true) {
+                long now = System.nanoTime();
+                long elapsedTime = now - lastTime;
+                lastTime = now;
 
-            if (running && !paused) {
-                // Update the game logic based on deltaTime
-                deltaTime += elapsedTime;
-                while (deltaTime >= desiredFrameTime) {
-                    move(); // Convert deltaTime to seconds for time-based movement
-                    checkCollision();
-                    powerUpEnder();
-                    deltaTime -= desiredFrameTime;
+                if (running && !paused) {
+                    // Update the game logic based on deltaTime
+                    deltaTime += elapsedTime;
+                    while (deltaTime >= desiredFrameTime) {
+                        move(); // Convert deltaTime to seconds for time-based movement
+                        checkCollision();
+                        powerUpEnder();
+                        deltaTime -= desiredFrameTime;
+                    }
+
+                    repaint();
+                } else if (paused) {
+                    // Calculate the paused time
+                    long pauseDuration = now - lastPauseTime - totalPausedTime;
+                    try {
+                        Thread.sleep(1);   // Add a delay to avoid busy-waiting
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    totalPausedTime += pauseDuration;
                 }
-
-                repaint();
-            } else if (paused) {
-                // Calculate the paused time
-                long pauseDuration = now - lastPauseTime - totalPausedTime;
-                try {
-                    Thread.sleep(1);   // Add a delay to avoid busy-waiting
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                totalPausedTime += pauseDuration;
             }
         }
-    }
 
-    //MouseListening methods for movement interactions
-    public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
+        //MouseListening methods for movement interactions
+        public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
         if(!keyPressed && !paused) {
             cursorPos = e.getPoint();
-            int mouseX = e.getX();
+             int mouseX = e.getX();
             int paddleWidth = (int) paddle1.getWidth();
             int paddleX = mouseX - paddleWidth / 2;
 
@@ -628,116 +636,116 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
             paddleX = Math.max(0, Math.min(paddleX, GAME_WIDTH - paddleWidth));
 
             paddle1.x = paddleX;
-        }
-        else {}
-    }
-    public void mousePressed(MouseEvent e) {
-    }
-    public void mouseDragged(MouseEvent e) {
-    }
-    public void mouseEntered(MouseEvent e) {
-        System.out.println("entered");
-    }
-    public void mouseExited(MouseEvent e) {
-        System.out.println("exited");
-    }
-    public void mouseClicked(MouseEvent e) {
-    }
-    public void mouseReleased(MouseEvent e) {
-    }
-    public void actionPerformed(ActionEvent e) { //placeholder
-    }
-    public void keyTyped(KeyEvent e) {
-    }
-    public void keyPressed(KeyEvent e) { //Keyboard inputs for movement + navigation
-        keyPressed = true;
-        if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !menuActive) {
-            paddle1.setDeltaX((int) -1.4);
-        }
-
-        if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !menuActive) {
-            paddle1.setDeltaX((int) +1.4);
-        }
-        if (e.getKeyCode() == KeyEvent.VK_I && menuActive) {
-            destroyWelcome();
-            showInstructions();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_P && menuActive) {
-            destroyWelcome();
-            showPowerUpTypes();
-        }
-        //navigating to menu from instructions
-        if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (instructionsShown)) {
-            resetWelcome(); //sets strings to default messages
-        }
-        if (e.getKeyCode() == KeyEvent.VK_L && menuActive) {
-            destroyWelcome();
-            showLeaderBoard();
-        }
-        if (e.getKeyCode() == KeyEvent.VK_SPACE && !processingP) {
-            processingP = true; // Set the flag to true while processing the "P" key
-
-            if (running && !menuActive) {
-                if (!paused) { //pausing
-                    running = false;
-                    paused = true;
-                    lastPauseTime = System.nanoTime();
-                    System.out.println("pause");
-                    pauseMenu();
-                }
-            } else if (paused) { //unpausing
-                long now = System.nanoTime();
-                running = true;
-                paused = false;
-                long pauseDuration = now - lastPauseTime;
-                totalPausedTime += pauseDuration;
-                System.out.println("unpause");
-                pauseMenu();
-                if (cursorPos !=null){
-                    Point windowXY = getLocationOnScreen();
-                    int x = windowXY.x + cursorPos.x;
-                    int y = windowXY.y + cursorPos.y;
-                    setCursorPos(x, y);
-                }
             }
-            else if(menuActive){
-                for(int i = 0; i < balls.size(); i++){
-                    balls.remove(i);//default ball colour
+            else {}
+        }
+        public void mousePressed(MouseEvent e) {
+        }
+        public void mouseDragged(MouseEvent e) {
+        }
+        public void mouseEntered(MouseEvent e) {
+            System.out.println("entered");
+        }
+        public void mouseExited(MouseEvent e) {
+            System.out.println("exited");
+        }
+        public void mouseClicked(MouseEvent e) {
+        }
+        public void mouseReleased(MouseEvent e) {
+        }
+        public void actionPerformed(ActionEvent e) { //placeholder
+        }
+        public void keyTyped(KeyEvent e) {
+        }
+        public void keyPressed(KeyEvent e) { //Keyboard inputs for movement + navigation
+            keyPressed = true;
+            if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !menuActive) {
+                paddle1.setDeltaX((int) -1.4);
+            }
+
+            if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !menuActive) {
+                paddle1.setDeltaX((int) +1.4);
+            }
+            if (e.getKeyCode() == KeyEvent.VK_I && menuActive) {
+                destroyWelcome();
+                showInstructions();
+            }
+            if (e.getKeyCode() == KeyEvent.VK_P && menuActive) {
+                    destroyWelcome();
+                    showPowerUpTypes();
+            }
+            //navigating to menu from instructions
+            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && (instructionsShown)) {
+                resetWelcome(); //sets strings to default messages
+            }
+            if (e.getKeyCode() == KeyEvent.VK_L && menuActive) {
+                destroyWelcome();
+                showLeaderBoard();
+            }
+                if (e.getKeyCode() == KeyEvent.VK_SPACE && !processingP) {
+                    processingP = true; // Set the flag to true while processing the "P" key
+
+                    if (running && !menuActive) {
+                        if (!paused) { //pausing
+                            running = false;
+                            paused = true;
+                            lastPauseTime = System.nanoTime();
+                            System.out.println("pause");
+                            pauseMenu();
+                        }
+                    } else if (paused) { //unpausing
+                        long now = System.nanoTime();
+                        running = true;
+                        paused = false;
+                        long pauseDuration = now - lastPauseTime;
+                        totalPausedTime += pauseDuration;
+                        System.out.println("unpause");
+                        pauseMenu();
+                        if (cursorPos !=null){
+                            Point windowXY = getLocationOnScreen();
+                            int x = windowXY.x + cursorPos.x;
+                            int y = windowXY.y + cursorPos.y;
+                            setCursorPos(x, y);
+                        }
+                    }
+                    else if(menuActive){
+                        for(int i = 0; i < balls.size(); i++){
+                            balls.remove(i);//default ball colour
+                        }
+                        beginGame();
+                    }
                 }
-                beginGame();
+            if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && ((powerUpTypesShown)||(leaderBoardShown))) {
+                resetWelcome();
             }
         }
-        if (e.getKeyCode() == KeyEvent.VK_Q && (menuActive) && ((powerUpTypesShown)||(leaderBoardShown))) {
-            resetWelcome();
-        }
-    }
 
-    //stopping paddle after releasing key
-    public void keyReleased(KeyEvent e) {
-        keyPressed = false;
+        //stopping paddle after releasing key
+        public void keyReleased(KeyEvent e) {
+            keyPressed = false;
 
-        if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) & !menuActive) {
-            paddle1.setDeltaX(0);
+            if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) & !menuActive) {
+                paddle1.setDeltaX(0);
+            }
+
+            if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !menuActive) {
+                paddle1.setDeltaX(0);
+            }
+            if(e.getKeyCode() == KeyEvent.VK_SPACE){
+                processingP = false;
+            }
         }
 
-        if ((e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) && !menuActive) {
-            paddle1.setDeltaX(0);
-        }
-        if(e.getKeyCode() == KeyEvent.VK_SPACE){
-            processingP = false;
-        }
-    }
+        public void pauseMenu(){
+            if (paused){ //pausing
+                    welcomeMessage = "PAUSED";
+                    powerTypeMessage = "press SPACE to continue";
+                }
+                else if (!paused){  //unpausing
+                    destroyWelcome();
 
-    public void pauseMenu(){
-        if (paused){ //pausing
-            welcomeMessage = "PAUSED";
-            powerTypeMessage = "press SPACE to continue";
+                }
         }
-        else if (!paused){  //unpausing
-            destroyWelcome();
-
-        }
-    }
     public void powerUpEnder(){
         if(powerUpStart) {
             if (powerUpEnd <= System.nanoTime()) {
@@ -748,8 +756,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
     }
     public void checkIfLost(int lives) {
 
-        if (lives < 1) { //if player lost/died
-
+        if (lives < 1) { //if lose/lost
             int ran = 0;
             level = 1;
             brickCount = 232;
@@ -799,7 +806,7 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
 
     public void menuModePaddles() {
         paddle1 = new Paddle(0, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH, PADDLE_HEIGHT);
-    }
+    } 
 
     //this method is not my own, I have referenced the source below, I give credit for the base method to the OP
     //https://stackoverflow.com/questions/34832069/creating-a-highscore-with-file-io-in-java
@@ -808,10 +815,10 @@ public class GamePanel extends JPanel implements Runnable, MouseListener, MouseM
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (int i = 0; i <= 2; i++) {
                 int currentHScore;
-                currentHScore = highScore[i];
+                        currentHScore = highScore[i];
 
-                writer.write(String.valueOf(currentHScore));
-                writer.newLine();
+                    writer.write(String.valueOf(currentHScore));
+                    writer.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -23,6 +23,7 @@ public class Background extends JPanel {
         g.setColor(backgroundColor);
         g.fillRect(0, 0, getWidth(), getHeight());
 
+        // Add any additional code for drawing other elements or images on top of the background
     }
 
 }
