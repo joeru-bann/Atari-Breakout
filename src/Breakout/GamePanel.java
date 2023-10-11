@@ -71,7 +71,7 @@ import java.awt.event.MouseMotionListener;
 
     private static final String FILE_PATH = "data/highscores.txt";
 
-    String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n";
+    String welcomeMessage = "WELCOME TO BRUMBLY BREAKOUT \n SPACE to play";
     String powerTypeMessage = "Press 'P' To see power up types";
     String hScoreDisplay = "hscore" + (highScore);
     String instructionMessage = "Press 'I' to see instructions";
@@ -175,7 +175,7 @@ import java.awt.event.MouseMotionListener;
         int ballX = (GAME_WIDTH / 2) - (BALL_DIAMETER / 2);
         int ballY = (GAME_HEIGHT / 2) - (BALL_DIAMETER / 2);
         if ((ballType == "default")) {
-            Ball ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 5);
+            Ball ball = new Ball(ballX, ballY, BALL_DIAMETER, BALL_DIAMETER, 3);
             ball.setDY(1);
             balls.add(ball);
             //hits = 0;
@@ -207,7 +207,7 @@ import java.awt.event.MouseMotionListener;
 
     public void showInstructions() {
         instructionsShown = true;
-        instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys \n \n 'space' to play or 'Q' go back";
+        instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n Mouse input, 'A' + 'D' or <-  -> keys  \n \n 'space' to play or 'Q' go back";
     }
     public void showPowerUpTypes() {
         powerUpTypesShown = true;
@@ -320,9 +320,8 @@ import java.awt.event.MouseMotionListener;
             allCleared = false;
             writeLeaderBoard();
             beginMenuMode();
-            welcomeMessage = "YOU ! YWONIPEEE";
+            welcomeMessage = "YOU WON! \n  ";
             hScoreDisplay = ("High score: " + highScore);
-//            writeHighScore();
 
         }
         //Keep draw statements here for atari font to work
@@ -524,8 +523,9 @@ import java.awt.event.MouseMotionListener;
             for (int r = 0; r < rows; r++) {
                 for (int t = 0; t < columns; t++) {
                     if (brick[r][t] != null && arrayBall.intersects(brick[r][t])) {
-                        arrayBall.dy = -arrayBall.dy;
                         playSound("brick_hit.wav");
+                        arrayBall.dy = -arrayBall.dy;
+
                         //normalizeDirection();
 
 
@@ -563,7 +563,7 @@ import java.awt.event.MouseMotionListener;
 
     public void newPowerUpBall(int i) {
         Ball arrayBall = balls.get(i);
-        pball = new PowerUpBall(arrayBall.x, arrayBall.y, BALL_DIAMETER, BALL_DIAMETER, 5);
+        pball = new PowerUpBall(arrayBall.x, arrayBall.y, BALL_DIAMETER, BALL_DIAMETER, 3);
         pball.setDY(1);
         pballs.add(pball);
         createPowerUp = true;
@@ -589,8 +589,23 @@ import java.awt.event.MouseMotionListener;
     }
         @Override
         public void run() {
-            double desiredFPS = 100.0;
-            double desiredFrameTime = 1_000_000_000 / desiredFPS; // Calculate the desired frame time in nanoseconds
+            int dx = 0;
+            int dy = 0;
+            int speed = 0;
+            int x = 0;
+            int y = 0;
+            for (int i = 0; i < balls.size(); i++) {
+                Ball arrayBall = balls.get(i);
+                dx = (int) arrayBall.dx;
+                dy = (int) arrayBall.dy;
+                speed = (int) 0.6;
+                x = arrayBall.x;
+                y = arrayBall.y;
+            }
+
+
+            double desiredFPS = 240.0; // Increase the frame rate
+            double desiredFrameTime = 1_000_000_000 / desiredFPS;
 
             long lastTime = System.nanoTime();
             double deltaTime = 0;
@@ -603,10 +618,17 @@ import java.awt.event.MouseMotionListener;
                 if (running && !paused) {
                     // Update the game logic based on deltaTime
                     deltaTime += elapsedTime;
+
                     while (deltaTime >= desiredFrameTime) {
                         move(); // Convert deltaTime to seconds for time-based movement
+
+                        // Implement continuous collision detection and response
+                        double alpha = (deltaTime / desiredFrameTime);
+                        int dFrameTime = (int) desiredFrameTime;
+                        interpolatePosition(alpha, dx, dy, speed,x,y, dFrameTime);
                         checkCollision();
-                        powerUpEnder();
+                        interpolatePosition(1.0 - alpha, dx, dy, speed, x, y, dFrameTime);
+                    powerUpEnder();
                         deltaTime -= desiredFrameTime;
                     }
 
@@ -615,7 +637,7 @@ import java.awt.event.MouseMotionListener;
                     // Calculate the paused time
                     long pauseDuration = now - lastPauseTime - totalPausedTime;
                     try {
-                        Thread.sleep(1);   // Add a delay to avoid busy-waiting
+                        Thread.sleep(1); // Add a delay to avoid busy-waiting
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -623,6 +645,26 @@ import java.awt.event.MouseMotionListener;
                 }
             }
         }
+
+        // Interpolate the ball's position
+        public void interpolatePosition(double alpha, int dx, int dy, int speed, int x, int y, int desiredFrameTime) {
+
+            double interpolatedX = x + alpha * dx * speed * desiredFrameTime / 1_000_000_000;
+            double interpolatedY = y + alpha * dy * speed * desiredFrameTime / 1_000_000_000;
+            x = (int) interpolatedX;
+            y = (int) interpolatedY;
+
+
+            if (alpha ==1.0) {
+                for (int i = 0; i < balls.size(); i++) {
+                    Ball arrayBall = balls.get(i);
+                    arrayBall.setDX(dx);
+                    arrayBall.setDY(dy);
+                }
+
+            }
+        }
+
 
         //MouseListening methods for movement interactions
         public void mouseMoved(MouseEvent e) { //1:1 mouse moving ratio
