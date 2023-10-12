@@ -202,23 +202,23 @@ import java.awt.event.MouseMotionListener;
         lBoard = "'L' to see leader board";
         instructionsShown = false;
         leaderBoardShown = false;
-        playSound("menuselect.wav");
+        playSound("menuselect.wav", false);
     }
 
     public void showInstructions() {
-        playSound("menuselect.wav");
+        playSound("menuselect.wav", false);
         instructionsShown = true;
         instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n Mouse input, 'A' + 'D' or <-  -> keys  \n \n 'space' to play or 'Q' go back";
     }
     public void showPowerUpTypes() {
-        playSound("menuselect.wav");
+        playSound("menuselect.wav", false);
         powerUpTypesShown = true;
         powerTypeMessage = "Orange = background colour change \n " + "Magenta = extra ball \n Green = expand paddle \n yellow = explosive ball ";
     }
 
     public void showLeaderBoard() {
         readHighScores();
-        playSound("menuselect.wav");
+        playSound("menuselect.wav", false);
         leaderBoardShown = true;
         lBoard = "1st " + leaderboard[0] + "\n" + "2nd " + leaderboard[1] + "\n" + "3rd " + leaderboard[2] + "\n";
     }
@@ -230,8 +230,8 @@ import java.awt.event.MouseMotionListener;
         newBall(ballType);
         destroyWelcome();
         newBricks();
-        playSound("ball_reset.wav");
-        playSound("retrorun.wav");
+        playSound("ball_reset.wav", false);
+        playSound("retrorun.wav", true);
         lives = 10;//= baseLives - level;
         score = 0;
         ballColour = Color.white;
@@ -239,25 +239,21 @@ import java.awt.event.MouseMotionListener;
         menuActive = false;
 
     }
-
-    public void playSound(String fileName) {
-
-        if (!soundPlaying) {
+        public void playSound(String fileName, boolean loop) {
             try {
-                sound = AudioSystem.getClip();
-                sound.open(AudioSystem.getAudioInputStream(getClass().getResource("audio/" + fileName)));
-                soundPlaying = true;
+                Clip clip = AudioSystem.getClip();
+                clip.open(AudioSystem.getAudioInputStream(getClass().getResource("audio/" + fileName)));
+
+                if (loop) {
+                    clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the sound continuously
+                } else {
+                    clip.start(); // Play the sound once
+                }
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Error occurred whilst attempting to play Breakout.audio");
+                //System.out.println("Error occurred whilst attempting to play the sound.");
             }
         }
-        if (soundPlaying) {
-            sound.start();
-        }
-
-        soundPlaying = false;
-    }
 
     @Override
     public void paintComponent(Graphics g) {
@@ -323,7 +319,7 @@ import java.awt.event.MouseMotionListener;
             allCleared = false;
             writeLeaderBoard();
             beginMenuMode();
-            welcomeMessage = "YOU WON! \n  ";
+            welcomeMessage = "YOU WON! YIPEEE!!!! \n  ";
             hScoreDisplay = ("High score: " + highScore);
 
         }
@@ -366,13 +362,14 @@ import java.awt.event.MouseMotionListener;
         for (int i = 0; i < balls.size(); i++) {
             Ball arrayBall = balls.get(i);
             if (arrayBall.y <= 0) { //roof
-                arrayBall.dy = -arrayBall.dy;
-                playSound("wallimpact.wav");
+                arrayBall.dy *= -1;
+                //arrayBall.dx *= -1;
+                playSound("wallimpact.wav", false);
                 paddle1.getPaddleWidth();
 
             }
 
-            if ((arrayBall.y >= GAME_HEIGHT - BALL_DIAMETER) || arrayBall.x > 953 || (arrayBall.x < -BALL_DIAMETER - 2)) {
+            if ((arrayBall.y >= GAME_HEIGHT - BALL_DIAMETER) || arrayBall.x > 951 || (arrayBall.x < -BALL_DIAMETER - 3)) {
                 //System.out.println("handle out "+ ball.x + " y: "+ ball.y);
                 balls.remove(i);
                 if (balls.size() == 0) {
@@ -382,9 +379,9 @@ import java.awt.event.MouseMotionListener;
                     explosiveBall = null;
                 }
             }
-            if (arrayBall.x <= 0 || arrayBall.x >= GAME_WIDTH - BALL_DIAMETER) {
-                arrayBall.dx = -arrayBall.dx;
-                playSound("wallimpact.wav");
+            if (arrayBall.x <= 0 || arrayBall.x >= GAME_WIDTH - (BALL_DIAMETER)+3) {
+                arrayBall.dx *= -1;
+                playSound("wallimpact.wav", false);
             }
 
             if (menuActive) {
@@ -406,133 +403,126 @@ import java.awt.event.MouseMotionListener;
         int middleX = (paddle1.x) + ((10 - lives) *10);
         if (lives > 0) { //still alive
             lives--;
-            playSound("lose_life.wav");
+            playSound("lose_life.wav", false);
             if (!menuActive) {
                 choice = random.nextInt(6);
                 paddleSize();
 
                 paddle1 = new Paddle(middleX, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, PADDLE_WIDTH, PADDLE_HEIGHT);
-                if (cursorPos !=null){
-                    Point windowXY = getLocationOnScreen();
-                    int x = windowXY.x + cursorPos.x;
-                    int y = windowXY.y + cursorPos.y;
-                    setCursorPos(x, y);
-                }
             }
         }
         checkIfLost(lives);
         newBall(ballType);
-        playSound("boundary_hit.wav");
-
+        playSound("boundary_hit.wav", false);
     }
 
-    private void handlePaddleCollision() { //hitting paddle
-        for (int i = 0; i < balls.size(); i++) {
-            Ball arrayBall = balls.get(i);
-            double ballCenterX = arrayBall.x + arrayBall.width / 2.0;
-            double paddleCenterX = paddle1.x + paddle1.width / 2.0;
+        private void handlePaddleCollision() { //hitting paddle
+            for (int i = 0; i < balls.size(); i++) {
+                Ball arrayBall = balls.get(i);
+                double ballCenterX = arrayBall.x + arrayBall.width / 2.0;
+                double paddleCenterX = paddle1.x + paddle1.width / 2.0;
 
-            double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
-            int ballTrueY = arrayBall.y - arrayBall.height;
+                double relativePosition = (ballCenterX - paddleCenterX) / (paddle1.width / 2.0);
+                int ballTrueY = arrayBall.y - arrayBall.height;
 
-            if (ballTrueY <= paddle1.y && arrayBall.intersects(paddle1)) {
+                if (ballTrueY <= paddle1.y && arrayBall.intersects(paddle1)) {
 
-                double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
+                    double inclination = relativePosition * 1.6; // Maximum inclination angle of 1.6
 
-                if (menuActive) {
-                    arrayBall.setDX(inclination);
-                    arrayBall.dy *= 1;
+                    if (menuActive) {
+                        inclination = getRandomInclination();
+                    }
+                    arrayBall.dy = -Math.abs(arrayBall.dy);
+
+                    // Calculate the rate of change of the vertical component
+                    double previousY = arrayBall.y - arrayBall.dy;
+                    double verticalChange = Math.abs(arrayBall.y - previousY);
+
+                    // Check if the ball has a low vertical change (slow rebound)
+                    if (verticalChange < 1.0) { //
+                        // Increase the vertical motion of the ball
+                        normalizeDirection(i);
+
+                    } else {
+                        normalizeDirection(i);
+                        arrayBall.setDX(inclination);
+                    }
+                    playSound("paddle_hit.wav", false);
                 }
-                arrayBall.dy = -Math.abs(arrayBall.dy);
-
-                // Calculate the rate of change of the vertical component
-                double previousY = arrayBall.y - arrayBall.dy;
-                double verticalChange = Math.abs(arrayBall.y - previousY);
-
-                // Check if the ball has a low vertical change (slow rebound)
-                if (verticalChange < 1.0) { //
-                    // Increase the vertical motion of the ball
-                    arrayBall.setDX(inclination);
-                    arrayBall.dy *= 1;
-                } else if (arrayBall.dx == 0){
-                    arrayBall.setDX(1);
-
-                }else {
-                    normalizeDirection(i);
-                    arrayBall.setDX(inclination);
-                }
-                playSound("paddle_hit.wav");
-
             }
-        }
-        if (createPowerUp && pball != null && (pball.y > GAME_HEIGHT || pball.x > 950 || pball.x < 0)) {
-            pballs.remove(pball);
-            pball = null;
-        } else if (createPowerUp && pball != null && pball.intersects(paddle1)) {
-            playSound("powercollect.wav");
-            pballs.remove(pball);
-            pball = null;
-            switch (powerUp) {
-                case 0 -> {
-                    paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH / 4, PADDLE_HEIGHT);
-                }
-                case 1 -> {
-                    newBall(ballType);
-                }
-                case 2 -> {
-                    int powerTime = 4000; //2 secs
-                    int ranR = changeBG(1, 255);
-                    int ranG = changeBG(1, 255);
-                    int ranB = changeBG(1, 255);
-                    r = ranR;
-                    gr = ranG;
-                    b = ranB;
-                    //System.out.println("r= " + ranR + " g= " + ranG + " b= " + ranB); dev comment
-                    Timer timer = new Timer(powerTime, new ActionListener() {
-                        public void actionPerformed(ActionEvent e) { //resetting
-                            r = 0;
-                            gr = 0;
-                            b = 0;
+             if (createPowerUp && pball != null && (pball.y > GAME_HEIGHT || pball.x > 950 || pball.x < 0)) {
+                    pballs.remove(pball);
+                    pball = null;
+                } else if (createPowerUp && pball != null && pball.intersects(paddle1)) {
+                    playSound("powercollect.wav", false);
+                    pballs.remove(pball);
+                    pball = null;
+                    switch (powerUp) {
+                        case 0 -> {
+                            paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH / 4, PADDLE_HEIGHT);
                         }
-                    });
-                    timer.setRepeats(false); //false to run once
-                    timer.start();
+                        case 1 -> {
+                            newBall(ballType);
+                        }
+                        case 2 -> {
+                            int powerTime = 4000; //2 secs
+                            int ranR = changeBG(1, 255);
+                            int ranG = changeBG(1, 255);
+                            int ranB = changeBG(1, 255);
+                            r = ranR;
+                            gr = ranG;
+                            b = ranB;
+                            //System.out.println("r= " + ranR + " g= " + ranG + " b= " + ranB); dev comment
+                            Timer timer = new Timer(powerTime, new ActionListener() {
+                                public void actionPerformed(ActionEvent e) { //resetting
+                                    r = 0;
+                                    gr = 0;
+                                    b = 0;
+                                }
+                            });
+                            timer.setRepeats(false); //false to run once
+                            timer.start();
+                        }
+                        case 3 -> {
+                            //System.out.println("explode area on next impact"); dev comment
+                            explosiveBall = balls.get(0);
+                        }
+                        default -> System.out.println("Error on powerUp switch case");
+                    }
+                    long fiveseconds = 5000000000L;
+                    powerUpEnd = System.nanoTime() + fiveseconds;
+                    powerUpStart = true;
                 }
-                case 3 -> {
-                    //System.out.println("explode area on next impact"); dev comment
-                    explosiveBall = balls.get(0);
-                }
-                default -> System.out.println("Error on powerUp switch case");
             }
-            long fiveseconds = 5000000000L;
-            powerUpEnd = System.nanoTime() + fiveseconds;
-            powerUpStart = true;
-        }
-    }
+
+
 
     public int changeBG(int min, int max) {
         int range = (max - min) + 1;
         return (int) (Math.random() * range) + min;
     }
 
-    private double getRandomInclination() {
-        int inclinationSelection = random.nextInt(3);
+        private double getRandomInclination() {
+            int inclinationSelection = random.nextInt(4);
 
-        return switch (inclinationSelection) {
-            case 0 -> 1.6;
-            case 1 -> 1.4;
-            case 2 -> 1;
-            default -> 0.7;
-        };
-    }
-    private void normalizeDirection(int i) {
-        Ball arrayBall = balls.get(i);
-        double magnitude = Math.sqrt((arrayBall.dx * arrayBall.dx + arrayBall.dy * arrayBall.dy));
-        arrayBall.dx /= ((magnitude) * 3);
-        arrayBall.dy /= magnitude / 1.2;
-    }
+            return switch (inclinationSelection) {
+                case 0 -> 1.6;
+                case 1 -> -1.4;
+                case 2 -> -0.7;
+                case 3 -> 0.7;
+                default -> 0.7;
+            };
+        }
+        private void normalizeDirection(int i) {
+            Ball arrayBall = balls.get(i);
+            double magnitude = Math.sqrt((arrayBall.dx * arrayBall.dx + arrayBall.dy * arrayBall.dy));
+            arrayBall.dx /= ((magnitude) * 3);
+            arrayBall.dy /= magnitude / 1.2;
+        }
 
         private void handleBrickCollision() {
+            double inclination = getRandomInclination();
+
             for (int i = 0; i < balls.size(); i++) {
                 Ball arrayBall = balls.get(i);
                 for (int r = 0; r < rows; r++) {
@@ -547,7 +537,7 @@ import java.awt.event.MouseMotionListener;
                                             for (int x = -1; x <= 1; x++) {
                                                 if (r + y >= 0 && t + x >= 0 && r + y < rows && t + x < columns) {
                                                     brick[r + y][t + x] = null;
-                                                    playSound("explosion.wav");
+                                                    playSound("explosion.wav", false);
                                                     brickCount--;
                                                     handleBrickScore(t + x);
                                                 }
@@ -557,7 +547,7 @@ import java.awt.event.MouseMotionListener;
                                     } else {
                                         arrayBall.dy *= -1;
                                         arrayBall.dx *= -1;
-                                        playSound("brick_hit.wav");
+                                        playSound("brick_hit.wav", false);
                                         handleBrickScore(t);
                                         brickCount--;
                                         brick[r][t] = null;
@@ -567,7 +557,13 @@ import java.awt.event.MouseMotionListener;
                                         newPowerUpBall(i);
                                         powerUp = random.nextInt(4);
                                     }
-                                } else { //if main menu
+                                } else { //if main menu is active
+                                    arrayBall.dy *= -1;
+                                    arrayBall.dx *= -1;
+
+                                    getRandomInclination();
+                                    arrayBall.setDY(inclination);
+
                                     choice = random.nextInt(4);
                                 }
                             }
@@ -816,7 +812,7 @@ import java.awt.event.MouseMotionListener;
     public void checkIfLost(int lives) {
 
         if (lives < 1) { //if lose/lost
-            playSound("ball_reset.wav");
+            playSound("ball_reset.wav", false);
             int ran = 0;
             level = 1;
             brickCount = 232;
@@ -824,8 +820,8 @@ import java.awt.event.MouseMotionListener;
             ran = random.nextInt(2);
 
             switch (ran) {
-                case 0 -> playSound("deep_you_lose.wav");
-                case 1 -> playSound("you_losew.wav");
+                case 0 -> playSound("deep_you_lose.wav", false);
+                case 1 -> playSound("you_losew.wav", false);
             }
             writeLeaderBoard();
             beginMenuMode();
@@ -854,7 +850,7 @@ import java.awt.event.MouseMotionListener;
     }
 
     public void beginMenuMode() {
-        playSound("doom.wav");
+        playSound("doom.wav", true);
         menuActive = true;
         newBricks();
         menuModePaddles();

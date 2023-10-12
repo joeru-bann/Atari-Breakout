@@ -15,6 +15,13 @@ public class Ball extends Rectangle {
 
         random = new Random();
     }
+    public double getDY() {
+        return dy;
+    }
+
+    public double getDX() {
+        return dx;
+    }
     public void setDX(double vectorX) {
         dx = vectorX;
     }
