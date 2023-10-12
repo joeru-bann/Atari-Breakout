@@ -31,20 +31,4 @@ public class Ball extends Rectangle {
         g.setColor(color);
         g.fillOval(x, y, width, height);
     }
-
-    // Adjust the ball's direction based on collision position
-    public void adjustDirection(Rectangle collisionObject) {
-        double collisionX = x + width / 2.0;
-        double collisionY = y + height / 2.0;
-
-        double objectCenterX = collisionObject.x + collisionObject.width / 2.0;
-        double objectCenterY = collisionObject.y + collisionObject.height / 2.0;
-
-        double deltaX = collisionX - objectCenterX;
-        double deltaY = collisionY - objectCenterY;
-
-        // Calculate the new direction based on the collision position
-        dx = -deltaX / (Math.abs(deltaX) + Math.abs(deltaY));
-        dy = -deltaY / (Math.abs(deltaX) + Math.abs(deltaY));
-    }
 }

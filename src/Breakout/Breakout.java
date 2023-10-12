@@ -7,7 +7,7 @@ public class Breakout {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Brumble Breakout : Breaking Brumble");
-            GamePanel window = new GamePanel(GamePanel.GAME_WIDTH, GamePanel.GAME_HEIGHT);
+            GameHandler window = new GameHandler(GameHandler.GAME_WIDTH, GameHandler.GAME_HEIGHT);
             frame.add(window);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
@@ -15,6 +15,7 @@ public class Breakout {
             frame.repaint();
             frame.setResizable(false);
             window.addKeyListener(window);
+
         });
     }
 }
