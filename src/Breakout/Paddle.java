@@ -30,7 +30,7 @@ public class Paddle extends Rectangle {
     }
 
     public void draw(Graphics g) {
-        g.setColor(new Color(160, 160, 255));
+        g.setColor(new Color(255, 255, 255));
         g.fillRect(x, y, width, height);
     }
 
