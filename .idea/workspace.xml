@@ -9,8 +9,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="trying to get physics properly working">
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="BLUEJ VERSION (NO PACKAGE) - working for bluej">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Background.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Background.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Ball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Breakout.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Breakout.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Brick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/GameHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GameHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Paddle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Paddle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/PowerUpBall.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/PowerUpBall.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/UI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/UI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Breakout/Welcome.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/Welcome.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,9 +58,10 @@
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: -1
-}</component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": -1
+}]]></component>
   <component name="ProjectId" id="2PBvbJhbctnnLw3Bs5arNidmv2q" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -183,6 +193,7 @@
       <workItem from="1697111169181" duration="775000" />
       <workItem from="1697111992251" duration="10394000" />
       <workItem from="1697723209032" duration="1720000" />
+      <workItem from="1698058058056" duration="216000" />
     </task>
     <task id="LOCAL-00001" summary="beginning base classes with intro">
       <created>1683236216529</created>
@@ -420,7 +431,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697117062981</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="BLUEJ VERSION (NO PACKAGE) - working for bluej">
+      <option name="closed" value="true" />
+      <created>1698058202743</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1698058202743</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -450,7 +469,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="high score now fully working, readScore method at beginning" />
     <MESSAGE value="refactrored the UI to utilize one class only, string is automatic size (will change looks bad), way more efficient now." />
     <MESSAGE value="fixed font artifacts by removing second instance of drawing string (gamepanel + UI)" />
     <MESSAGE value="new instruction string ('M') (welcome class)" />
@@ -475,6 +493,7 @@
     <MESSAGE value="Revert &quot;change game-width to 694 cleaner&quot;&#10;&#10;This reverts commit 40598f3e" />
     <MESSAGE value="Adding lots of sfx for immersion (all copyright free - checked)&#10;Cleaning up some ball physics" />
     <MESSAGE value="removing obsolete sfx" />
-    <option name="LAST_COMMIT_MESSAGE" value="removing obsolete sfx" />
+    <MESSAGE value="BLUEJ VERSION (NO PACKAGE) - working for bluej" />
+    <option name="LAST_COMMIT_MESSAGE" value="BLUEJ VERSION (NO PACKAGE) - working for bluej" />
   </component>
 </project>

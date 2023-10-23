@@ -1,4 +1,4 @@
- 
+package Breakout;
 
 import java.awt.*;
 public class PowerUpBall extends Ball

@@ -1,4 +1,4 @@
- 
+package Breakout;
 
 import javax.swing.*;
 //main method
