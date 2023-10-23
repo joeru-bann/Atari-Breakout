@@ -9,10 +9,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="interpolation physics + updates instructions">
+    <list default="true" id="fd16654d-f4ad-4a8f-85d4-d9fc355aecfb" name="Changes" comment="trying to get physics properly working">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.bluej" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Breakout/GameHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Breakout/GameHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +38,7 @@
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
-        <option name="accountId" value="0e256ade-74e8-483f-a8bf-f10bd5fcd937" />
+        <option name="accountId" value="db7660be-f094-400a-a2a3-c16baa9f0633" />
         <option name="url" value="https://github.com/joeru-bann/Atari-Breakout.git" />
       </UrlAndAccount>
     </option>

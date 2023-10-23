@@ -1,4 +1,3 @@
-package Breakout;
 
 import java.io.*;
 import java.util.*;
@@ -121,8 +120,8 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         brick = new Brick[rows][columns];
 
         livesUI = new UI(GAME_WIDTH - 640, GAME_HEIGHT - 20, Color.RED, "Lives: ", atari);
-        scoreUI = new UI(GAME_WIDTH - 500, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
-        bLeftUI = new UI(GAME_WIDTH - 340, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
+        bLeftUI = new UI(GAME_WIDTH - 480, GAME_HEIGHT - 20, Color.YELLOW, "bricks: ", atari);
+        scoreUI = new UI(GAME_WIDTH - 330, GAME_HEIGHT - 20,  Color.GREEN, "Score: ", atari);
         hScoreUI = new UI(GAME_WIDTH - 190, GAME_HEIGHT - 20, Color.MAGENTA, "High: ", atari);
 
         try {
@@ -146,14 +145,12 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         gameThread = new Thread(this);
         gameThread.start();
 
-
     }
 
     private void calculateScale() {
         scaleX = (double) screenWidth / GAME_WIDTH;
         scaleY = (double) screenHeight / GAME_HEIGHT;
     }
-
 
     public void newPaddles() {
         //new paddle instance from class
@@ -211,6 +208,7 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         instructionsShown = true;
         instructionMessage = "the aim of the game is to \n destroy all blocks \n on the screen using the paddle \n to bounce the ball into the bricks \n \n for control use: \n 'A' + 'D' or <-  -> keys \n \n 'space' to play or 'Q' go back";
     }
+
     public void showPowerUpTypes() {
         playSound("menuselect.wav", false);
         powerUpTypesShown = true;
@@ -258,7 +256,6 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         }
     }
 
-
     @Override
     public void paintComponent(Graphics g) {
 
@@ -273,19 +270,34 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         g2d.scale(scaleX, scaleY);
         g.drawImage(buffer, 0, 0, this);
     }
+
     public void draw(Graphics g) {
         allCleared = true;
 
         if (!menuActive) {
 
-            switch (choice) {  //altering choice anywhere in GameHandler allows the ball the change
-                case 0 -> ballColour = Color.cyan;
-                case 1 -> ballColour = Color.magenta;
-                case 2 -> ballColour = Color.red;
-                case 3 -> ballColour = Color.orange;
-                case 4 -> ballColour = Color.yellow;
-                case 5 -> ballColour = Color.green;
-                default -> ballColour = Color.white;
+            switch (choice) {
+                case 0:
+                    ballColour = Color.cyan;
+                    break;
+                case 1:
+                    ballColour = Color.magenta;
+                    break;
+                case 2:
+                    ballColour = Color.red;
+                    break;
+                case 3:
+                    ballColour = Color.orange;
+                    break;
+                case 4:
+                    ballColour = Color.yellow;
+                    break;
+                case 5:
+                    ballColour = Color.green;
+                    break;
+                default:
+                    ballColour = Color.white;
+                    break;
             }
         }
         bg.draw(g, r, gr, b, GAME_WIDTH , GAME_HEIGHT);
@@ -312,10 +324,18 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         if (createPowerUp && pball != null) {
 
             switch (powerUp) {
-                case 0 -> pball.draw(g, Color.green);
-                case 1 -> pball.draw(g, Color.magenta);
-                case 2 -> pball.draw(g, Color.orange);
-                case 3 -> pball.draw(g, Color.yellow);
+                case 0:
+                    pball.draw(g, Color.green);
+                    break;
+                case 1:
+                    pball.draw(g, Color.magenta);
+                    break;
+                case 2:
+                    pball.draw(g, Color.orange);
+                    break;
+                case 3:
+                    pball.draw(g, Color.yellow);
+                    break;
             }
 
         }
@@ -323,9 +343,9 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
             allCleared = false;
             writeLeaderBoard();
             beginMenuMode();
-            welcomeMessage = "YOU ! YWONIPEEE";
+            welcomeMessage = "YOU WON!!!! YIPEEE!!!!!!";
             hScoreDisplay = ("High score: " + highScore);
-//            writeHighScore();
+            //            writeHighScore();
 
         }
         //Keep draw statements here for atari font to work
@@ -464,13 +484,13 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
             pballs.remove(pball);
             pball = null;
             switch (powerUp) {
-                case 0 -> {
+                case 0 : 
                     paddle1 = new Paddle(paddle1.x, GAME_HEIGHT - (PADDLE_HEIGHT - DISTANCE / 2) - 50, GAME_WIDTH / 4, PADDLE_HEIGHT);
-                }
-                case 1 -> {
+
+                case 1 : 
                     newBall(ballType);
-                }
-                case 2 -> {
+
+                case 2 : 
                     int powerTime = 4000; //2 secs
                     int ranR = changeBG(1, 255);
                     int ranG = changeBG(1, 255);
@@ -480,18 +500,18 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
                     b = ranB;
                     // System.out.println("r= " + ranR + " g= " + ranG + " b= " + ranB);
                     Timer timer = new Timer(powerTime, new ActionListener() {
-                        public void actionPerformed(ActionEvent e) { //resetting
-                            resetRGB();
-                        }
-                    });
+                                public void actionPerformed(ActionEvent e) { //resetting
+                                    resetRGB();
+                                }
+                            });
                     timer.setRepeats(false); //false to run once
                     timer.start();
-                }
-                case 3 -> {
-                    System.out.println("explode area on next impact");
+
+                case 3 :
+                    //System.out.println("explode area on next impact");
                     explosiveBall = balls.get(0);
-                }
-                default -> System.out.println("Error on powerUp switch case");
+
+                default : //System.out.println("Error on powerUp switch case");
             }
             long fiveseconds = 5000000000L;
             powerUpEnd = System.nanoTime() + fiveseconds;
@@ -505,21 +525,36 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         b = 0;
 
     }
+
     public int changeBG(int min, int max) {
         int range = (max - min) + 1;
         return (int) (Math.random() * range) + min;
     }
 
     private double getRandomInclination() {
-        int inclinationSelection = random.nextInt(3);
+        int inclinationSelection = random.nextInt(4);
+        double inclination;
 
-        return switch (inclinationSelection) {
-            case 0 -> 1.6;
-            case 1 -> 1.4;
-            case 2 -> 1;
-            default -> 0.7;
-        };
+        switch (inclinationSelection) {
+            case 0:
+                inclination = 1.6;
+                break;
+            case 1:
+                inclination = -1.4;
+                break;
+            case 2:
+                inclination = -0.7;
+                break;
+            case 3:
+                inclination = 0.7;
+                break;
+            default:
+                inclination = 0.7;
+        }
+
+        return inclination;
     }
+
     private void normalizeDirection(int i) {
         Ball arrayBall = balls.get(i);
         double magnitude = Math.sqrt((arrayBall.dx * arrayBall.dx + arrayBall.dy * arrayBall.dy));
@@ -537,7 +572,6 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
                         arrayBall.dx *= -1;
                         playSound("brick_hit.wav", false);
                         //normalizeDirection();
-
 
                         if (!menuActive) { //if game is played
                             if (arrayBall == explosiveBall) {
@@ -582,10 +616,21 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
 
     private void handleBrickScore(int brickIndex) {
         switch (brickIndex) {
-            case 0, 1 -> score += 7;
-            case 2, 3 -> score += 5;
-            case 4, 5 -> score += 3;
-            default -> score += 1;
+            case 0:
+            case 1:
+                score += 7;
+                break;
+            case 2:
+            case 3:
+                score += 5;
+                break;
+            case 4:
+            case 5:
+                score += 3;
+                break;
+            default:
+                score += 1;
+                break;
         }
     }
 
@@ -598,6 +643,7 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         }
 
     }
+
     @Override
     public void run() {
         double desiredFPS = 100.0;
@@ -650,24 +696,33 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
         }
         else {}
     }
+
     public void mousePressed(MouseEvent e) {
     }
+
     public void mouseDragged(MouseEvent e) {
     }
+
     public void mouseEntered(MouseEvent e) {
-        System.out.println("entered");
+        //System.out.println("entered");
     }
+
     public void mouseExited(MouseEvent e) {
-        System.out.println("exited");
+        //System.out.println("exited");
     }
+
     public void mouseClicked(MouseEvent e) {
     }
+
     public void mouseReleased(MouseEvent e) {
     }
+
     public void actionPerformed(ActionEvent e) { //placeholder
     }
+
     public void keyTyped(KeyEvent e) {
     }
+
     public void keyPressed(KeyEvent e) { //Keyboard inputs for movement + navigation
         keyPressed = true;
         if ((e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) && !menuActive) {
@@ -757,6 +812,7 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
 
         }
     }
+
     public void powerUpEnder(){
         if(powerUpStart) {
             if (powerUpEnd <= System.nanoTime()) {
@@ -765,6 +821,7 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
             }
         }
     }
+
     public void checkIfLost(int lives) {
 
         if (lives < 1) { //if lose/lost
@@ -777,13 +834,18 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
             ran = random.nextInt(1);
 
             switch (ran) {
-                case 0 -> playSound("deep_you_lose.wav", false);
-                case 1 -> playSound("you_losew.wav", false);
+                case 0:
+                    playSound("deep_you_lose.wav", false);
+                    break;
+                case 1:
+                    playSound("you_losew.wav", false);
+                    break;
             }
             writeLeaderBoard();
             beginMenuMode();
         }
     }
+
     public void writeLeaderBoard() {
         if (score > highScore[0]) { //replacing 2nd
             int thirdPlace;
@@ -838,6 +900,7 @@ public class GameHandler extends JPanel implements Runnable, MouseListener, Mous
             e.printStackTrace();
         }
     }
+
     public int[] readHighScores() {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
 
